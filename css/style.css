@@ -1,0 +1,19 @@
+.navbar{
+    background-color: rgba(21,28,72,255)
+}
+.nav-item
+{
+  color: rgb(255, 255, 255);
+  font-family: 'Lato', sans-serif;
+  font-size: 30px;
+  margin: 0px;
+}
+.nav-link
+{
+color: rgb(255, 255, 255);
+  font-family: 'Lato', sans-serif;
+  font-size: 30px;
+  margin: 0px;
+  
+}
+

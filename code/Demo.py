@@ -67,6 +67,6 @@ light.data.energy = 100
 
 bpy.ops.mesh.primitive_plane_add(size=10)
 
-bpy.data.scenes[0].render.filepath = './bpy.png'
+bpy.data.scenes[0].render.filepath = './static/flask_render.png'
 
 bpy.ops.render.render(write_still=True)

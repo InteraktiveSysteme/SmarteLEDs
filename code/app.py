@@ -16,40 +16,31 @@ def render():
 	exec(open("Demo.py").read())
 	return render_template('render.html')
 
-@app.route('/lamp')
-def lamp():
+@app.route('/lamp/<id>')
+# liste mit allen lamp und
+# uri parameter /lamp/{id}
+def lamp(id):
+
+	# funktion erstellt dirliste mit allen lampennamen
 	entries = os.listdir('static/lamps')
-	pattern = ".*\.md"
-	list = []
+	lamplist = []
 	for e in entries:
     		if re.match(".*\.md", e):
-        		list.append(re.sub("\..*", "", e))
-	del entries
-	return render_template('lamp.html', list = list)
+        		lamplist.append(re.sub("\..*", "", e))
 
+	# funktion extrahiert lampe mit id {id} aus list
+	print(lamplist[int(id)])
+	# funktion erstellt liste mit bildern zugehoerig zu lampe {id}
+	pat = "^{a1}.*\.jpg".format(a1 = lamplist[int(id)])
+	imglist = []
+	for e in entries:
+		if re.match(pat, e):
+			imglist.append(e)
 
+	print(imglist)
 
-print("")
-print("")
-print("")
-
-print("")
-print("")
-print("")
-print("")
-print("")
-
-
-
-
-
-#print(re.sub("lamp01.md", lambda entry: entry, entries))
-
-#a = 'the quick brown fox jumped over the green lazy python'
-#print(re.sub("(\w+)",
-#             lambda x: x.group(1).capitalize(),
-#             a))
-#print(list(filteredlist))
+	# funktion laedt lampenbeschreibung
+	return render_template('lamp.html', description = "{a1}.md".format(a1 = lamplist[int(id)]), imglist= imglist)
 
 if __name__ == '__main__':
     app.run()

@@ -18,22 +18,21 @@ def render():
 
 @app.route('/lamp')
 def lamp():
-        return render_template('lamp.html')
+	entries = os.listdir('static/lamps')
+	pattern = ".*\.md"
+	list = []
+	for e in entries:
+    		if re.match(".*\.md", e):
+        		list.append(re.sub("\..*", "", e))
+	del entries
+	return render_template('lamp.html', list = list)
 
 
 
 print("")
 print("")
 print("")
-entries = os.listdir('static/lamps')
-pattern = ".*\.md"
-filtered = []
-for e in entries:
-    if re.match(".*\.md", e):
-        filtered.append(re.sub("\..*", "", e))
-del entries
 
-print(filtered)
 print("")
 print("")
 print("")

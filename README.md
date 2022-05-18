@@ -15,8 +15,21 @@ Clone this repo :
 ```bash
     # git pull
 ```
-
+**Push**
 ```bash
+    # git add <files> or --all
+    # git commit -m <msg> 
+    # git push origin main
+```
+
+**Merge**
+```bash
+    # git add <files> or --all
+    # git commit -m <msg> 
+    # git pull 
+    
+    Hetzt sollte ein Merge Konfikt entstehen. Im Editor auswaehlen welche Aenderungen behalten werden!
+    
     # git add <files> or --all
     # git commit -m <msg> 
     # git push origin main

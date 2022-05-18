@@ -13,17 +13,12 @@
   margin: 0px;
 }
 
-<<<<<<< HEAD
 .nav-item>a:hover {
   background-color: #ffbf006e;
   color: rgb(0, 0, 0);
 }
 
 
-=======
-.row{
-  text-align: center;
-}
 
 .card{
   margin: 50px auto; 
@@ -125,4 +120,3 @@
   border-top-left-radius: 15px;
   background-size: cover;
 }
->>>>>>> 55e110d3d67321345b64ad9807dbbd135065ba8d

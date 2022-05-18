@@ -9,11 +9,13 @@
 <link rel="stylesheet" href="/css/style.css">
 
     <title>Let´s SimuLED</title>
+    <script language="javascript" type="script" src="glowHover.js"></script>
   </head>
   <body>
-   
-    <nav class="navbar navbar-expand-lg ">
-        <div class="container-fluid">
+
+    <nav class="navbar  navbar-expand-lg justify-content-center">
+        <div class="container-fluid justify-content-center">
+
             <a class="navbar-brand" href="#">
                 <img src="/images/Logo/Bildmarke.png" class="img-fluid" width="50" height="auto" alt="Logo" >
             </a>
@@ -34,8 +36,28 @@
               
               
             </ul>
-            <form class="d-flex">
-                <a class="nav-link" href="#">Login</a>
+            <form class="form-inline">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="basic-addon1">@</span>
+                </div>
+                <input type="text" class="form-control" placeholder="Username or Email" aria-label="Username" aria-describedby="basic-addon1">
+              </div>
+
+              <div class="input-group" style="padding-left: 5px;">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="basic-addon1"><img src="/images/open-iconic-master/svg/key.svg"></span>
+                </div>
+                <input type="text" class="form-control" placeholder="Password" aria-label="Username" aria-describedby="basic-addon1">
+                <div class="input-group-append">
+                  <button style="color: rgb(0, 0, 0);" class="btn btn-outline-secondary" type="button">Login</button>
+                </div>
+                <div class="input-group-append">
+                  <button style="color: rgb(0, 0, 0);" class="btn btn-outline-secondary" type="button">Register</button>
+                  <button style="color: rgb(0, 0, 0);" class="btn btn-outline-secondary" type="button">Register</button>
+                </div>
+              </div>
+              
             </form>
           </div>
         </div>
@@ -86,7 +108,7 @@
                   </a>
             </div>
           </div>
-          <div class="col">
+          <div class="col " >
             <h2>
               Super Lampe
             </h2>

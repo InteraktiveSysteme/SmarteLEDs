@@ -1,7 +1,7 @@
 # Super Lampe
 
-{Eig1} Versandkosten: 4,90 € 
-{Eig2} versandfertig innerhalb von 2-4 Werktagen 
+{postage} Versandkosten: 4,90 € 
+{price} versandfertig innerhalb von 2-4 Werktagen 
 - Kein Leuchtmittel im Lieferumfang enthalten. 
 - Artikelnummer 273397 
 - Dimmbar externen Dimmer (Nicht Inklusive) 

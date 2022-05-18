@@ -7,3 +7,5 @@
 - Dimmbar externen Dimmer (Nicht Inklusive) 
 - Abmessungen Breite: 12 cm Länge: 23 cm Höhe: 12 cm 
 - Fassung E27 
+
+

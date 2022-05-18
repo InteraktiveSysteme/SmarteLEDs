@@ -4,7 +4,7 @@ This is a project actively developed as part of the IA/WEB Course of the TH Koel
 
 ## Building
 
-Clone this repo :
+**Clone this repo :**
 ```bash
     # git clone https://github.com/InteraktiveSysteme/SmarteLEDs.git
 ```

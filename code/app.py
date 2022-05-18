@@ -5,17 +5,21 @@ import os
 import re
 import markdown
 
-app = Flask("SamuelsName")
+app = Flask("LedsSim")
 
 
 @app.route('/')
-def hello_world():  # put application's code here
-    return 'Hello World! <a href="/render">render bootiful image</a>'
+def index():  # put application's code here
+    return render_template('index.html')
 
 @app.route('/render')
 def render():
 	exec(open("Demo.py").read())
 	return render_template('render.html')
+
+@app.route('/lampList')
+def lampList():
+	return render_template('lampList.html')
 
 @app.route('/lamp/<id>')
 # liste mit allen lamp und

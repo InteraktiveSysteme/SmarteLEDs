@@ -5,21 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3e6a2a55-a89b-4de5-bf7c-4f947cce39d9" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/static/Logo/Bildmarke.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/Logo/Bildmarke_transparent.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/js/html_import.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/Code.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Code.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/flask_render.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/lamps/lamp01.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/lamps/lamp01.md" beforeDir="false" afterPath="$PROJECT_DIR$/static/lamps/lamp01.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/lamps/lamp02.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/lamps/lamp03.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/lamp.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/lamp.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/render.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/style.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,9 +32,11 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/static" />
-  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "last_opened_file_path": "D:/OneDrive - TH Köln/BAMT/Abgaben 6. Semester/IA/GIT/SmarteLEDs"
+  }
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\OneDrive - TH Köln\BAMT\Abgaben 6. Semester\IA\GIT\SmarteLEDs\Code\static" />
@@ -97,6 +85,7 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="Flask server.Code" />
       <item itemvalue="Python.app" />
     </list>
   </component>

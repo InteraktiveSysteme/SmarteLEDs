@@ -70,12 +70,12 @@
                               <p>The whole caption will only show up if the screen is at least medium size.</p>
                           </div>
                       </div>
-                	<!-- DAS HIER MUSS UEBER CAROUSELS GELOEST WERDEN -->
-                	{% for img in imglist %}
-                      		<div class="carousel-item">
-                          	<img class="d-block w-100" src="{{url_for('static', filename='/lamps/' + img)}}" alt="Second slide">
-                      		</div>
-                	{%  endfor %}
+                      <div class="carousel-item">
+                          <img class="d-block w-100" src="/images/example lamps/orny-wandleuchte-h3386002-1.jpg" alt="Second slide">
+                      </div>
+                      <div class="carousel-item">
+                          <img class="d-block w-100" src="/images/example lamps/orny-wandleuchte-h3386002-2.jpg" alt="Third slide">
+                      </div>
                   </div>
                   <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
                       <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -90,12 +90,12 @@
           <div class="col">
             <h2>
                 hallo hier steht template text
+                {% for i in list %}
+                    <li>{{ i }}</li>
+                {%  endfor %}
             </h2>
             <p>
                 hier steht noch mehr template text
-                <!-- HIER MUSS NOCH DER TEMPLATE TEXT IN DIE VARIABLE (UEBER APP.PY) -->
-                {{ description }}
-
             </p>
             <div class="btn-group">
               <a href="#" class="btn btn-outline-dark">add to shopping cart</a>

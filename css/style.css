@@ -7,15 +7,122 @@
 }
 .nav-link
 {
-color: rgb(0, 0, 0);
+  color: rgb(0, 0, 0);
   font-family: 'Lato', sans-serif;
   font-size: 20px;
   margin: 0px;
 }
 
+<<<<<<< HEAD
 .nav-item>a:hover {
   background-color: #ffbf006e;
   color: rgb(0, 0, 0);
 }
 
 
+=======
+.row{
+  text-align: center;
+}
+
+.card{
+  margin: 50px auto; 
+  float: none; 
+  margin-bottom: 10px; 
+  border: 1px solid #14274E !important;
+}
+
+.card-img-top{
+  width: 60%;
+  height: 60%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 20px;
+}
+
+.container{
+  width: 100vh;
+}
+.col{
+  height:fit-content;
+  text-align:center;
+  background-color: #f6f4f1;
+  height: 100vh;
+  width: 100%;
+}
+#col-test{
+  background-image: url(/images/room_setup.jpg);
+  background-position-x: 72%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100vh;
+  width: 100%;
+}
+.blur{
+  width: 100%;
+  height: 100vh;
+  backdrop-filter: blur(6px);
+  background-color: rgba(255, 255, blue, alpha);
+}
+#col-1{
+  border-top-left-radius: 15px;
+  background-image: url(/images/room_setup.jpg);
+  background-position-x: 72%;
+  background-size: cover;
+  filter: blur(6px);
+  -webkit-filter: blur(6px);
+}
+#col-1:hover{
+  border-top-left-radius: 15px;
+  transition: ease-in 0.5s;
+  transition: ease-out 0.5s;
+  filter: blur(0px);
+  -webkit-filter: blur(0px);
+}
+#col-2{
+  background-image: url(/images/phillips_lamp.jpg);
+  background-position-x: 85%;
+  background-size: cover;
+  filter: blur(6px);
+  -webkit-filter: blur(6px);
+}
+#col-2:hover{
+  transition: ease-in 0.5s;
+  transition: ease-out 0.5s;
+  filter: blur(0px);
+  -webkit-filter: blur(0px);
+}
+#col-3{
+  border-top-right-radius: 15px;
+  background-image: url(/images/company.jpg);
+  background-position-x: center;
+  background-size: cover;
+  filter: blur(6px);
+  -webkit-filter: blur(6px);
+}
+#col-3:hover{
+  border-top-right-radius: 15px;
+  transition: ease-in 0.5s;
+  transition: ease-out 0.5s;
+  filter: blur(0px);
+  -webkit-filter: blur(0px);
+  border-top-right-radius: 15px;
+}
+.btn-lg{
+  color: rgba(21,28,72,255);
+  border: none;
+  align-self: center;
+  box-shadow: 18%;
+}
+#infotext{
+  margin-top: 5%;
+}
+.background{
+  border-top-left-radius: 15px;
+  column-fill: auto;
+}
+#col-test{
+  border-top-left-radius: 15px;
+  background-size: cover;
+}
+>>>>>>> 55e110d3d67321345b64ad9807dbbd135065ba8d

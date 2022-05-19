@@ -42,3 +42,18 @@ This is a project actively developed as part of the IA/WEB Course of the TH Koel
 ```bash
      <img class="d-block w-100" src="{{url_for('static', filename='/lamps/lampe.png')}}" alt="Placeholder">
 ```
+
+**Jinja2**
+```bash
+     {% extends "base.html" %}
+{% block title %}Index{% endblock %}
+{% block head %}
+    {{ super() }}
+    <style type="text/css">
+        .important { color: #336699; }
+    </style>
+{% endblock %}
+{% block content %}
+    Hier kommt deine HTML seite hin!
+{% endblock %}
+```

@@ -34,3 +34,11 @@ This is a project actively developed as part of the IA/WEB Course of the TH Koel
     # git commit -m <msg> 
     # git push origin main
 ```
+## HTML
+
+
+**Images**
+
+```bash
+     <img class="d-block w-100" src="{{url_for('static', filename='/lamps/lampe.png')}}" alt="Placeholder">
+```

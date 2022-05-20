@@ -2,7 +2,6 @@
 {% block title %}Index{% endblock %}
 {% block head %}
     {{ super() }}
-    <script src="/lib/three.js"></script>
 {% endblock %}
 {% block content %}
 
@@ -13,13 +12,7 @@
 
             <div class="col-6" id="webGL">
 
-                <script src="../venv/Lib/three.js"></script>
-                <script src="../JS/LampViewer.js"></script>
 
-                <script src="{{ url_for('venv', filename='/Lib/three.js' ) }}"></script>
-                <!--<script src="{{ url_for('JS', filename='/LampViewer.js' ) }}"></script>
--->
-                <!--
                 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
                         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
                         crossorigin="anonymous"></script>
@@ -61,7 +54,7 @@
                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
                         <span class="sr-only">Next</span>
                     </a>
-                </div>-->
+                </div>
             </div>
             <div class="col ">
                 <h2>

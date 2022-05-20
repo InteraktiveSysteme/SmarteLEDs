@@ -3,9 +3,16 @@ from flask import render_template
 import time
 import os
 import re
-import markdown
+#import markdown
 
 app = Flask("LedsSim")
+
+@app.route('/child')
+def child():  # put application's code here
+    return render_template('child.html')
+@app.route('/test')
+def test():  # put application's code here
+    return render_template('test.html')
 
 
 @app.route('/')

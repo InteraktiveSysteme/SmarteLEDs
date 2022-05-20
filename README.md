@@ -57,3 +57,18 @@ This is a project actively developed as part of the IA/WEB Course of the TH Koel
     Hier kommt deine HTML seite hin!
 {% endblock %}
 ```
+# Style Guide
+```bash
+/* Color Theme Swatches in Hex */
+ "primary": #359DA3,
+ "light": #F2F2F2,
+ "secundary": #86D3D9,
+ "dark warning": #651A69; (Achtung! keine native Klasse)
+ "warning": #D06ED4,
+ "dark": #595959,
+
+![AdobeColor-Logopack 03](https://user-images.githubusercontent.com/102241189/169463891-b27be81f-0d85-473c-8286-e7c1fff241e3.jpeg)
+
+
+
+```

@@ -30,7 +30,7 @@ color: #f6f4f1;
   width: 100%;
 }
 #col-test{
-  background-image: url(/images/room_setup.jpg);
+
   background-position-x: 72%;
   background-repeat: no-repeat;
   background-size: cover;
@@ -45,7 +45,6 @@ color: #f6f4f1;
 }
 #col-1{
   border-top-left-radius: 15px;
-  background-image: url(/images/room_setup.jpg);
   background-position-x: 72%;
   background-size: cover;
   filter: blur(6px);
@@ -59,7 +58,6 @@ color: #f6f4f1;
   -webkit-filter: blur(0px);
 }
 #col-2{
-  background-image: url(/images/phillips_lamp.jpg);
   background-position-x: 85%;
   background-size: cover;
   filter: blur(6px);
@@ -73,7 +71,6 @@ color: #f6f4f1;
 }
 #col-3{
   border-top-right-radius: 15px;
-  background-image: url(/images/company.jpg);
   background-position-x: center;
   background-size: cover;
   filter: blur(6px);

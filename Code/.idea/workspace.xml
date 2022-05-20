@@ -164,6 +164,7 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="Flask server.Code" />
       <item itemvalue="Python.app" />
     </list>
   </component>

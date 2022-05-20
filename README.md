@@ -45,7 +45,7 @@ This is a project actively developed as part of the IA/WEB Course of the TH Koel
 
 **Jinja2**
 ```bash
-     {% extends "base.html" %}
+{% extends "base.html" %}
 {% block title %}Index{% endblock %}
 {% block head %}
     {{ super() }}

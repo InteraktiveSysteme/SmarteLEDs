@@ -49,9 +49,6 @@ This is a project actively developed as part of the IA/WEB Course of the TH Koel
 {% block title %}Index{% endblock %}
 {% block head %}
     {{ super() }}
-    <style type="text/css">
-        .important { color: #336699; }
-    </style>
 {% endblock %}
 {% block content %}
     Hier kommt deine HTML seite hin!

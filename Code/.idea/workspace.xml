@@ -5,9 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3e6a2a55-a89b-4de5-bf7c-4f947cce39d9" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/JS/LampViewer.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/images/pictogramme/logo-github.svg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/css/baseStyle.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/baseStyle.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/scss/styleGenerator.scss" beforeDir="false" afterPath="$PROJECT_DIR$/static/scss/styleGenerator.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/lampList.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/lampList.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/lamp.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/lamp.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,6 +25,7 @@
         <option value="Python Script" />
         <option value="HTML File" />
         <option value="CSS File" />
+        <option value="JavaScript File" />
       </list>
     </option>
   </component>
@@ -51,7 +56,7 @@
   "keyToString": {
     "DefaultHtmlFileTemplate": "HTML File",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "D:/THKöln/IA WebGit/SmarteLEDs/Code",
+    "last_opened_file_path": "D:/THKöln/IA WebGit/SmarteLEDs/Code/lib",
     "list.type.of.created.stylesheet": "CSS",
     "nodejs_package_manager_path": "npm",
     "settings.editor.selected.configurable": "preferences.pluginManager"
@@ -59,14 +64,15 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\THKöln\IA WebGit\SmarteLEDs\Code\lib" />
       <recent name="D:\OneDrive - TH Köln\BAMT\Abgaben 6. Semester\IA\GIT\SmarteLEDs\Code\static" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\THKöln\IA WebGit\SmarteLEDs\Code\static\images\pictogramme" />
       <recent name="D:\THKöln\IA WebGit\SmarteLEDs\Code\static\Logo" />
       <recent name="D:\THKöln\IA WebGit\SmarteLEDs\Code\static\css" />
       <recent name="D:\THKöln\IA WebGit\SmarteLEDs\Code\SassFolder" />
       <recent name="D:\THKöln\IA WebGit\SmarteLEDs\Code" />
-      <recent name="D:\THKöln\IA WebGit\SmarteLEDs\Code\static\images\pictogramme" />
     </key>
   </component>
   <component name="RunManager" selected="Python.app">
@@ -132,7 +138,7 @@
       <workItem from="1652951541137" duration="758000" />
       <workItem from="1652952523740" duration="541000" />
       <workItem from="1652953090811" duration="16522000" />
-      <workItem from="1653030265705" duration="8724000" />
+      <workItem from="1653030265705" duration="11871000" />
     </task>
     <servers />
   </component>
@@ -151,6 +157,6 @@
     </option>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/Code$app.coverage" NAME="app Coverage Results" MODIFIED="1653039950561" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Code$app.coverage" NAME="app Coverage Results" MODIFIED="1653043120687" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

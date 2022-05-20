@@ -5,16 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3e6a2a55-a89b-4de5-bf7c-4f947cce39d9" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/Logo/Logo2.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/Logo/Logo2.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/Logo/Logo3.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/css/LampStyle.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/LampStyle.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/style.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/Code.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/scss/styleGenerator.scss" beforeDir="false" afterPath="$PROJECT_DIR$/static/scss/styleGenerator.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/scss/styleGeneratormin.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/scss/styleGeneratormin.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/scss/styleGeneratormin.css.map" beforeDir="false" afterPath="$PROJECT_DIR$/static/scss/styleGeneratormin.css.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/lamp.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/lamp.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,6 +59,7 @@
     "WebServerToolWindowFactoryState": "false",
     "last_opened_file_path": "D:/THKöln/IA WebGit/SmarteLEDs/Code",
     "list.type.of.created.stylesheet": "CSS",
+    "nodejs_package_manager_path": "npm",
     "settings.editor.selected.configurable": "preferences.pluginManager"
   }
 }]]></component>
@@ -68,11 +68,11 @@
       <recent name="D:\OneDrive - TH Köln\BAMT\Abgaben 6. Semester\IA\GIT\SmarteLEDs\Code\static" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\THKöln\IA WebGit\SmarteLEDs\Code\static\Logo" />
       <recent name="D:\THKöln\IA WebGit\SmarteLEDs\Code\static\css" />
       <recent name="D:\THKöln\IA WebGit\SmarteLEDs\Code\SassFolder" />
       <recent name="D:\THKöln\IA WebGit\SmarteLEDs\Code" />
       <recent name="D:\THKöln\IA WebGit\SmarteLEDs\Code\static\images\pictogramme" />
-      <recent name="D:\OneDrive - TH Köln\BAMT\Abgaben 6. Semester\IA\GIT\SmarteLEDs\Code\static\js" />
     </key>
   </component>
   <component name="RunManager" selected="Python.app">
@@ -137,7 +137,8 @@
       <workItem from="1652951248108" duration="137000" />
       <workItem from="1652951541137" duration="758000" />
       <workItem from="1652952523740" duration="541000" />
-      <workItem from="1652953090811" duration="16052000" />
+      <workItem from="1652953090811" duration="16522000" />
+      <workItem from="1653030265705" duration="2805000" />
     </task>
     <servers />
   </component>
@@ -156,6 +157,6 @@
     </option>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/Code$app.coverage" NAME="app Coverage Results" MODIFIED="1652972815232" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Code$app.coverage" NAME="app Coverage Results" MODIFIED="1653033100435" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

@@ -8,8 +8,8 @@ $theme-colors: (
         "dark": #595959,
 );
 
-$btn-box-shadow:              inset 0 1px 0 rgba($white, .15), 0 1px 1px #D06ED4;
-$primary
+$btn-box-shadow:              inset 0 1px 0 rgba(white, .15), 0 1px 1px #D06ED4;
+$primary:                               #359DA3;
 $input-bg:                              #F2F2F2;
 $input-disabled-border-color:           null;
 
@@ -22,12 +22,11 @@ $input-border-radius:                   $border-radius;
 $input-border-radius-sm:                $border-radius-sm;
 $input-border-radius-lg:                $border-radius-lg;
 */
-$input-focus-bg:                        $input-bg;
+
 $input-focus-border-color:              #359DA3;
 $input-focus-color:                    #651A69;
 //$input-focus-width:                     $input-btn-focus-width;
 //$input-focus-box-shadow:                $input-btn-focus-box-shadow;
-*/
 $input-placeholder-color:               #359DA3;
 $input-plaintext-color:                 #359DA3;
 

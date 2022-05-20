@@ -22,30 +22,31 @@
     {% endblock %}
 </head>
 <body>
-<nav class="navbar bg-primary navbar-expand-sm ">
+<nav class="navbar bg-light navbar-expand-sm ">
     <div class="container-fluid">
         <div class="collapse navbar-collapse " id="navbarSupportedContent">
             <ul class="navbar-nav me-auto order-0 ">
                 <li class="nav-item">
-                    <img class="d-block" width="50" src="{{ url_for('static', filename='/Logo/Bildmarke_transparent.png') }}"
-                         alt="logo">
+                    <a href="#"><img style="padding-right: 30px" class="d-block" height="50"
+                                     src="{{ url_for('static', filename='/Logo/Logo2.svg') }}"
+                                     alt="logo"></a>
                 </li>
                 <li class="nav-item">
-                        <a class="nav-link " href="#">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">SimuLED</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">About us</a>
-                    </li>
-                    <li>
-                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                                aria-expanded="false" aria-label="Toggle navigation">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
-                    </li>
+                    <a class="nav-link " href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">SimuLED</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">About us</a>
+                </li>
+                <li>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                </li>
 
             </ul>
             <div class="mx-auto">
@@ -54,10 +55,11 @@
                 </ul>
             </div>
             <form class="d-flex ms-auto order-5">
+
                 <input class="form-control me-2" type="search" placeholder="Username or Email" aria-label="Search">
                 <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-secundary" type="submit">Login</button>
-                <button style="margin-left: 7px" class="btn btn-outline-secundary" type="submit">Register</button>
+                <button class="btn btn-outline-primary" type="submit">Login</button>
+                <button style="margin-left: 7px" class="btn btn-outline-primary" type="submit">Register</button>
             </form>
         </div>
     </div>
@@ -67,10 +69,18 @@
 <div id="content">{% block content %}{% endblock %}</div>
 <div id="footer">
     {% block footer %}
-        <h2 style="text-align: center" class="align-content-center">
-        Hier kommt das Impressum und so hin!
-        </h2>
-
+        <div class="bg-light">
+            <h2 style="text-align: center" class="align-content-center">
+                Hier kommt das Impressum und so hin!<br/>
+                Hier kommt das Impressum und so hin!<br/>
+                Hier kommt das Impressum und so hin!<br/>
+                Hier kommt das Impressum und so hin!<br/>
+                Hier kommt das Impressum und so hin!<br/>
+                Hier kommt das Impressum und so hin!<br/>
+                Hier kommt das Impressum und so hin!<br/>
+                Hier kommt das Impressum und so hin!<br/>
+            </h2>
+        </div>
     {% endblock %}
 </div>
 </body>

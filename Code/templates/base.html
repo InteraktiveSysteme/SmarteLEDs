@@ -22,7 +22,7 @@
     {% endblock %}
 </head>
 <body>
-<nav class="navbar bg-light navbar-expand-sm ">
+<nav class="navbar bg-light fixed-top navbar-expand-sm ">
     <div class="container-fluid">
         <div class="collapse navbar-collapse " id="navbarSupportedContent">
             <ul class="navbar-nav me-auto order-0 ">
@@ -64,24 +64,86 @@
         </div>
     </div>
 </nav>
+<div style="margin-top: 100px">
 
-
-<div id="content">{% block content %}{% endblock %}</div>
-<div id="footer">
-    {% block footer %}
-        <div class="bg-light">
-            <h2 style="text-align: center" class="align-content-center">
-                Hier kommt das Impressum und so hin!<br/>
-                Hier kommt das Impressum und so hin!<br/>
-                Hier kommt das Impressum und so hin!<br/>
-                Hier kommt das Impressum und so hin!<br/>
-                Hier kommt das Impressum und so hin!<br/>
-                Hier kommt das Impressum und so hin!<br/>
-                Hier kommt das Impressum und so hin!<br/>
-                Hier kommt das Impressum und so hin!<br/>
-            </h2>
-        </div>
-    {% endblock %}
 </div>
+<!-- Page Content -->
+<div id="content">{% block content %}{% endblock %}</div>
+
+
+<!-- Footer -->
+<footer class="text-center text-lg-start bg-light text-muted">
+
+
+  <!-- Section: Links  -->
+
+  <section class="" >
+    <div class="container text-center text-md-start mt-5" style="margin-top: 10px">
+      <!-- Grid row -->
+      <div class="row mt-3">
+        <!-- Grid column -->
+        <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+          <!-- Content -->
+          <h6 class="text-uppercase fw-bold mb-4">
+            <i class="fas fa-gem me-3"></i>TH Koeln
+          </h6>
+          <p>
+            This Website is a product of the IA and Web Project Phase of the TH Köln.
+          </p>
+        </div>
+        <!-- Grid column -->
+
+        <!-- Grid column -->
+        <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+          <!-- Links -->
+          <h6 class="text-uppercase fw-bold mb-4">
+            DEVELOPERS
+          </h6>
+          <p>
+            <a href="#!" class="text-reset">David Mertens</a>
+          </p>
+          <p>
+            <a href="#!" class="text-reset">React</a>
+          </p>
+          <p>
+            <a href="#!" class="text-reset">Vue</a>
+          </p>
+          <p>
+            <a href="#!" class="text-reset">Laravel</a>
+          </p>
+        </div>
+        <!-- Grid column -->
+
+        <!-- Grid column -->
+        <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+          <!-- Links -->
+          <h6 class="text-uppercase fw-bold mb-4">
+            CONTACT
+          </h6>
+          <p>
+            <a href="#!" class="text-reset">david_tim_luca.mertens@smail.th-koeln.de</a>
+          </p>
+          <p>
+            <a href="#!" class="text-reset">Settings</a>
+          </p>
+          <p>
+            <a href="#!" class="text-reset">Orders</a>
+          </p>
+          <p>
+            <a href="#!" class="text-reset">Help</a>
+          </p>
+        </div>
+        <!-- Grid column -->
+
+
+        <!-- Grid column -->
+      </div>
+      <!-- Grid row -->
+    </div>
+  </section>
+  <!-- Section: Links  -->
+
+</footer>
+<!-- Footer -->
 </body>
 </html>

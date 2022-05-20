@@ -67,8 +67,5 @@ This is a project actively developed as part of the IA/WEB Course of the TH Koel
  "warning": #D06ED4,
  "dark": #595959,
 
-![AdobeColor-Logopack 03](https://user-images.githubusercontent.com/102241189/169463891-b27be81f-0d85-473c-8286-e7c1fff241e3.jpeg)
-
-
 
 ```

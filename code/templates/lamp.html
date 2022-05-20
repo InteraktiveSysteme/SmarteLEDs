@@ -78,7 +78,7 @@
                     E27<br/>
                 </p>
                 -->
-                <table>
+                <!--table>
                     <tr>
                         <td style="padding-right: 110px">Preis:</td>
                         <td>10€</td>
@@ -107,12 +107,13 @@
                         <td>ja (externer Dimmer nicht im Lieferumfang enthalten</td>
                     </tr>
 
-                </table>
+                </table-->
+                {{ description }}
                 <table>
                         {% for entry in properties %}
                             <tr>
-                            <td style="padding-right: 30px">{{entry}}</td>
-                            <td>propValues[loop.index0]</td>
+                                <td style="padding-right: 30px">{{entry}}</td>
+                                <td style="padding-right: 30px">{{entry}}</td>
                             </tr>
                         {% endfor %}
                 </table>

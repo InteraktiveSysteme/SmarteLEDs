@@ -1,4 +1,5 @@
 from flask import Blueprint, request, url_for, redirect, render_template, flash
+from flask import send_from_directory
 
 import time
 import os
@@ -27,6 +28,7 @@ def lamp(id):
 
     # funktion erstellt dirliste mit allen lampennamen
     entries = os.listdir('static/lamps')
+    print("HALLOOOOO: ", entries)
     lamplist = []
     for e in entries:
         if re.match(".*\.md", e):
@@ -43,15 +45,16 @@ def lamp(id):
 
     print(imglist)
 
-    with open("a1.md".format(a1 = lamplist[int(id)]), 'r') as file:
-        mdtext = file.read().split("\n")
+    file = open("static/lamps/{a1}.md".format(a1 = lamplist[int(id)]))
+    mdtext = file.read().split("\n")
+    #print(mdtext)
 
     props = []
     vals = []
     mdtext, props, vals = process(mdtext)
 
     # funktion laedt lampenbeschreibung
-    return render_template('lamp.html', description = mdtext, properties = props, values = vals, imglist= imglist)
+    return render_template('lamp.html', description = mdtext, properties = props, imglist= imglist)
 
 @app.route('/test')
 def test():  # put application's code here
@@ -75,8 +78,8 @@ def process(textarray):
         match2 = re.split("^{.*}", textarray[i])
 
         if len(match) > 0:
-            props.append(match[0])
-            vals.append(match2[1].removeprefix(" "))
+            props.append(match[0].replace("{", "").replace("}", ""))
+            props.append(match2[1].removeprefix(" "))
             textarray[i] = ""
 
 

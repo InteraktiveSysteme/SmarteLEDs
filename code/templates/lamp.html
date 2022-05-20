@@ -57,6 +57,7 @@
                 </div>
             </div>
             <div class="col ">
+                <!--
                 <h2>
                     Super Lampe
                 </h2>
@@ -76,6 +77,46 @@
                     Fassung<br/>
                     E27<br/>
                 </p>
+                -->
+                <table>
+                    <tr>
+                        <td style="padding-right: 110px">Preis:</td>
+                        <td>10€</td>
+                    </tr>
+                    <tr>
+                        <td>Versandkosten:</td>
+                        <td>4,99€<br/>
+                            Versandfertig in 2-4 Werktagen</td>
+                    </tr>
+                    <tr>
+                        <td>Artikelnummer:</td>
+                        <td>273397</td>
+                    </tr>
+                    <tr>
+                        <td>Abmessungen:</td>
+                        <td>Breite: 12cm<br/>
+                            Länge: 50cm<br/>
+                            Höhe: 12cm</td>
+                    </tr>
+                    <tr>
+                        <td>Fassung:</td>
+                        <td>E27</td>
+                    </tr>
+                    <tr>
+                        <td>Dimmbar</td>
+                        <td>ja (externer Dimmer nicht im Lieferumfang enthalten</td>
+                    </tr>
+
+                </table>
+                <table>
+                        {% for entry in properties %}
+                            <tr>
+                            <td style="padding-right: 30px">{{entry}}</td>
+                            <td>propValues[loop.index0]</td>
+                            </tr>
+                        {% endfor %}
+                </table>
+
 
                 <a href="#" class="btn btn-outline-primary">SimuLED this lamp</a>
                 <a href="#" class="btn btn-outline-primary">add to shopping cart</a>

@@ -16,4 +16,8 @@
     background-color: #86D3D9;
     color: rgb(0, 0, 0);
     border-radius: 5px;
-  }
+}
+
+.nav-link{
+    color: #595959; !important
+}

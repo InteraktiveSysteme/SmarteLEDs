@@ -4,7 +4,7 @@
 body{
   background-color: #f6f4f1
 }
-.nav-item
+/*.nav-item
 {
   color: #f6f4f1;
   font-family: 'Lato', sans-serif;
@@ -18,9 +18,14 @@ color: #f6f4f1;
   font-size: 30px;
   margin: 0px;
   
-}
-h1{
+}*/
+.fs-2{
   margin-top: 2%;
+  margin-left: 5%;
+  margin-bottom: 1%;
+}
+.fs-5{
+  margin-top: none;
   margin-left: 5%;
   margin-bottom: 2%;
 }
@@ -29,4 +34,11 @@ h1{
 }
 #col-2{
   
+}
+#card-img{
+  margin: 3%;
+  height: 30%;
+}
+#card-btn{
+  margin-left: 1%;
 }

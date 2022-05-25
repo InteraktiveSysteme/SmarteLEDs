@@ -7,7 +7,7 @@ import re
 
 app = Flask("LedsSim")
 
-@app.route('/static/Gltf/<filename>',methods = ['GET','POST'])
+@app.route('/static/Gltf/<filename>',methods = ['GET'])
 def get_files(filename):
     """Download a file."""
     try:

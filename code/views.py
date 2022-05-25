@@ -4,7 +4,6 @@ from flask import send_from_directory
 import time
 import os
 import re
-import markdown
 
 from flask import Blueprint, request, url_for, redirect, render_template, flash
 app = Blueprint('app', __name__, template_folder="templates/")
@@ -28,12 +27,11 @@ def lamp(id):
 
     # funktion erstellt dirliste mit allen lampennamen
     entries = os.listdir('static/lamps')
-    print("HALLOOOOO: ", entries)
     lamplist = []
     for e in entries:
         if re.match(".*\.md", e):
             lamplist.append(re.sub("\..*", "", e))
-
+    lamplist.sort()
     # funktion extrahiert lampe mit id {id} aus list
     print(lamplist[int(id)])
     # funktion erstellt liste mit bildern zugehoerig zu lampe {id}
@@ -83,5 +81,8 @@ def process(textarray):
             textarray[i] = ""
 
 
-    textarray = markdown.markdown("\n".join(str(x) for x in textarray))
+    textarray = "\n".join(str(x) for x in textarray)
+    print(textarray)
+    print(props)
+    print(vals)
     return textarray, props, vals

@@ -110,10 +110,10 @@
                 </table-->
                  {{ description|markdown }}
                 <table>
-                        {% for entry in tableList %}
+                        {% for row in tableContent %}
                             <tr>
-                                <td style="padding-right: 30px">{{entry.property}}</td>
-                                <td>{{entry.value}}</td>
+                                <td style="padding-right: 30px">{{ row[0] }}</td>
+                                <td>{{ row[1] }}</td>
                             </tr>
                         {% endfor %}
                 </table>

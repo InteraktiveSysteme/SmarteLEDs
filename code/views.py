@@ -51,10 +51,10 @@ def lamp(id):
     #print(mdtext)
 
 
-    mdtext, entryList = process(mdtext)
+    mdtext, data = process(mdtext)
 
     # funktion laedt lampenbeschreibung
-    return render_template('lamp.html', description = mdtext, tableList = entryList, imglist= imglist)
+    return render_template('lamp.html', description = mdtext, tableContent = data, imglist= imglist)
 
 @app.route('/test')
 def test():  # put application's code here
@@ -70,18 +70,21 @@ def render():
     return render_template('render.html')
 
 def process(textarray):
-    entryList = []
+    vals = []
+    props = []
     for i in range(0, len(textarray)):
         #print("Durchlauf ", ihttps://www.codersdiaries.com/blog/flask-project-structure)
         property = re.findall("^{.*}", textarray[i])
         value = re.split("^{.*}", textarray[i])
 
         if len(property) > 0:
-            entryList.append(models.TableEntry(property[0].replace("{", "").replace("}", ""), value[1].removeprefix(" ")))
+            props.append(property[0].replace("{", "").replace("}", ""))
+            vals.append(value[1].removeprefix(" "))
             textarray[i] = ""
 
     textarray = "\n".join(str(x) for x in textarray)
     #print(textarray)
     #print(props)
     #print(vals)
-    return textarray, entryList
+    data = zip(props, vals)
+    return textarray, data

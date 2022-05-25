@@ -15,4 +15,5 @@ class DevelopmentConfig(Config):
     ENV="development"
     DEVELOPMENT=True
     DEBUG=True
+
 SQLALCHEMY_DATABASE_URI="sqlite:///development_database.db"

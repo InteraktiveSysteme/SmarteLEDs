@@ -6,6 +6,9 @@ import os
 import re
 
 from flask import Blueprint, request, url_for, redirect, render_template, flash
+
+import models
+
 app = Blueprint('app', __name__, template_folder="templates/")
 
 #@app.app_errorhandler(404)
@@ -47,12 +50,11 @@ def lamp(id):
     mdtext = file.read().split("\n")
     #print(mdtext)
 
-    props = []
-    vals = []
-    mdtext, props, vals = process(mdtext)
+
+    mdtext, entryList = process(mdtext)
 
     # funktion laedt lampenbeschreibung
-    return render_template('lamp.html', description = mdtext, properties = props, imglist= imglist)
+    return render_template('lamp.html', description = mdtext, tableList = entryList, imglist= imglist)
 
 @app.route('/test')
 def test():  # put application's code here
@@ -68,21 +70,18 @@ def render():
     return render_template('render.html')
 
 def process(textarray):
-    props = []
-    vals = []
+    entryList = []
     for i in range(0, len(textarray)):
-        #print("Durchlauf ", i)
-        match = re.findall("^{.*}", textarray[i])
-        match2 = re.split("^{.*}", textarray[i])
+        #print("Durchlauf ", ihttps://www.codersdiaries.com/blog/flask-project-structure)
+        property = re.findall("^{.*}", textarray[i])
+        value = re.split("^{.*}", textarray[i])
 
-        if len(match) > 0:
-            props.append(match[0].replace("{", "").replace("}", ""))
-            props.append(match2[1].removeprefix(" "))
+        if len(property) > 0:
+            entryList.append(models.TableEntry(property[0].replace("{", "").replace("}", ""), value[1].removeprefix(" ")))
             textarray[i] = ""
 
-
     textarray = "\n".join(str(x) for x in textarray)
-    print(textarray)
-    print(props)
-    print(vals)
-    return textarray, props, vals
+    #print(textarray)
+    #print(props)
+    #print(vals)
+    return textarray, entryList

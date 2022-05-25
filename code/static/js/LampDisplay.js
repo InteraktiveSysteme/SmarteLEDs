@@ -49,7 +49,6 @@ function animate(time) {
   renderer.render(scene, camera);
   requestAnimationFrame(animate);
 }
-var loader = new THREE.GLTFLoader();
 requestAnimationFrame(animate);
 
 //2.datei

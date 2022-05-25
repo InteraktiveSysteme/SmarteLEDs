@@ -65,7 +65,7 @@ function loadModels() {
    const onLoad = ( gltf, position ) => {
       const model = gltf.scene.children[ 0 ];
       model.position.copy( position );
-
+    
       const animation = gltf.animations[ 0 ];
       const mixer = new THREE.AnimationMixer( model );
       mixers.push( mixer );
@@ -83,7 +83,7 @@ function loadModels() {
 
    // Modell asynchron laden. 
    const parrotPosition = new THREE.Vector3( -20, 0, 2.5 );
-   loader.load( 'Gltf\BarramundiFish.gltf', gltf => onLoad( gltf, parrotPosition ), onProgress, onError );
+   loader.load( "/static/Gltf/DamagedHelmet.glb", gltf => onLoad( gltf, parrotPosition ), onProgress, onError );
 }
 
 main();

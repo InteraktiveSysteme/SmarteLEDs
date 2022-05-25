@@ -1,5 +1,7 @@
 from flask import Flask
 from flask import render_template
+from flask import send_from_directory
+import flask
 import time
 import os
 import re
@@ -7,14 +9,17 @@ import re
 
 app = Flask("LedsSim")
 
+
 @app.route('/static/Gltf/<filename>',methods = ['GET'])
 def get_files(filename):
-    """Download a file."""
-    try:
-		path = "static/Gltf/" + filename
-		return send_from_directory(DOWNLOAD_DIRECTORY, path, as_attachment=True)
-    except FileNotFoundError:
-        abort(404)
+	try:
+		path = filename
+		print("moin")
+		return send_from_directory("static/Gltf/",path, as_attachment=True)
+	except FileNotFoundError:
+		print("ABORT!!!")
+		abort(404)
+
 
 @app.route('/child')
 def child():  # put application's code here
@@ -40,7 +45,6 @@ def lampList():
 # liste mit allen lamp und
 # uri parameter /lamp/{id}
 def lamp(id):
-
 	# funktion erstellt dirliste mit allen lampennamen
 	entries = os.listdir('static/lamps')
 	lamplist = []

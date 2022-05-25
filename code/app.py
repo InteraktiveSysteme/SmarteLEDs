@@ -7,13 +7,21 @@ import re
 
 app = Flask("LedsSim")
 
+@app.route('/static/Gltf/<filename>',methods = ['GET','POST'])
+def get_files(filename):
+    """Download a file."""
+    try:
+		path = "static/Gltf/" + filename
+		return send_from_directory(DOWNLOAD_DIRECTORY, path, as_attachment=True)
+    except FileNotFoundError:
+        abort(404)
+
 @app.route('/child')
 def child():  # put application's code here
     return render_template('child.html')
 @app.route('/test')
 def test():  # put application's code here
     return render_template('test.html')
-
 
 @app.route('/')
 def index():  # put application's code here

@@ -1,53 +1,55 @@
-//import * as THREE from './three.js-master/build/three.module.js';
-import  'GLTFLoader.js';
-var scene = new THREE.Scene();
-var breite = document.getElementById('gl').offsetWidth;
-var hoehe = document.getElementById('gl').offsetHeight;
-window.alert(breite)
-const loader = new GLTFLoader();
+"use strict";
 
+const  renderer = new THREE.WebGLRenderer({canvas: document.getElementById("canvas")});
 
-/*loader.load('code/static/Gltf/BarramundiFish.gltf',function (gltf){
-  console.log(gltf)
-}*/
+// There's no reason to set the aspect here because we're going
+// to set it every frame anyway so we'll set it to 2 since 2
+// is the the aspect for the canvas default size (300w/150h = 2)
+const  camera = new THREE.PerspectiveCamera(70, 2, 1, 1000);
+camera.position.z = 400;
 
-// Create a basic perspective camera
-var camera = new THREE.PerspectiveCamera( 75, breite/hoehe, 0.1, 1000 );
-camera.position.z = 4;
+const scene = new THREE.Scene();
+const geometry = new THREE.BoxGeometry(200, 200, 200);
+const material = new THREE.MeshPhongMaterial({
+  color: 0x555555,
+  specular: 0xffffff,
+  shininess: 50,
+  shading: THREE.SmoothShading
+});
 
-// Create a renderer with Antialiasing
-var renderer = new THREE.WebGLRenderer({antialias:true});
+const mesh = new THREE.Mesh(geometry, material);
+scene.add(mesh);
 
-// Configure renderer clear color
-renderer.setClearColor("#000000");
+const light1 = new THREE.PointLight(0xff80C0, 2, 0);
+light1.position.set(200, 100, 300);
+scene.add(light1);
 
-// Configure renderer size
-renderer.setSize( breite, hoehe );
+function resizeCanvasToDisplaySize() {
+  const canvas = renderer.domElement;
+  const width = canvas.clientWidth;
+  const height = canvas.clientHeight;
+  if (canvas.width !== width ||canvas.height !== height) {
+    // you must pass false here or three.js sadly fights the browser
+    renderer.setSize(width, height, false);
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
 
-// Append Renderer to DOM
-document.getElementById("gl").appendChild( renderer.domElement );
+    // set render target sizes here
+  }
+}
 
-// ------------------------------------------------
-// FUN STARTS HERE
-// ------------------------------------------------
+function animate(time) {
+  time *= 0.001;  // seconds
 
-// Create a Cube Mesh with basic material
-var geometry = new THREE.BoxGeometry( 1, 1, 1 );
-var material = new THREE.MeshBasicMaterial( { color: "#433F81" } );
-var cube = new THREE.Mesh( geometry, material );
-var obj = GLTFL
-// Add cube to Scene
-scene.add( cube );
+  resizeCanvasToDisplaySize();
 
-// Render Loop
-var render = function () {
-  requestAnimationFrame( render );
+  mesh.rotation.x = time * 0.5;
+  mesh.rotation.y = time * 1;
 
-  cube.rotation.x += 0.01;
-  cube.rotation.y += 0.01;
-
-  // Render the scene
   renderer.render(scene, camera);
-};
+  requestAnimationFrame(animate);
+}
+var loader = new THREE.GLTFLoader();
+requestAnimationFrame(animate);
 
-render();
+//2.datei

@@ -1,3 +1,5 @@
+import itertools
+
 from flask import Blueprint, request, url_for, redirect, render_template, flash
 from flask import send_from_directory
 
@@ -52,9 +54,10 @@ def lamp(id):
 
 
     mdtext, data = process(mdtext)
+    #imglist = zip(itertools.count, imglist)
 
     # funktion laedt lampenbeschreibung
-    return render_template('lamp.html', description = mdtext, tableContent = data, imglist= imglist)
+    return render_template('lamp.html', description = mdtext, tableContent = data, imglist= imglist, zip=zip, indices=itertools.count)
 
 @app.route('/test')
 def test():  # put application's code here
@@ -73,7 +76,6 @@ def process(textarray):
     vals = []
     props = []
     for i in range(0, len(textarray)):
-        #print("Durchlauf ", ihttps://www.codersdiaries.com/blog/flask-project-structure)
         property = re.findall("^{.*}", textarray[i])
         value = re.split("^{.*}", textarray[i])
 

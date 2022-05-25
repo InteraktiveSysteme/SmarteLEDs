@@ -9,9 +9,7 @@ import re
 
 from flask import Blueprint, request, url_for, redirect, render_template, flash
 
-import models
-
-app = Blueprint('app', __name__, template_folder="templates/")
+app = Blueprint('Simuled Website', __name__, template_folder="templates/")
 
 #@app.app_errorhandler(404)
 #def page_not_found(e):

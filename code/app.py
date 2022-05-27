@@ -13,6 +13,7 @@ def create_app():
     db = SQLAlchemy(mapp)
     migrate = Migrate(mapp, db)
 
+
     return mapp
 
 if __name__ == '__main__':

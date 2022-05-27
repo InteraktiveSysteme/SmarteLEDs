@@ -50,27 +50,11 @@ def lamp(id):
     mdtext = file.read().split("\n")
     #print(mdtext)
 
+    mdtext, data = extractTableData(mdtext)
 
-    mdtext, data = process(mdtext)
-    #imglist = zip(itertools.count, imglist)
-
-    # funktion laedt lampenbeschreibung
     return render_template('lamp.html', description = mdtext, tableContent = data, imglist= imglist, zip=zip, indices=itertools.count)
 
-@app.route('/test')
-def test():  # put application's code here
-    return render_template('test.html')
-
-@app.route('/child')
-def child():  # put application's code here
-    return render_template('child.html')
-
-@app.route('/render')
-def render():
-    exec(open("Demo.py").read())
-    return render_template('render.html')
-
-def process(textarray):
+def extractTableData(textarray):
     vals = []
     props = []
     for i in range(0, len(textarray)):
@@ -88,3 +72,17 @@ def process(textarray):
     #print(vals)
     data = zip(props, vals)
     return textarray, data
+
+@app.route('/test')
+def test():  # put application's code here
+    return render_template('test.html')
+
+@app.route('/child')
+def child():  # put application's code here
+    return render_template('child.html')
+
+@app.route('/render')
+def render():
+    exec(open("Demo.py").read())
+    return render_template('render.html')
+

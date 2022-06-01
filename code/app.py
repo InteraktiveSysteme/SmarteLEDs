@@ -28,6 +28,10 @@ def render():
 def lampList():
 	return render_template('lampList.html')
 
+@app.route('/shoppingCart')
+def shoppingCart():
+	return render_template('shopping_cart.html')
+
 @app.route('/lamp/<id>')
 # liste mit allen lamp und
 # uri parameter /lamp/{id}

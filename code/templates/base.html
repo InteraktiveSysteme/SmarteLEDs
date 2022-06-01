@@ -54,12 +54,11 @@
 
                 </ul>
             </div>
-            <form class="d-flex ms-auto order-5">
-
-                <input class="form-control me-2" type="search" placeholder="Username or Email" aria-label="Search">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-primary" type="submit">Login</button>
-                <button style="margin-left: 7px" class="btn btn-outline-primary" type="submit">Register</button>
+            <form action="/login" method="POST" class="d-flex ms-auto order-5">
+                <input class="form-control me-2" type="search" name="username" placeholder="Username or Email" aria-label="Search">
+                <input class="form-control me-2" type="search" name="password" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-primary" name="loginbutton" type="submit">Login</button>
+                <button style="margin-left: 7px" class="btn btn-outline-primary" name="registerbutton" type="submit">Register</button>
             </form>
         </div>
     </div>

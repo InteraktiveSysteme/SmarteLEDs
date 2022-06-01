@@ -1,10 +1,8 @@
-from flask import Flask
-from flask import render_template, request
-import time
+from flask import render_template, request, url_for
 import os
 import re
-# import markdown
-from __init__ import app, db, migrate, User
+import markdown
+from app import app, db, User
 
 
 @app.route('/child')
@@ -38,7 +36,7 @@ def lampList():
 # uri parameter /lamp/{id}
 def lamp(id):
     # funktion erstellt dirliste mit allen lampennamen
-    entries = os.listdir('static/lamps')
+    entries = os.listdir('app/static/lamps')
     lamplist = []
     for e in entries:
         if re.match(".*\.md", e):
@@ -59,6 +57,8 @@ def lamp(id):
     return render_template('lamp.html', description="{a1}.md".format(a1=lamplist[int(id)]), imglist=imglist)
 
 
+
+
 @app.route('/login', methods=["POST"])
 def login():
     username = request.form.get("username")
@@ -68,7 +68,6 @@ def login():
 
     print("username: ", username, "  password: ", password, "login: ", login, "  register: ", register)
     user = User(username=username, password=password)
-
     # register
     if login == None:
         try:
@@ -81,7 +80,3 @@ def login():
     #if register == None:
         #missing (login)
     return render_template('index.html')
-
-
-if __name__ == '__main__':
-    app.run()

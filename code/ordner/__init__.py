@@ -35,4 +35,4 @@ class User(db.Model):
     def __repr__(self):
         return "User'{}'>".format(self.username)
 
-from app import routes
+from ordner import routes

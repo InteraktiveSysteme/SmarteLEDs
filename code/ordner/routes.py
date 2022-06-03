@@ -2,7 +2,7 @@ from flask import render_template, request, url_for
 import os
 import re
 import markdown
-from app import app, db, User
+from ordner import app, db, User
 
 
 @app.route('/child')
@@ -36,7 +36,7 @@ def lampList():
 # uri parameter /lamp/{id}
 def lamp(id):
     # funktion erstellt dirliste mit allen lampennamen
-    entries = os.listdir('app/static/lamps')
+    entries = os.listdir('ordner/static/lamps')
     lamplist = []
     for e in entries:
         if re.match(".*\.md", e):

@@ -15,6 +15,7 @@ const geometry = new THREE.SphereBufferGeometry(0.5, 64, 64);
 const frontBackGeo = new THREE.PlaneGeometry( width, height );
 const SideGeo = new THREE.PlaneGeometry( depth, height )
 const topBottomGeo = new THREE.PlaneGeometry( width, depth )
+const cubeGeo = new THREE.BoxGeometry( .25, 0.25, .25)
 
 // Materials
 const material = new THREE.MeshStandardMaterial( {color: 0xffff00, side: THREE.DoubleSide} )
@@ -96,6 +97,20 @@ const bottomPlane = new THREE.Mesh(topBottomGeo, material3)
 bottomPlane.rotation.x = -( Math.PI / 2 )
 bottomPlane.position.y = - ( height / 2 )
 scene.add(bottomPlane)
+
+// interior Mesh
+const cube = new THREE.Mesh( cubeGeo, material2 )
+scene.add( cube )
+
+// creating the bounding box for the cube
+const box = new THREE.Box3( new THREE.Vector3(), new THREE.Vector3() )
+cube.geometry.computeBoundingBox()
+box.setFromObject( cube )
+
+// saving width, height and depth into a Vector3
+const vec = new THREE.Vector3()
+box.getSize( vec )
+cube.position.y = - ( height / 2 ) + ( vec.y / 2 )
 
 //adding GLTF Cube which was exported from a blender file
 

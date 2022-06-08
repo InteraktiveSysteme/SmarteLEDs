@@ -74,7 +74,7 @@ scene.add(topPlane)
 
 const bottomPlane = new THREE.Mesh(topBottomGeo, material3)
 bottomPlane.castShadow = true
-bottomPlane.receiveShadow = true
+bottomPlane.receiveShadow  = true
 bottomPlane.rotation.x = -( Math.PI / 2 )
 bottomPlane.position.y = - ( height / 2 )
 scene.add(bottomPlane)
@@ -94,6 +94,7 @@ lightCube2.position.set( 0, 0.2, 0.45 )
 scene.add( lightCube2 ) 
 
 // creating the bounding box for the cube
+//  parenting bounding box to object
 const box = new THREE.Box3( new THREE.Vector3(), new THREE.Vector3() )
 cube.geometry.computeBoundingBox()
 box.setFromObject( cube )

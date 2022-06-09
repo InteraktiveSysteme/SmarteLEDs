@@ -225,6 +225,44 @@ camera.position.y = 0
 camera.position.z = 2
 scene.add(camera)
 
+//Eventlistener
+
+document.addEventListener('mousemove', onDocumentMouseMove)
+
+let mouseX = 0
+let mouseY = 0
+
+let targetX = 0
+let targetY = 0
+
+const windowHalfX = window.innerWidth / 2;
+const windowHalfY = window.innerHeight / 2;
+
+function onDocumentMouseMove(event){
+    mouseX = (event.pageX)
+    //mouseY = (event.clientY - windowHalfY)
+}
+// window.addEventListener( "pointerdown", e => {
+//     window.setPointerCapture( e.pointerId )
+//     setCameraPosition( e )
+
+//     window.addEventListener( "pointermove", setCameraPosition )
+//     window.addEventListener( "pointerup", e => {
+//         window.removeEventListener( "pointermove", setCameraPosition )
+//     }, { once: true } )
+// })
+
+// function setCameraPosition( e ){
+
+//     camera.position.x = 2 * Math.cos( 2 * Math.PI * ( mouseX / window.innerWidth ) ) 
+//     camera.position.z = 2 * Math.sin( 2 * Math.PI * ( mouseX / window.innerWidth ) )
+// }
+
+window.addEventListener('mousedown', () => {
+    camera.position.x = 2 * Math.cos( 2 * Math.PI * ( mouseX / window.innerWidth ) ) 
+    camera.position.z = 2 * Math.sin( 2 * Math.PI * ( mouseX / window.innerWidth ) )
+})
+
 // Controls
 // const controls = new OrbitControls(camera, canvas)
 // controls.enableDamping = true
@@ -245,22 +283,7 @@ renderer.shadowMap.type = THREE.VSMShadowMap
  * Animate
  */
 
-//mouse movement animation
-document.addEventListener('mousemove', onDocumentMouseMove)
 
-let mouseX = 0
-let mouseY = 0
-
-let targetX = 0
-let targetY = 0
-
-const windowHalfX = window.innerWidth / 2;
-const windowHalfY = window.innerHeight / 2;
-
-function onDocumentMouseMove(event){
-    mouseX = (event.clientX)
-    //mouseY = (event.clientY - windowHalfY)
-}
 
 //scroll animation
 /*const updateSphere = (event) => {
@@ -285,9 +308,9 @@ const tick = () =>
     // Update objects
     //sphere.rotation.y = .5 * elapsedTime
 
-    //slider rotation
-    camera.position.x = 2 * Math.cos(elapsedTime)
-    camera.position.z = 2 * Math.sin(elapsedTime)
+    //rotating camera
+    // camera.position.x = 2 * Math.cos(elapsedTime)
+    // camera.position.z = 2 * Math.sin(elapsedTime)
 
     //mouse rotation
     /*camera.position.x = Math.cos(targetX)

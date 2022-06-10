@@ -30,7 +30,7 @@
 <nav class="navbar bg-light fixed-top navbar-expand-sm ">
     <div class="container-fluid">
         <div class="collapse navbar-collapse " id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto order-0 ">
+            <ul class="navbar-nav nav-pills me-auto order-0 ">
                 <li class="nav-item">
                     <a href="{{url_for('index')}}"><img style="padding-right: 30px" class="d-block" height="50"
                                                         src="{{ url_for('static', filename='/Logo/Logo2.svg') }}"
@@ -42,9 +42,7 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{url_for('shop')}}">Shop</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" src="/static/images/pictogramme/shopping-cart-icon-illustration-free-vector.webp" href="{{url_for('shoppingCart')}}">Shopping Cart</a>
-                </li>
+
                 {% if current_user.admin %}
                 <li class="nav-item">
                     <a class="nav-link " href="{{url_for('addLamp')}}">Add Lamp</a>
@@ -89,19 +87,40 @@
             </div>
     </div>
     </form>-->
+            {% if current_user.is_authenticated %}
+            <ul class="navbar-nav nav-pills   ">
+                <li class="nav-item">
 
+                    <a style="margin-right:15px" href="{{url_for('shoppingCart')}}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
+                             class="bi bi-cart3" viewBox="0 0 16 16">
+                            <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                        </svg>
+                    </a>
+                </li>
+                <li class="nav-item">
+
+                    <a class="nav-link ">{{ current_user.userName }}</a>
+
+                </li>
+
+            </ul>
+                                        <a class="order-5 btn btn-outline-danger" href="{{ url_for('logout') }}">Logout</a>
+
+            {% else %}
             <form id="form" class="d-flex ms-auto order-5" action="login" method="POST" enctype="multipart/form-data">
 
                 <input style="margin-right:5px" name="username" id="username" class="textarea form-control"
                        placeholder="Username" aria-label="With textarea"></input>
-                <input type="password" style="margin-right:5px" name="password" id="password" class="textarea form-control"
+                <input type="password" style="margin-right:5px" name="password" id="password"
+                       class="textarea form-control"
                        placeholder="Password" aria-label="With textarea"></input>
 
                 <a id="login" ondblclick="login()" style="margin-right:5px" href="javascript:;"
                    onclick="parentNode.submit();" type="submit" class=" btn btn-outline-primary">Login</a>
             </form>
+            {% endif %}
 
-            <a class="order-5 btn btn-outline-primary" href="{{ url_for('logout') }}">Logout</a>
 
         </div>
     </div>

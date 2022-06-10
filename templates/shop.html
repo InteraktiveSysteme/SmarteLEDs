@@ -11,7 +11,7 @@
 
         {% for lamp in lamps %}
         <div class="col-12 col-md-6 col-lg-3 g-2">
-            <div class="card mb-4 p-3  border-danger" style="width: 18rem;">
+            <div class="card mb-4 p-3  border-primary" style="width: 18rem;">
                 <img class="card-img-top" src="/static/lamps/{{ lamp.imgName }}"
                      onerror="/static/images/inApp/8974589526046.jpg" alt="Card image cap">
                 <div class="card-body">
@@ -22,10 +22,10 @@
                             <div class="btn-group" role="group" aria-label="Basic example">
                                 {% if current_user.admin %}
                                 <a href="{{ url_for('loeschen',id=lamp.lampID) }}"
-                                   class="col-6 btn btn-outline-dark">Delete</a>
+                                   class="col-6 btn btn-outline-danger">Delete</a>
                                 {%endif%}
                                 <a href="{{ url_for('lamp',id=lamp.lampID) }}"
-                                   class="col-6 btn btn-outline-dark btn-block">Details</a>
+                                   class="col-6 btn btn-outline-primary btn-block">Details</a>
                             </div>
                         </div>
                     </div>

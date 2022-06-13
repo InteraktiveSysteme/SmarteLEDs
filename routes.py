@@ -18,4 +18,5 @@ app.route("/admin", methods=['GET'])(admin)
 app.route("/addLamp", methods=['GET','POST'])(addLamp)
 app.route("/lamp/<id>/delete", methods=['GET'])(loeschen)
 app.route("/User/<id>/delete", methods=['GET'])(userLoeschen)
+app.route("/shopLamp/<id>", methods=['GET','POST'])(shopLamp)
 

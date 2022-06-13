@@ -71,7 +71,7 @@
             <big style="color:#359DA3" class="text-mut">{{ price }} $</big><br />
 
             <a href={{url_for('simuled')}} class="btn btn-outline-primary">SimuLED this lamp</a>
-            <a href="#" class="btn btn-outline-primary">add to shopping cart</a>
+            <a href="{{ url_for('shopLamp',id=lamp.lampID) }}" class="btn btn-outline-primary">add to shopping cart</a>
 
 
         </div>

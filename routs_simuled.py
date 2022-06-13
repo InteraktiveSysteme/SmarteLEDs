@@ -5,6 +5,7 @@ from app import *
 from flask import Flask, render_template, request, flash, url_for, redirect
 from flask import render_template
 from wtforms import *
+from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 import uuid as uuid
 import os
@@ -12,6 +13,16 @@ from flask_login import *
 
 def child():  # put application's code here
     return render_template('child.html')
+
+
+
+@login_required
+def shopLamp(id):  # put application's code here
+    lamp = Lamp.query.get_or_404(id)
+    lamp.userKeyID = current_user.userID
+    lamps = Lamp.query.order_by(Lamp.timeStamp)
+    db.session.commit()
+    return render_template('shop.html',lamps=lamps)
 
 
 def test():  # put application's code here
@@ -70,13 +81,19 @@ def shop():
 
 @login_required
 def admin():
-    lamps = Lamp.query.order_by(Lamp.timeStamp)
-    users = User.query.order_by(User.timeStamp)
-    return render_template("admin.html", users=users,lamps=lamps), 200
+    if current_user and current_user.admin:
+        lamps = Lamp.query.order_by(Lamp.timeStamp)
+        users = User.query.order_by(User.timeStamp)
+        return render_template("admin.html", users=users, lamps=lamps), 200
+    flash("Admin Page is for Admins only")
+    return render_template("index"), 200
 
+
+@login_required
 def shoppingCart():
     print("getShoppingCart")
-    return render_template('shoppingCart.html')
+    lamps = Lamp.query.filter_by(userKeyID = current_user.userID)
+    return render_template('shoppingCart.html', lamps = lamps)
 
 def registerPage():
     return render_template('registerPage.html')
@@ -143,12 +160,11 @@ def login():
     password = request.form["password"]
     user = User.query.filter_by(userName=username).first()
     if user:
-        if user.password == password:
+        if user.verifyPassword(password):
             login_user(user)
             flash("Logged in!")
 
         else:
-            print("password required: ",user.password," passwort übergeben: "+password)
             flash("Wrong Password")
     else:
         flash("User does not Exist")
@@ -200,3 +216,8 @@ def userLoeschen(id):
 
     users = User.query.order_by(User.timeStamp)
     return render_template("admin.html", users=users, lamps=lamps)
+
+@app.errorhandler(404)
+def page_not_found(e):
+    # note that we set the 404 status explicitly
+    return render_template("404.html"), 404

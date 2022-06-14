@@ -227,6 +227,15 @@ scene.add(camera)
 
 //Eventlistener
 
+let screenLog = document.querySelector('#screen-log');
+document.addEventListener('mousemove', logKey);
+
+function logKey(e) {
+  screenLog.innerText = `
+    Screen X/Y: ${e.screenX}, ${e.screenY}
+    Client X/Y: ${e.clientX}, ${e.clientY}`;
+}
+
 document.addEventListener('mousemove', onDocumentMouseMove)
 
 let mouseX = 0
@@ -239,7 +248,7 @@ const windowHalfX = window.innerWidth / 2;
 const windowHalfY = window.innerHeight / 2;
 
 function onDocumentMouseMove(event){
-    mouseX = (event.pageX)
+    mouseX = (event.screenX)
     //mouseY = (event.clientY - windowHalfY)
 }
 // window.addEventListener( "pointerdown", e => {
@@ -257,10 +266,23 @@ function onDocumentMouseMove(event){
 //     camera.position.x = 2 * Math.cos( 2 * Math.PI * ( mouseX / window.innerWidth ) ) 
 //     camera.position.z = 2 * Math.sin( 2 * Math.PI * ( mouseX / window.innerWidth ) )
 // }
+var bool = new Boolean( "true" )
 
 window.addEventListener('mousedown', () => {
+
+    document.addEventListener( 'mousemove', onDocumentMouseMove )
+
     camera.position.x = 2 * Math.cos( 2 * Math.PI * ( mouseX / window.innerWidth ) ) 
     camera.position.z = 2 * Math.sin( 2 * Math.PI * ( mouseX / window.innerWidth ) )
+    
+    window.addEventListener( 'mouseup', () => {
+
+        window.removeEventListener('mousedown')
+    } )
+})
+window.addEventListener('mouseup', () => {
+
+    bool = new Boolean( "false" )    
 })
 
 // Controls

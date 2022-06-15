@@ -1,17 +1,21 @@
 import itertools
 
-from flask import Blueprint, request, url_for, redirect, render_template, flash
+from flask import Blueprint, request, url_for, redirect, render_template, flash, make_response
 from flask import send_from_directory
 
 import time
 import os
 import re
+import json
+
+gString = ""
 
 from flask import Blueprint, request, url_for, redirect, render_template, flash
 
-import models
+app = Blueprint('Simuled Website', __name__, template_folder="templates/")
 
-app = Blueprint('app', __name__, template_folder="templates/")
+
+imglist = []
 
 #@app.app_errorhandler(404)
 #def page_not_found(e):
@@ -21,58 +25,83 @@ app = Blueprint('app', __name__, template_folder="templates/")
 def index():  # put application's code here
     return render_template('index.html')
 
+@app.route('/put/<string>')
+def put(string):
+    gString = string
+    gString = "lololoLOL"
+    return string
+
+@app.route('/pull')
+def pull():
+    print("gString", gString)
+    return "gstring: " + gString
+
 @app.route('/lamplist')
 def lampList():
     return render_template('lampList.html')
+
+@app.route('/addtocart/<id>', methods = ['POST', 'GET'])
+def addtocart(id):
+    #if request.method == 'POST':
+
+        lamplist = createList()
+        #cart = []
+        if(request.cookies.get('cart') is None):
+            cartTEMP = []
+        else:
+            cartTEMP = json.loads(request.cookies.get('cart'))
+        print(request.cookies.get('cart'))
+        print(type(request.cookies.get('cart')))
+        cartTEMP.append(id)
+        #cartTEMP.append(lamplist[int(id)])
+        resp = make_response(render_template('shopping_cart.html ' , shoppingCart = cartTEMP, imgList = getLampImages(1) ))
+        cartJSON = json.dumps(cartTEMP)
+        resp.set_cookie('cart', cartJSON)
+        print(cartJSON)
+
+
+        return resp
+
+@app.route('/shopping_cart')
+def shopping_cart():
+    lamplist = createList()
+    if (request.cookies.get('cart') is None):
+        cartTEMP = []
+    else:
+
+        cartTEMP = json.loads(request.cookies.get('cart'))
+        print(len(cartTEMP))
+
+        file = open("static/lamps/{a1}.md".format(a1=lamplist[int(1)]))
+        mdtext = file.read().split("\n")
+        # print(mdtext)
+
+        mdtext, data = extractTableData(mdtext)
+    return render_template('shopping_cart.html', shoppingCart = cartTEMP, description = mdtext, imgList = getLampImages(1) )
 
 @app.route('/lamp/<id>')
 # liste mit allen lamp und
 # uri parameter /lamp/{id}
 def lamp(id):
 
-    # funktion erstellt dirliste mit allen lampennamen
-    entries = os.listdir('static/lamps')
-    lamplist = []
-    for e in entries:
-        if re.match(".*\.md", e):
-            lamplist.append(re.sub("\..*", "", e))
-    lamplist.sort()
-    # funktion extrahiert lampe mit id {id} aus list
-    print(lamplist[int(id)])
-    # funktion erstellt liste mit bildern zugehoerig zu lampe {id}
-    pat = "^{a1}.*\.jpg".format(a1 = lamplist[int(id)])
-    imglist = []
-    for e in entries:
-        if re.match(pat, e):
-            imglist.append(e)
 
-    print(imglist)
+    lamplist = createList()
+    print(len(lamplist))
+
+    # funktion extrahiert lampe mit id {id} aus list
+    #print(lamplist[int(id)])
+
+
 
     file = open("static/lamps/{a1}.md".format(a1 = lamplist[int(id)]))
     mdtext = file.read().split("\n")
     #print(mdtext)
 
+    mdtext, data = extractTableData(mdtext)
 
-    mdtext, data = process(mdtext)
-    #imglist = zip(itertools.count, imglist)
-
-    # funktion laedt lampenbeschreibung
     return render_template('lamp.html', description = mdtext, tableContent = data, imglist= imglist, zip=zip, indices=itertools.count)
 
-@app.route('/test')
-def test():  # put application's code here
-    return render_template('test.html')
-
-@app.route('/child')
-def child():  # put application's code here
-    return render_template('child.html')
-
-@app.route('/render')
-def render():
-    exec(open("Demo.py").read())
-    return render_template('render.html')
-
-def process(textarray):
+def extractTableData(textarray):
     vals = []
     props = []
     for i in range(0, len(textarray)):
@@ -90,3 +119,43 @@ def process(textarray):
     #print(vals)
     data = zip(props, vals)
     return textarray, data
+
+def createList():
+    # funktion erstellt dirliste mit allen lampennamen
+    entries = os.listdir('static/lamps')
+    lamplistTEMP = []
+    for e in entries:
+        if re.match(".*\.md", e):
+            lamplistTEMP.append(re.sub("\..*", "", e))
+    lamplistTEMP.sort()
+
+    #lamplist = lamplistTEMP
+
+    return lamplistTEMP
+    #print(lamplistTEMP)
+    #imglist = imglistTEMP
+
+def getLampImages(id):
+    # funktion erstellt liste mit bildern zugehoerig zu lampe {id}
+    imglistTEMP = []
+    entries = os.listdir('static/lamps')
+    lamplist = createList()
+    pat = "^{a1}.*\.jpg".format(a1=lamplist[int(id)])
+    for e in entries:
+        if re.match(pat, e):
+            imglistTEMP.append(e)
+    return imglistTEMP
+
+@app.route('/test')
+def test():  # put application's code here
+    return render_template('test.html')
+
+@app.route('/child')
+def child():  # put application's code here
+    return render_template('child.html')
+
+@app.route('/render')
+def render():
+    exec(open("Demo.py").read())
+    return render_template('render.html')
+

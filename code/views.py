@@ -54,7 +54,19 @@ def addtocart(id):
         print(type(request.cookies.get('cart')))
         cartTEMP.append(id)
         #cartTEMP.append(lamplist[int(id)])
-        resp = make_response(render_template('shopping_cart.html ' , shoppingCart = cartTEMP, imgList = getLampImages(1) ))
+
+
+        file = open("static/lamps/{a1}.md".format(a1=lamplist[int(1)]))
+        mdtext = file.read().split("\n")
+        # print(mdtext)
+
+
+        mdtext, data = extractTableData(mdtext)
+        resp = make_response(render_template('shopping_cart.html', shoppingCart = cartTEMP, description = mdtext, imgList = getLampImages(1) ))
+        #resp = make_response(render_template('index.html'))
+
+        #return render_template('shopping_cart.html', shoppingCart=cartTEMP,  imgList=getLampImages(1))
+
         cartJSON = json.dumps(cartTEMP)
         resp.set_cookie('cart', cartJSON)
         print(cartJSON)
@@ -67,6 +79,7 @@ def shopping_cart():
     lamplist = createList()
     if (request.cookies.get('cart') is None):
         cartTEMP = []
+        return render_template('shopping_cart.html')
     else:
 
         cartTEMP = json.loads(request.cookies.get('cart'))
@@ -77,7 +90,8 @@ def shopping_cart():
         # print(mdtext)
 
         mdtext, data = extractTableData(mdtext)
-    return render_template('shopping_cart.html', shoppingCart = cartTEMP, description = mdtext, imgList = getLampImages(1) )
+        return render_template('shopping_cart.html', shoppingCart = cartTEMP, description = mdtext, imgList = getLampImages(1) )
+
 
 @app.route('/lamp/<id>')
 # liste mit allen lamp und

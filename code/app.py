@@ -1,5 +1,6 @@
 from flask import Flask
 from flask import render_template
+from flask import request, send_from_directory
 import time
 import os
 import re
@@ -17,6 +18,10 @@ def test():  # put application's code here
 @app.route('/testglb')
 def test2():  # put application's code here
 	return render_template('testglb.html')
+
+@app.route('/getfile')
+def sendglb():
+	return send_from_directory(os.path.join(app.root_path, 'static/Gltf'), "lamp.glb");
 
 @app.route('/')
 def index():  # put application's code here

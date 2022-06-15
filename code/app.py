@@ -14,6 +14,9 @@ def child():  # put application's code here
 def test():  # put application's code here
     return render_template('test.html')
 
+@app.route('/testglb')
+def test2():  # put application's code here
+	return render_template('testglb.html')
 
 @app.route('/')
 def index():  # put application's code here

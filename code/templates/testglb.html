@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8"/>
+    <title>Three.js 101</title>
+
+    <!--  Three.js CDN  -->
+    <script type="importmap">
+    {
+      "imports": {
+        "three": "{{ url_for('static', filename='/js/three2.js' ) }}",
+        "gltf": "{{ url_for('static', filename='/js/GLTFLoader.js' ) }}",
+        "dragcontrols": "{{ url_for('static', filename='/js/DragControls.js' ) }}"
+      }
+    }
+  </script>
+</head>
+  <body style="background-color: black;">
+  <!--  Our code  -->
+    <div id="gl" style="width: auto;height: auto">
+        <canvas id="myCanvas" width="auto" height="auto" style="position: relativ;"></canvas>
+    </div>
+    <div class="slidecontainer">
+      <input type="range" min="0" max="360" value="180" class="slider" id="myRange" style="position:absolute;">
+    </div>
+    <script type="module" src="{{ url_for('static', filename='/js/room.js' ) }}"></script>
+  </body>
+</html>

@@ -1,3 +1,4 @@
+import * as THREE from "three"
 // Canvas
 const canvas = document.getElementById('myCanvas')
 

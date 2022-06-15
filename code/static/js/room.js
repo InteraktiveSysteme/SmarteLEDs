@@ -223,6 +223,7 @@ const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 
 camera.position.x = 0
 camera.position.y = 0
 camera.position.z = 2
+let temp = 0
 scene.add(camera)
 
 //Eventlistener
@@ -236,7 +237,38 @@ function logKey(e) {
     Client X/Y: ${e.clientX}, ${e.clientY}`;
 }
 
-document.addEventListener('mousemove', onDocumentMouseMove)
+var bool = false
+var mousePos = .0
+var camAngle = .0
+
+window.addEventListener('mousedown', () => {
+
+    bool = true
+    camX = camera.position.x
+    camY = camera.position.y
+})
+window.addEventListener('mouseup', () => {
+
+    bool = false 
+})
+
+document.addEventListener('mousemove', (event) => {
+
+    if( bool ){
+        if( mouseX == 0 ){
+
+            camera.position = 2 * Math.cos( 2 * Math.PI * ( 0 ) )
+            camera.position = 2 * Math.sin( 2 * Math.PI * ( 0 ) )
+        }
+        
+        mouseX = ( event.screenX ) - mouseX
+        
+        camera.position.x = camX + 2 * Math.cos( 2 * Math.PI * ( mouseX / window.innerWidth ) ) 
+        camera.position.z = camY + 2 * Math.sin( 2 * Math.PI * ( mouseX / window.innerWidth ) )
+
+
+    }
+})
 
 let mouseX = 0
 let mouseY = 0
@@ -248,8 +280,11 @@ const windowHalfX = window.innerWidth / 2;
 const windowHalfY = window.innerHeight / 2;
 
 function onDocumentMouseMove(event){
+
     mouseX = (event.screenX)
-    //mouseY = (event.clientY - windowHalfY)
+
+    camera.position.x = 2 * Math.cos( 2 * Math.PI * ( mouseX / window.innerWidth ) ) 
+    camera.position.z = 2 * Math.sin( 2 * Math.PI * ( mouseX / window.innerWidth ) )
 }
 // window.addEventListener( "pointerdown", e => {
 //     window.setPointerCapture( e.pointerId )
@@ -266,24 +301,6 @@ function onDocumentMouseMove(event){
 //     camera.position.x = 2 * Math.cos( 2 * Math.PI * ( mouseX / window.innerWidth ) ) 
 //     camera.position.z = 2 * Math.sin( 2 * Math.PI * ( mouseX / window.innerWidth ) )
 // }
-var bool = new Boolean( "true" )
-
-window.addEventListener('mousedown', () => {
-
-    document.addEventListener( 'mousemove', onDocumentMouseMove )
-
-    camera.position.x = 2 * Math.cos( 2 * Math.PI * ( mouseX / window.innerWidth ) ) 
-    camera.position.z = 2 * Math.sin( 2 * Math.PI * ( mouseX / window.innerWidth ) )
-    
-    window.addEventListener( 'mouseup', () => {
-
-        window.removeEventListener('mousedown')
-    } )
-})
-window.addEventListener('mouseup', () => {
-
-    bool = new Boolean( "false" )    
-})
 
 // Controls
 // const controls = new OrbitControls(camera, canvas)

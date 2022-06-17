@@ -4,12 +4,14 @@ import requests
 from app import *
 from flask import Flask, render_template, request, flash, url_for, redirect
 from flask import render_template
-from wtforms import *
+from flask_wtf import Form
+from wtforms import TextAreaField, SubmitField, validators
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 import uuid as uuid
 import os
 from flask_login import *
+import forms
 
 def child():  # put application's code here
     return render_template('child.html')
@@ -95,8 +97,7 @@ def shoppingCart():
     lamps = Lamp.query.filter_by(userKeyID = current_user.userID)
     return render_template('shoppingCart.html', lamps = lamps)
 
-def registerPage():
-    return render_template('registerPage.html')
+
 
 
 # liste mit allen lamp und
@@ -127,14 +128,21 @@ def lamp(id):
 
 
 def register():
+    username = None
+    password = None
+    form = forms.registerForm()
 
-    username = request.form['name']
-    password = request.form["password"]
+    if request.method == "GET":
+        return render_template('registerPage.html', form = form)
+    if form.validate_on_submit():
+        username = request.form['name']
+        password = request.form["password"]
+
     try:
         user = User.query.filter_by(userName=username).first()
         if user:
             flash("Username already in Usage")
-            return render_template("registerPage.html")
+            return render_template("registerPage.html", form = form)
     except:
         print("Username not found")
     admin = False

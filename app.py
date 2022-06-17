@@ -4,7 +4,10 @@ from flask_migrate import Migrate
 from flask_login import *
 from flask_bootstrap import Bootstrap
 from datetime import datetime
+from flask_wtf import Form
+from wtforms import TextAreaField, SubmitField, validators
 import os
+import forms
 
 from werkzeug.security import generate_password_hash, check_password_hash
 

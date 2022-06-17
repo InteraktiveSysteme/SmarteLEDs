@@ -32,6 +32,13 @@ def load_user(userID):
 
 db.create_all()
 
+class Cart(db.Model):
+    cartID = db.Column(db.Integer(), primary_key=True)
+    userID = db.Column(db.Integer())
+    lampID = db.Column(db.Integer())
+    amount = db.Column(db.Integer())
+    timeStamp = db.Column(db.DateTime, default=datetime.utcnow, unique=False)
+
 
 class User(db.Model, UserMixin):
     userID = db.Column(db.Integer(), primary_key=True)

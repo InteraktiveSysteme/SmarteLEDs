@@ -1,28 +1,25 @@
 import re
-
-import requests
 from app import *
 from flask import Flask, render_template, request, flash, url_for, redirect
 from flask import render_template
-from wtforms import *
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 import uuid as uuid
 import os
 from flask_login import *
 
+
 def child():  # put application's code here
     return render_template('child.html')
 
 
-
 @login_required
 def shopLamp(id):  # put application's code here
-    lamp = Lamp.query.get_or_404(id)
-    lamp.userKeyID = current_user.userID
-    lamps = Lamp.query.order_by(Lamp.timeStamp)
+    cart = Cart(userID=current_user.userID, lampID=id, amount=1)
+    db.session.add(cart)
     db.session.commit()
-    return render_template('shop.html',lamps=lamps)
+    lamps = Lamp.query.order_by(Lamp.timeStamp)
+    return render_template('shop.html', lamps=lamps)
 
 
 def test():  # put application's code here
@@ -41,6 +38,7 @@ def render():
 
 def simuled():
     return render_template('simuled.html')
+
 
 @login_required
 def addLamp():
@@ -63,7 +61,8 @@ def addLamp():
         saveName = str(uuid.uuid1()) + "_" + imgName
         imgName = saveName
         img.save(os.path.join(app.config['UPLOAD_FOLDER'], saveName))
-        lamp = Lamp(lampName=name, imgName=imgName,gltfName=gltfName, lampPrice=price, lampText=text , lampLongText= longtext)
+        lamp = Lamp(lampName=name, imgName=imgName, gltfName=gltfName, lampPrice=price, lampText=text,
+                    lampLongText=longtext)
         db.session.add(lamp)
         db.session.commit()
         print(name)
@@ -79,6 +78,7 @@ def shop():
 
     return render_template("shop.html", lamps=lamps), 200
 
+
 @login_required
 def admin():
     if current_user and current_user.admin:
@@ -92,8 +92,20 @@ def admin():
 @login_required
 def shoppingCart():
     print("getShoppingCart")
-    lamps = Lamp.query.filter_by(userKeyID = current_user.userID)
-    return render_template('shoppingCart.html', lamps = lamps)
+
+    lamps = Cart.query.filter_by(userID = current_user.userID)
+
+    list = []
+
+    for lamp in lamps:
+
+        if lamp in list:
+            print("doppel")
+        else:
+            print("einzel")
+            list.append(Lamp.query.get_or_404(lamp.lampID))
+    return render_template('shoppingCart.html', lamps=list)
+
 
 def registerPage():
     return render_template('registerPage.html')
@@ -123,11 +135,12 @@ def lamp(id):
     print(imglist)
 
     # funktion laedt lampenbeschreibung
-    return render_template('lamp.html', description="{a1}.md".format(a1=lamplist[int(id)]), imglist=imglist, lamp=lamp, name=lamp.lampName, text=lamp.lampText, price=lamp.lampPrice,img=lamp.imgName,longText=lamp.lampLongText)
+    return render_template('lamp.html', description="{a1}.md".format(a1=lamplist[int(id)]), imglist=imglist, lamp=lamp,
+                           name=lamp.lampName, text=lamp.lampText, price=lamp.lampPrice, img=lamp.imgName,
+                           longText=lamp.lampLongText)
 
 
 def register():
-
     username = request.form['name']
     password = request.form["password"]
     try:
@@ -145,14 +158,13 @@ def register():
     print("username: ", username, "  password: ", password, "login: ", login, "  register: ", register)
     user = User(userName=username, password=password, admin=admin)
     print(login)
- 
+
     db.session.add(user)
     db.session.commit()
     print("registered!")
     flash(message="Registered!")
-    
-    return render_template('index.html')
 
+    return render_template('index.html')
 
 
 def login():
@@ -170,12 +182,12 @@ def login():
         flash("User does not Exist")
     return render_template('index.html')
 
+
 @login_required
 def logout():
     logout_user()
     flash("You are not logged in anymore!")
     return render_template('index.html')
-
 
 
 def loeschen(id):
@@ -188,15 +200,16 @@ def loeschen(id):
         db.session.commit()
         os.remove("/static/Imgages/", imgName)
         lamps = Lamp.query.order_by(Lamp.timeStamp)
-        return render_template("shop.html", lamps=lamps,users=users)
+        return render_template("shop.html", lamps=lamps, users=users)
 
     except:
         print("error")
         lamps = Lamp.query.order_by(Lamp.timeStamp)
-        return render_template("shop.html", lamps=lamps,users=users)
+        return render_template("shop.html", lamps=lamps, users=users)
 
     lamps = Lamp.query.order_by(Lamp.timeStamp)
     return render_template("shop.html", lamps=lampsv)
+
 
 @login_required
 def userLoeschen(id):
@@ -216,6 +229,7 @@ def userLoeschen(id):
 
     users = User.query.order_by(User.timeStamp)
     return render_template("admin.html", users=users, lamps=lamps)
+
 
 @app.errorhandler(404)
 def page_not_found(e):

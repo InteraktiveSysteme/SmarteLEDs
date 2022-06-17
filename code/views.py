@@ -76,10 +76,21 @@ def addtocart(id):
 
 @app.route('/deletefromcart/<cartID>')
 def deletefromcart(cartID):
-    if(request.cookies.get('cart') is not None):
-        cartTEMP = request.cookies.get('cart')
+    file = open("static/lamps/{a1}.md".format(a1=createList()[int(1)]))
+    mdtext = file.read().split("\n")
+    mdtext, data = extractTableData(mdtext)
+    cartTEMP = json.loads(request.cookies.get('cart'))
+    if(request.cookies.get('cart') is not None and len(cartTEMP)>int(cartID)):
 
+        cartTEMP.pop(int(cartID))
+        cartJSON = json.dumps(cartTEMP)
 
+        resp = make_response(render_template('shopping_cart.html', shoppingCart=cartTEMP,
+                                             description=mdtext, imgList=getLampImages(1)))
+        resp.set_cookie('cart', cartJSON)
+        return resp
+    return render_template('shopping_cart.html', shoppingCart=cartTEMP,
+                                             description=mdtext, imgList=getLampImages(1))
 
 @app.route('/shopping_cart')
 def shopping_cart():

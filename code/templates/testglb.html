@@ -9,8 +9,8 @@
     <script type="importmap">
     {
       "imports": {
-        "three": "{{ url_for('static', filename='/js/three2.js' ) }}",
-        "gltf": "{{ url_for('static', filename='/js/three.js-master/examples/jsm/loaders/GLTFLoader.js' ) }}",
+        "three": "{{ url_for('static', filename='/js/three_module.js' ) }}",
+        "gltf": "{{ url_for('static', filename='/js/GLTFLoader.js' ) }}",
         "dragcontrols": "{{ url_for('static', filename='/js/DragControls.js' ) }}"
       }
     }
@@ -21,9 +21,9 @@
     <div id="gl" style="width: auto;height: auto">
         <canvas id="myCanvas" width="auto" height="auto" style="position: relative;"></canvas>
     </div>
-    <div class="slidecontainer">
+    <!--div class="slidecontainer">
       <input type="range" min="0" max="360" value="180" class="slider" id="myRange" style="position:absolute;">
-    </div>
+    </div-->
     <script type="module" src="{{ url_for('static', filename='/js/gltf.js' ) }}"></script>
   </body>
 </html>

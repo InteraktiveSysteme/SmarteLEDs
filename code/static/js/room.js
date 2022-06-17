@@ -1,4 +1,5 @@
 import * as THREE from "three"
+import { GLTFLoader } from "gltf"
 // Canvas
 const canvas = document.getElementById('myCanvas')
 
@@ -272,6 +273,19 @@ window.addEventListener('scroll', updateSphere)*/
 var slider = document.getElementById("myRange");
 var output = document.getElementById("demo");
 
+
+const loader = new GLTFLoader();
+loader.load('/get/lamp.glb', (glb) => {
+   const box = new THREE.Box3( new THREE.Vector3(), new THREE.Vector3() )
+   glb.geometry.computeBoundingBox();
+   box.setFromObject(glb);
+   const vec = new THREE.Vector3();
+   box.getSize(vec)
+   const c2 = new THREE.BoxGeometry(vec.x, vec.y, vec.z);
+   const cmesh = new THREE.Mesh(c2, new THREE.MeshBasicMaterial({ color: 0xFF0000}))
+   scene.add(cmesh)
+   scene.add(glb.scene)
+})
 
 const clock = new THREE.Clock()
 

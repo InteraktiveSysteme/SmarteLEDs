@@ -6,9 +6,15 @@
     <title>Three.js 101</title>
 
     <!--  Three.js CDN  -->
-    <script src="{{ url_for('static', filename='/js/three.js' ) }}"></script>
-    <script src="{{ url_for('static', filename='/js/GLTFLoader.js' ) }}"></script>
-    <script src="{{ url_for('static', filename='/js/DragControls.js' ) }}"></script>
+    <script type="importmap">
+    {
+      "imports": {
+        "three": "{{ url_for('static', filename='/js/three_module.js' ) }}",
+        "gltf": "{{ url_for('static', filename='/js/GLTFLoader.js' ) }}",
+        "dragcontrols": "{{ url_for('static', filename='/js/DragControls.js' ) }}"
+      }
+    }
+  </script>
 </head>
   <body style="background-color: black;">
   <!--  Our code  -->
@@ -18,6 +24,6 @@
     <div class="slidecontainer">
       <input type="range" min="0" max="360" value="180" class="slider" id="myRange" style="position:absolute;">
     </div>
-    <script src="{{ url_for('static', filename='/js/room.js' ) }}"></script>
+    <script type="module" src="{{ url_for('static', filename='/js/room.js' ) }}"></script>
   </body>
 </html>

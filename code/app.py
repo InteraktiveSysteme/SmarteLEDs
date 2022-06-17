@@ -19,9 +19,9 @@ def test():  # put application's code here
 def test2():  # put application's code here
 	return render_template('testglb.html')
 
-@app.route('/getfile')
-def sendglb():
-	return send_from_directory(os.path.join(app.root_path, 'static/Gltf'), "lamp.glb");
+@app.route('/get/<file>')
+def sendglb(file):
+	return send_from_directory(os.path.join(app.root_path, 'static/Gltf'), file);
 
 @app.route('/')
 def index():  # put application's code here

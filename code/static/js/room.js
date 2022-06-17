@@ -204,7 +204,7 @@ var bool = false
 var mousePos = .0
 var camAngle = .0
 var camX = .0
-var camY = .0
+var camZ = .0
 var count = 0
 
 window.addEventListener('mousedown', (event) => {
@@ -214,11 +214,12 @@ window.addEventListener('mousedown', (event) => {
     bool = true
     mousePos = event.screenX
     camX = camera.position.x
-    camY = camera.position.y
+    camZ = camera.position.z
 })
 window.addEventListener('mouseup', () => {
 
-    bool = false 
+    bool = false
+    camAngle = 0;
 })
 
 document.addEventListener('mousemove', (event) => {
@@ -227,32 +228,25 @@ document.addEventListener('mousemove', (event) => {
 
         mouseX = ( event.screenX - mousePos )
         
-        // camAngle = Math.ceil( Math.acos( camX / 2 ) / ( 2 * Math.PI / window.innerWidth ) ) 
+        // camAngle = Math.acos( camX / 2 ) / ( 2 * Math.PI / window.innerWidth )
 
-        if( camAngle < 0 ){
+        // if( camAngle < 0 ){
 
-            camAngle = -1 * ( Math.acos( camX / 2.0 ) / ( 2.0 * Math.PI / window.innerWidth ) )
-        }
-        else{
+        //     camAngle = -1 * ( Math.acos( camX / 2.0 ) / ( 2.0 * Math.PI / window.innerWidth ) )
+        // }
+        // else{
             
-            camAngle = Math.acos( camX / 2.0 ) / ( 2.0 * Math.PI / window.innerWidth )
-        }
+        //     camAngle = Math.acos( camX / 2.0 ) / ( 2.0 * Math.PI / window.innerWidth ) 
+        // }
 
-        console.log( "camAngle old: " + camAngle )
+        // console.log( "camAngle old: " + camAngle )
 
-        camAngle += mouseX
+        // camAngle += mouseX
 
-        /*if( camAngle >= window.innerWidth ){
-
-            camAngle = camAngle - window.innerWidth
-        }
-        else if( camAngle <= .0 ){
-
-            camAngle = window.innerWidth + camAngle
-        }*/
-
-        camera.position.x = 2 * Math.cos( 2 * Math.PI * ( camAngle / window.innerWidth ) ) 
-        camera.position.z = 2 * Math.sin( 2 * Math.PI * ( camAngle / window.innerWidth ) )
+        camera.position.x = camX * Math.cos( ( 3 * mouseX ) / window.innerWidth ) - camZ * Math.sin( ( 3 * mouseX ) / window.innerWidth ) 
+        camera.position.z = camX * Math.sin( ( 3 * mouseX ) / window.innerWidth ) + camZ * Math.cos( ( 3 * mouseX ) / window.innerWidth )
+        // camera.position.x = camX + Math.cos( 2 * Math.PI * ( mouseX / window.innerWidth ) ) 
+        // camera.position.z = camZ + Math.sin( 2 * Math.PI * ( mouseX / window.innerWidth ) )
         console.log( "camAngle new: " + camAngle )
     }
 })
@@ -265,14 +259,6 @@ let targetY = 0
 
 const windowHalfX = window.innerWidth / 2;
 const windowHalfY = window.innerHeight / 2;
-
-function onDocumentMouseMove(event){
-
-    mouseX = (event.screenX)
-
-    camera.position.x = 2 * Math.cos( 2 * Math.PI * ( mouseX / window.innerWidth ) ) 
-    camera.position.z = 2 * Math.sin( 2 * Math.PI * ( mouseX / window.innerWidth ) )
-}
 
 /**
  * Renderer

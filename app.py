@@ -9,8 +9,6 @@ from wtforms import TextAreaField, SubmitField, validators
 import os
 import forms
 
-from werkzeug.security import generate_password_hash, check_password_hash
-
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(12)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///SQLTerror.db'
@@ -39,21 +37,9 @@ db.create_all()
 class User(db.Model, UserMixin):
     userID = db.Column(db.Integer(), primary_key=True)
     userName = db.Column(db.String(100), unique=False, nullable=False)
-    passwordHash = db.Column(db.String(120))
-    lamps = db.relationship('Lamp', backref='poster')
+    password = db.Column(db.Integer(), unique=False, nullable=False)
     timeStamp = db.Column(db.DateTime, default=datetime.utcnow, unique=False)
     admin = db.Column(db.Boolean)
-
-    @property
-    def password(self):
-        raise AttributeError('Password is not a readable Attribute')
-
-    @password.setter
-    def password(self, password):
-       self.passwordHash = generate_password_hash(password)
-
-    def verifyPassword(self, password):
-        return check_password_hash(self.passwordHash, password)
 
     def get_id(self):
         return (self.userID)
@@ -70,7 +56,6 @@ class Lamp(db.Model):
     gltfName = db.Column(db.String(1000), unique=False)
     lampText = db.Column(db.String(1000), unique=False)
     lampLongText = db.Column(db.String(10000), unique=False)
-    userKeyID = db.Column(db.Integer(),db.ForeignKey('user.userID'))
 
     lampPrice = db.Column(db.Integer(), unique=False)
 

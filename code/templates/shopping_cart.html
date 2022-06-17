@@ -6,10 +6,10 @@
 {% endblock %}
 {% block content %}
 
-    {
+
     <p class="fs-2">Shopping Cart</p>
 
-    <p class="fs-5">Articles: number</p>
+    <p class="fs-5">Articles: {{ shoppingCart|length }}</p>
 
 
 
@@ -25,7 +25,7 @@
               <div class="col-md-8">
                 <div class="card-body">
                   <h5 class="card-title">{{ i }}</h5>
-                  <p class="card-text">Short description of product</p>
+                  {{ description }}
                   <p class="fs-6">Price: 29.99€</p>
                   <div class="row" style="margin-top: 20%;">
                     <div class="col-3" style="width:fit-content">

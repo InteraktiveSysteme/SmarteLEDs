@@ -74,6 +74,13 @@ def addtocart(id):
 
         return resp
 
+@app.route('/deletefromcart/<cartID>')
+def deletefromcart(cartID):
+    if(request.cookies.get('cart') is not None):
+        cartTEMP = request.cookies.get('cart')
+
+
+
 @app.route('/shopping_cart')
 def shopping_cart():
     lamplist = createList()
@@ -159,6 +166,11 @@ def getLampImages(id):
         if re.match(pat, e):
             imglistTEMP.append(e)
     return imglistTEMP
+
+def calcCartPrice():
+    if (request.cookies.get('cart') is not None):
+        cartTEMP = json.loads(request.cookies.get('cart'))
+
 
 @app.route('/test')
 def test():  # put application's code here

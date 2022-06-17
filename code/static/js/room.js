@@ -137,42 +137,6 @@ const sLHelper2 = new THREE.SpotLightHelper( spotLight2 )
 scene.add( spotLight2 )
 scene.add( sLHelper2 )
 
-// Pointlight 
-// const pointLight = new THREE.PointLight( 0xffff00, 1 )
-// pointLight.position.set( 0, 0.2, 0 )
-// pointLight.castShadow = true
-// const pLHelper = new THREE.PointLightHelper( pointLight )
-// scene.add( pointLight )
-// scene.add( pLHelper )
-
-// Light 1
-
-// const pointLight = new THREE.PointLight(0xffffff, 0.1)
-// pointLight.position.x = 2
-// pointLight.position.y = 3
-// pointLight.position.z = 4
-// scene.add(pointLight)
-// pointLight.intensity = 1
-
-//Light 2
-
-// const pointLight2 = new THREE.PointLight(0xff0000, 10)
-// pointLight2.position.set(-1.86,1,-1.65)
-// scene.add(pointLight2)
-
-// const pointLightHelper = new THREE.PointLightHelper(pointLight2, 1) //is a reference, where the point light is?
-// scene.add(pointLightHelper)
-
-//Light 3
-
-// const pointLight3 = new THREE.PointLight(0x0000ff, 10)
-
-// pointLight3.position.set(1.92,-1.31,0.34)
-// scene.add(pointLight3)
-
-// const pointLightHelper3 = new THREE.PointLightHelper(pointLight3, 1) //is a reference, where the point light is?
-// scene.add(pointLightHelper3)
-
 /**
  * Sizes
  */
@@ -211,7 +175,6 @@ controls.addEventListener( 'dragstart', function ( event ) {
 controls.addEventListener( 'dragend', function ( event ) {
 
 	event.object.material.emissive.set( 0x000000 );
-
 } );*/
 
 
@@ -220,13 +183,13 @@ controls.addEventListener( 'dragend', function ( event ) {
  */
 // Base camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
-camera.position.x = 0
+camera.position.x = 2
 camera.position.y = 0
-camera.position.z = 2
+camera.position.z = 0
 let temp = 0
 scene.add(camera)
 
-//Eventlistener
+//Eventlistener for mouse drag rotation
 
 let screenLog = document.querySelector('#screen-log');
 document.addEventListener('mousemove', logKey);
@@ -236,14 +199,20 @@ function logKey(e) {
     Screen X/Y: ${e.screenX}, ${e.screenY}
     Client X/Y: ${e.clientX}, ${e.clientY}`;
 }
-
+// all variables for the mouse tracking and dragging
 var bool = false
 var mousePos = .0
 var camAngle = .0
+var camX = .0
+var camY = .0
+var count = 0
 
-window.addEventListener('mousedown', () => {
+window.addEventListener('mousedown', (event) => {
 
+    count++
+    console.log( count )
     bool = true
+    mousePos = event.screenX
     camX = camera.position.x
     camY = camera.position.y
 })
@@ -255,18 +224,36 @@ window.addEventListener('mouseup', () => {
 document.addEventListener('mousemove', (event) => {
 
     if( bool ){
-        if( mouseX == 0 ){
 
-            camera.position = 2 * Math.cos( 2 * Math.PI * ( 0 ) )
-            camera.position = 2 * Math.sin( 2 * Math.PI * ( 0 ) )
+        mouseX = ( event.screenX - mousePos )
+        
+        // camAngle = Math.ceil( Math.acos( camX / 2 ) / ( 2 * Math.PI / window.innerWidth ) ) 
+
+        if( camAngle < 0 ){
+
+            camAngle = -1 * ( Math.acos( camX / 2.0 ) / ( 2.0 * Math.PI / window.innerWidth ) )
         }
-        
-        mouseX = ( event.screenX ) - mouseX
-        
-        camera.position.x = camX + 2 * Math.cos( 2 * Math.PI * ( mouseX / window.innerWidth ) ) 
-        camera.position.z = camY + 2 * Math.sin( 2 * Math.PI * ( mouseX / window.innerWidth ) )
+        else{
+            
+            camAngle = Math.acos( camX / 2.0 ) / ( 2.0 * Math.PI / window.innerWidth )
+        }
 
+        console.log( "camAngle old: " + camAngle )
 
+        camAngle += mouseX
+
+        /*if( camAngle >= window.innerWidth ){
+
+            camAngle = camAngle - window.innerWidth
+        }
+        else if( camAngle <= .0 ){
+
+            camAngle = window.innerWidth + camAngle
+        }*/
+
+        camera.position.x = 2 * Math.cos( 2 * Math.PI * ( camAngle / window.innerWidth ) ) 
+        camera.position.z = 2 * Math.sin( 2 * Math.PI * ( camAngle / window.innerWidth ) )
+        console.log( "camAngle new: " + camAngle )
     }
 })
 
@@ -286,25 +273,6 @@ function onDocumentMouseMove(event){
     camera.position.x = 2 * Math.cos( 2 * Math.PI * ( mouseX / window.innerWidth ) ) 
     camera.position.z = 2 * Math.sin( 2 * Math.PI * ( mouseX / window.innerWidth ) )
 }
-// window.addEventListener( "pointerdown", e => {
-//     window.setPointerCapture( e.pointerId )
-//     setCameraPosition( e )
-
-//     window.addEventListener( "pointermove", setCameraPosition )
-//     window.addEventListener( "pointerup", e => {
-//         window.removeEventListener( "pointermove", setCameraPosition )
-//     }, { once: true } )
-// })
-
-// function setCameraPosition( e ){
-
-//     camera.position.x = 2 * Math.cos( 2 * Math.PI * ( mouseX / window.innerWidth ) ) 
-//     camera.position.z = 2 * Math.sin( 2 * Math.PI * ( mouseX / window.innerWidth ) )
-// }
-
-// Controls
-// const controls = new OrbitControls(camera, canvas)
-// controls.enableDamping = true
 
 /**
  * Renderer
@@ -322,8 +290,6 @@ renderer.shadowMap.type = THREE.VSMShadowMap
  * Animate
  */
 
-
-
 //scroll animation
 /*const updateSphere = (event) => {
     sphere.position.y = window.scrollY * .001
@@ -331,16 +297,11 @@ renderer.shadowMap.type = THREE.VSMShadowMap
 
 window.addEventListener('scroll', updateSphere)*/
 
-var slider = document.getElementById("myRange");
-var output = document.getElementById("demo");
-
-
 const clock = new THREE.Clock()
 
 const tick = () =>
 {
     targetX = 2 * Math.PI * (mouseX / window.innerWidth)
-    //targetY = 2 * Math.PI * (mouseY / window.innerHeight)
 
     const elapsedTime = clock.getElapsedTime()
 

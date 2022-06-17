@@ -1,5 +1,5 @@
 import * as THREE from "three"
-import { GLTFLoader } from "gltf";
+//import { GLTFLoader } from "gltf";
 
 const canvas = document.getElementById('myCanvas');
 
@@ -38,8 +38,22 @@ scene.add(camera)
 scene.add(light);
 scene.add(spot)
 
+const geometry = new THREE.SphereBufferGeometry(0.5, 64, 64);
+
+// Materials
+
+const material = new THREE.MeshStandardMaterial()
+material.metalness = 0.7
+material.roughness = 0.2
+material.normalMap = normalTexture
+material.color = new THREE.Color(0x292929)
+
+// Mesh
+const sphere = new THREE.Mesh(geometry,material)
+scene.add(sphere)
+
 loader.load('/get/lamp.glb', (glb) => {
-   scene.add(glb.scene)
+   //scene.add(glb.scene)
 })
 
 console.log("Hallo from GLBLand")

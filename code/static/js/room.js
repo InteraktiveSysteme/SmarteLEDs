@@ -1,5 +1,3 @@
-import * as THREE from "three"
-import { GLTFLoader } from "gltf"
 // Canvas
 const canvas = document.getElementById('myCanvas')
 
@@ -35,6 +33,32 @@ const material3 = new THREE.MeshPhongMaterial(  )
 material.metalness = 0.0
 material.roughness = 1.0
 material.color = new THREE.Color(0xFFFFFF)
+
+//Lights
+
+// Ambient Light
+const ambient = new THREE.AmbientLight( 0xffffff, .05 )
+scene.add( ambient )
+
+// Spotlight 1
+const spotLight = new THREE.SpotLight( 0xff0000, 0.7, 8, -(Math.PI / 4), 0.3, 2 )
+spotLight.position.set( 0.45, 0.2, 0 )
+// spotLight.position.set( 0,0,0 )
+spotLight.castShadow = true
+//const sLHelper = new THREE.SpotLightHelper( spotLight )
+scene.add( spotLight )
+//scene.add( sLHelper )
+
+// Spotlight 2
+const spotLight2 = new THREE.SpotLight( 0x0000ff, 0.7, 8, -(Math.PI / 4), 0.3, 2 )
+// spotLight2.position.set( 0,0,0 )
+spotLight2.position.set( 0, 0.2, 0.45 )
+spotLight2.rotation.y = - ( Math.Pi / 2 )
+spotLight2.castShadow = true
+//const sLHelper2 = new THREE.SpotLightHelper( spotLight2 )
+scene.add( spotLight2 )
+//scene.add( sLHelper2 )
+
 
 // Mesh and walls 
 //  Front and back wall
@@ -76,7 +100,7 @@ scene.add(topPlane)
 
 const bottomPlane = new THREE.Mesh(topBottomGeo, material3)
 bottomPlane.castShadow = true
-bottomPlane.receiveShadow = true
+bottomPlane.receiveShadow  = true
 bottomPlane.rotation.x = -( Math.PI / 2 )
 bottomPlane.position.y = - ( height / 2 )
 scene.add(bottomPlane)
@@ -85,17 +109,28 @@ scene.add(bottomPlane)
 const cube = new THREE.Mesh( cubeGeo, material2 )
 cube.castShadow = true
 cube.receiveShadow = true
+spotLight.parent = cube
 scene.add( cube )
 
-const lightCube = new THREE.Mesh ( lightGeo, material3 )
-lightCube.position.set( 0.45, 0.2, 0 )
-scene.add( lightCube ) 
+const cone = new THREE.ConeGeometry( .05, .1, 32 )
+const material4 = new THREE.MeshPhongMaterial( {color: 0xff0000, side: THREE.DoubleSide} )
+material4.emissiveIntensity = 1.0
 
-const lightCube2 = new THREE.Mesh ( lightGeo, material3 )
-lightCube2.position.set( 0, 0.2, 0.45 )
-scene.add( lightCube2 ) 
+const lightCone = new THREE.Mesh ( cone, material4 )
+lightCone.position.set( 0.45, 0.2, 0 )
+lightCone.rotation.z = - ( Math.PI / 4 )
+spotLight.parent = lightCone
+scene.add( lightCone )
+
+
+const lightCone2 = new THREE.Mesh ( cone, material4 )
+lightCone2.position.set( 0, 0.2, 0.45 )
+lightCone2.rotation.x = Math.PI / 4
+spotLight2.parent = lightCone2
+scene.add( lightCone2 )
 
 // creating the bounding box for the cube
+//  parenting bounding box to object
 const box = new THREE.Box3( new THREE.Vector3(), new THREE.Vector3() )
 cube.geometry.computeBoundingBox()
 box.setFromObject( cube )
@@ -104,75 +139,6 @@ box.setFromObject( cube )
 const vec = new THREE.Vector3()
 box.getSize( vec )
 cube.position.y = - ( height / 2 ) + ( vec.y / 2 )
-
-//adding GLTF Cube which was exported from a blender file
-
-/*const loader = new THREE.GLTFLoader()
-
-let cubeMesh = null
-loader.load("{{ url_for('static', filename='/static/Gltf/BarramundiFish.gltf' ) }}", function(gltf){
-    cubeMesh = gltf.scene.children.find((child) => child.name === "Bara")
-    cubeMesh.scale.set(0.5,0.5,0.5)
-    cubeMesh.rotateY(90)
-    cubeMesh.position.y += .1
-        
-    scene.add(cubeMesh)
-})
-*/
-//Lights
-
-// Spotlight 1
-const spotLight = new THREE.SpotLight( 0xff0000, 0.7, 8, -(Math.PI / 4), 0.3, 2 )
-spotLight.position.set( 0.45, 0.2, 0 )
-spotLight.castShadow = true
-const sLHelper = new THREE.SpotLightHelper( spotLight )
-scene.add( spotLight )
-scene.add( sLHelper )
-
-// Spotlight 2
-const spotLight2 = new THREE.SpotLight( 0x0000ff, 0.7, 8, -(Math.PI / 4), 0.3, 2 )
-spotLight2.position.set( 0, 0.2, 0.45 )
-spotLight2.rotation.y = - ( Math.Pi / 2 )
-spotLight2.castShadow = true
-const sLHelper2 = new THREE.SpotLightHelper( spotLight2 )
-scene.add( spotLight2 )
-scene.add( sLHelper2 )
-
-// Pointlight 
-// const pointLight = new THREE.PointLight( 0xffff00, 1 )
-// pointLight.position.set( 0, 0.2, 0 )
-// pointLight.castShadow = true
-// const pLHelper = new THREE.PointLightHelper( pointLight )
-// scene.add( pointLight )
-// scene.add( pLHelper )
-
-// Light 1
-
-// const pointLight = new THREE.PointLight(0xffffff, 0.1)
-// pointLight.position.x = 2
-// pointLight.position.y = 3
-// pointLight.position.z = 4
-// scene.add(pointLight)
-// pointLight.intensity = 1
-
-//Light 2
-
-// const pointLight2 = new THREE.PointLight(0xff0000, 10)
-// pointLight2.position.set(-1.86,1,-1.65)
-// scene.add(pointLight2)
-
-// const pointLightHelper = new THREE.PointLightHelper(pointLight2, 1) //is a reference, where the point light is?
-// scene.add(pointLightHelper)
-
-//Light 3
-
-// const pointLight3 = new THREE.PointLight(0x0000ff, 10)
-
-// pointLight3.position.set(1.92,-1.31,0.34)
-// scene.add(pointLight3)
-
-// const pointLightHelper3 = new THREE.PointLightHelper(pointLight3, 1) //is a reference, where the point light is?
-// scene.add(pointLightHelper3)
 
 /**
  * Sizes
@@ -196,39 +162,72 @@ window.addEventListener('resize', () =>
     renderer.setSize(sizes.width, sizes.height)
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 })
-// Drag Controls
-/*var objects = [];
-objects.push(sphere);
-const controls = new THREE.DragControls( objects, camera, renderer.domElement );
-
-// add event listener to highlight dragged objects
-
-controls.addEventListener( 'dragstart', function ( event ) {
-
-	event.object.material.emissive.set( 0xaaaaaa );
-
-} );
-
-controls.addEventListener( 'dragend', function ( event ) {
-
-	event.object.material.emissive.set( 0x000000 );
-
-} );*/
-
 
 /**
  * Camera
  */
 // Base camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
-camera.position.x = 0
+camera.position.x = 1.3
 camera.position.y = 0
-camera.position.z = 2
+camera.position.z = 0
+let temp = 0
 scene.add(camera)
 
-// Controls
-// const controls = new OrbitControls(camera, canvas)
-// controls.enableDamping = true
+//Eventlistener for mouse drag rotation
+
+let screenLog = document.querySelector('#screen-log');
+document.addEventListener('mousemove', logKey);
+
+function logKey(e) {
+  screenLog.innerText = `
+    Screen X/Y: ${e.screenX}, ${e.screenY}
+    Client X/Y: ${e.clientX}, ${e.clientY}`;
+}
+// all variables for the mouse tracking and dragging
+var bool = false
+var mousePos = .0
+var camAngle = .0
+var camX = .0
+var camZ = .0
+var count = 0
+
+window.addEventListener('mousedown', (event) => {
+
+    count++
+    console.log( count )
+    bool = true
+    mousePos = event.screenX
+    camX = camera.position.x
+    camZ = camera.position.z
+})
+window.addEventListener('mouseup', () => {
+
+    bool = false
+    camAngle = 0;
+})
+
+document.addEventListener('mousemove', (event) => {
+
+    if( bool ){
+
+        mouseX = ( event.screenX - mousePos )
+
+        camera.position.x = camX * Math.cos( ( 3 * mouseX ) / window.innerWidth ) - camZ * Math.sin( ( 3 * mouseX ) / window.innerWidth ) 
+        camera.position.z = camX * Math.sin( ( 3 * mouseX ) / window.innerWidth ) + camZ * Math.cos( ( 3 * mouseX ) / window.innerWidth )
+       
+        console.log( "camAngle new: " + camAngle )
+    }
+})
+
+let mouseX = 0
+let mouseY = 0
+
+let targetX = 0
+let targetY = 0
+
+const windowHalfX = window.innerWidth / 2;
+const windowHalfY = window.innerHeight / 2;
 
 /**
  * Renderer
@@ -242,26 +241,15 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 renderer.shadowMap.enabled = true
 renderer.shadowMap.type = THREE.VSMShadowMap
 
+//Array
+var objectArray = [ cube, lightCone, lightCone2 ]
+
+// Drag Controls
+const controls = new THREE.DragControls( objectArray, camera, renderer.domElement );
+
 /**
  * Animate
  */
-
-//mouse movement animation
-document.addEventListener('mousemove', onDocumentMouseMove)
-
-let mouseX = 0
-let mouseY = 0
-
-let targetX = 0
-let targetY = 0
-
-const windowHalfX = window.innerWidth / 2;
-const windowHalfY = window.innerHeight / 2;
-
-function onDocumentMouseMove(event){
-    mouseX = (event.clientX)
-    //mouseY = (event.clientY - windowHalfY)
-}
 
 //scroll animation
 /*const updateSphere = (event) => {
@@ -270,38 +258,20 @@ function onDocumentMouseMove(event){
 
 window.addEventListener('scroll', updateSphere)*/
 
-var slider = document.getElementById("myRange");
-var output = document.getElementById("demo");
-
-
-const loader = new GLTFLoader();
-loader.load('/get/lamp.glb', (glb) => {
-   const box = new THREE.Box3( new THREE.Vector3(), new THREE.Vector3() )
-   glb.geometry.computeBoundingBox();
-   box.setFromObject(glb);
-   const vec = new THREE.Vector3();
-   box.getSize(vec)
-   const c2 = new THREE.BoxGeometry(vec.x, vec.y, vec.z);
-   const cmesh = new THREE.Mesh(c2, new THREE.MeshBasicMaterial({ color: 0xFF0000}))
-   scene.add(cmesh)
-   scene.add(glb.scene)
-})
-
 const clock = new THREE.Clock()
 
 const tick = () =>
 {
     targetX = 2 * Math.PI * (mouseX / window.innerWidth)
-    //targetY = 2 * Math.PI * (mouseY / window.innerHeight)
 
     const elapsedTime = clock.getElapsedTime()
 
     // Update objects
     //sphere.rotation.y = .5 * elapsedTime
 
-    //slider rotation
-    camera.position.x = 2 * Math.cos(elapsedTime)
-    camera.position.z = 2 * Math.sin(elapsedTime)
+    //rotating camera
+    // camera.position.x = 2 * Math.cos(elapsedTime)
+    // camera.position.z = 2 * Math.sin(elapsedTime)
 
     //mouse rotation
     /*camera.position.x = Math.cos(targetX)

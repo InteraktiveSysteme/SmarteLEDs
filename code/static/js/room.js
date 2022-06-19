@@ -34,6 +34,39 @@ material.metalness = 0.0
 material.roughness = 1.0
 material.color = new THREE.Color(0xFFFFFF)
 
+//Lights
+
+// Ambient Light
+const ambient = new THREE.AmbientLight( 0xffffff, .05 )
+scene.add( ambient )
+
+// Spotlight 1
+// const spotLight = new THREE.SpotLight( 0xff0000, 0.7, 8, -(Math.PI / 4), 0.3, 2 )
+const spotLight = new THREE.SpotLight( 0xff0000, 0.7, 8 )
+spotLight.penumbra = .3
+spotLight.decay = 2
+// spotLight.position.set( 0.45, 0.2, 0 )
+spotLight.position.set( 0,0,0 )
+spotLight.castShadow = true
+// const sLHelper = new THREE.SpotLightHelper( spotLight )
+// sLHelper.position.set( 0,0,0 )
+scene.add( spotLight )
+// scene.add( sLHelper )
+
+// Spotlight 2
+// const spotLight2 = new THREE.SpotLight( 0x0000ff, 0.7, 8, -(Math.PI / 4), 0.3, 2 )
+const spotLight2 = new THREE.SpotLight( 0x0000ff, 0.7, 8 )
+spotLight2.penumbra = .3
+spotLight2.decay = .2
+spotLight2.position.set( 0,0,0 )
+// spotLight2.position.set( 0, 0.2, 0.45 )
+// spotLight2.rotation.y = - ( Math.Pi / 2 )
+spotLight2.castShadow = true
+//const sLHelper2 = new THREE.SpotLightHelper( spotLight2 )
+scene.add( spotLight2 )
+//scene.add( sLHelper2 )
+
+
 // Mesh and walls 
 //  Front and back wall
 const frontPlane = new THREE.Mesh(frontBackGeo, material3)
@@ -85,13 +118,23 @@ cube.castShadow = true
 cube.receiveShadow = true
 scene.add( cube )
 
-const lightCube = new THREE.Mesh ( lightGeo, material3 )
-lightCube.position.set( 0.45, 0.2, 0 )
-scene.add( lightCube ) 
+const cone = new THREE.ConeGeometry( .05, .1, 32 )
+const material4 = new THREE.MeshPhongMaterial( {color: 0xff0000, side: THREE.DoubleSide} )
+material4.emissiveIntensity = 1.0
 
-const lightCube2 = new THREE.Mesh ( lightGeo, material3 )
-lightCube2.position.set( 0, 0.2, 0.45 )
-scene.add( lightCube2 ) 
+const lightCone = new THREE.Mesh ( cone, material4 )
+lightCone.position.set( 0.45, 0.2, 0 )
+lightCone.rotation.z = - ( Math.PI / 4 )
+spotLight.parent = lightCone
+// sLHelper.parent = lightCone
+scene.add( lightCone )
+
+
+const lightCone2 = new THREE.Mesh ( cone, material4 )
+lightCone2.position.set( 0, 0.2, 0.45 )
+lightCone2.rotation.x = Math.PI / 4
+spotLight2.parent = lightCone2
+scene.add( lightCone2 )
 
 // creating the bounding box for the cube
 //  parenting bounding box to object
@@ -103,39 +146,6 @@ box.setFromObject( cube )
 const vec = new THREE.Vector3()
 box.getSize( vec )
 cube.position.y = - ( height / 2 ) + ( vec.y / 2 )
-
-//adding GLTF Cube which was exported from a blender file
-
-/*const loader = new THREE.GLTFLoader()
-
-let cubeMesh = null
-loader.load("{{ url_for('static', filename='/static/Gltf/BarramundiFish.gltf' ) }}", function(gltf){
-    cubeMesh = gltf.scene.children.find((child) => child.name === "Bara")
-    cubeMesh.scale.set(0.5,0.5,0.5)
-    cubeMesh.rotateY(90)
-    cubeMesh.position.y += .1
-        
-    scene.add(cubeMesh)
-})
-*/
-//Lights
-
-// Spotlight 1
-const spotLight = new THREE.SpotLight( 0xff0000, 0.7, 8, -(Math.PI / 4), 0.3, 2 )
-spotLight.position.set( 0.45, 0.2, 0 )
-spotLight.castShadow = true
-const sLHelper = new THREE.SpotLightHelper( spotLight )
-scene.add( spotLight )
-scene.add( sLHelper )
-
-// Spotlight 2
-const spotLight2 = new THREE.SpotLight( 0x0000ff, 0.7, 8, -(Math.PI / 4), 0.3, 2 )
-spotLight2.position.set( 0, 0.2, 0.45 )
-spotLight2.rotation.y = - ( Math.Pi / 2 )
-spotLight2.castShadow = true
-const sLHelper2 = new THREE.SpotLightHelper( spotLight2 )
-scene.add( spotLight2 )
-scene.add( sLHelper2 )
 
 /**
  * Sizes
@@ -159,31 +169,13 @@ window.addEventListener('resize', () =>
     renderer.setSize(sizes.width, sizes.height)
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 })
-// Drag Controls
-/*var objects = [];
-objects.push(sphere);
-const controls = new THREE.DragControls( objects, camera, renderer.domElement );
-
-// add event listener to highlight dragged objects
-
-controls.addEventListener( 'dragstart', function ( event ) {
-
-	event.object.material.emissive.set( 0xaaaaaa );
-
-} );
-
-controls.addEventListener( 'dragend', function ( event ) {
-
-	event.object.material.emissive.set( 0x000000 );
-} );*/
-
 
 /**
  * Camera
  */
 // Base camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
-camera.position.x = 2
+camera.position.x = 1.3
 camera.position.y = 0
 camera.position.z = 0
 let temp = 0
@@ -200,7 +192,7 @@ function logKey(e) {
     Client X/Y: ${e.clientX}, ${e.clientY}`;
 }
 // all variables for the mouse tracking and dragging
-var bool = false
+var dragBool = false
 var mousePos = .0
 var camAngle = .0
 var camX = .0
@@ -211,42 +203,26 @@ window.addEventListener('mousedown', (event) => {
 
     count++
     console.log( count )
-    bool = true
+    dragBool = true
     mousePos = event.screenX
     camX = camera.position.x
     camZ = camera.position.z
 })
 window.addEventListener('mouseup', () => {
 
-    bool = false
+    dragBool = false
     camAngle = 0;
 })
 
 document.addEventListener('mousemove', (event) => {
 
-    if( bool ){
+    if( dragBool && modeSwitch ){
 
         mouseX = ( event.screenX - mousePos )
-        
-        // camAngle = Math.acos( camX / 2 ) / ( 2 * Math.PI / window.innerWidth )
-
-        // if( camAngle < 0 ){
-
-        //     camAngle = -1 * ( Math.acos( camX / 2.0 ) / ( 2.0 * Math.PI / window.innerWidth ) )
-        // }
-        // else{
-            
-        //     camAngle = Math.acos( camX / 2.0 ) / ( 2.0 * Math.PI / window.innerWidth ) 
-        // }
-
-        // console.log( "camAngle old: " + camAngle )
-
-        // camAngle += mouseX
 
         camera.position.x = camX * Math.cos( ( 3 * mouseX ) / window.innerWidth ) - camZ * Math.sin( ( 3 * mouseX ) / window.innerWidth ) 
         camera.position.z = camX * Math.sin( ( 3 * mouseX ) / window.innerWidth ) + camZ * Math.cos( ( 3 * mouseX ) / window.innerWidth )
-        // camera.position.x = camX + Math.cos( 2 * Math.PI * ( mouseX / window.innerWidth ) ) 
-        // camera.position.z = camZ + Math.sin( 2 * Math.PI * ( mouseX / window.innerWidth ) )
+       
         console.log( "camAngle new: " + camAngle )
     }
 })
@@ -271,6 +247,44 @@ renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 renderer.shadowMap.enabled = true
 renderer.shadowMap.type = THREE.VSMShadowMap
+
+//Array
+var objectArray = [ lightCone, lightCone2, cube ]
+
+// Drag Controls
+const controls = new THREE.DragControls( objectArray, camera, renderer.domElement );
+
+//Eventlistener for keeping Cube on the ground
+document.addEventListener( 'mousemove', () => {
+
+    if( !modeSwitch ){
+
+
+        cube.position.y = - ( height / 2 ) + ( vec.y / 2 )
+    }
+} )
+
+//EventListener for switching between roundtable and object drag
+var modeSwitch = true
+
+document.addEventListener( 'keydown', onKeyPressS)
+
+function onKeyPressS( event ){
+
+    if( event.key === "s" ){
+
+        if( modeSwitch ){
+
+            modeSwitch = false
+            objectArray.push( cube )
+        }
+        else{
+    
+            modeSwitch = true
+            objectArray.pop()
+        }
+    }
+}
 
 /**
  * Animate

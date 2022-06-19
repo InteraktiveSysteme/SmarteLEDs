@@ -6,6 +6,14 @@
     <title>Three.js 101</title>
 
     <!--  Three.js CDN  -->
+    <!--script type="importmap">
+      "imports:" 
+      {
+        "three": "{{ url_for('static', filename='/js/three.js' ) }}",
+        "GLTF": "{{ url_for('static', filename='/js/GLTFLoader.js' ) }}",
+        "drag": "{{ url_for('static', filename='/js/DragControls.js' ) }}"
+      }
+    </script -->
     <script src="{{ url_for('static', filename='/js/three.js' ) }}"></script>
     <script src="{{ url_for('static', filename='/js/GLTFLoader.js' ) }}"></script>
     <script src="{{ url_for('static', filename='/js/DragControls.js' ) }}"></script>

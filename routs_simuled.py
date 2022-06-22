@@ -13,8 +13,6 @@ from flask_login import *
 def child():  # put application's code here
     return render_template('child.html')
 
-
-
 def shopLamp(id):  # put application's code here
 
     if current_user.is_authenticated:

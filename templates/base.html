@@ -90,7 +90,6 @@
             </div>
     </div>
     </form>-->
-            {% if current_user.is_authenticated %}
             <ul class="navbar-nav nav-pills   ">
                 <li class="nav-item">
 
@@ -101,6 +100,7 @@
                         </svg>
                     </a>
                 </li>
+                {% if current_user.is_authenticated %}
                 <li class="nav-item">
 
                     <a class="nav-link ">{{ current_user.userName }}</a>

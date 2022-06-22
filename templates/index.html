@@ -1,88 +1,6 @@
 {% extends "base.html" %}
 {% block title %}Index{% endblock %}
 {% block head %}
-<<<<<<< HEAD
-{{ super() }}
-{% endblock %}
-{% block content %}
-
-<body>
-<link rel="stylesheet" href="{{ url_for('static',filename='/css/index_style.css') }}">
-
-<div class="container mt-2 flex-lg-fill" id="conainer-box">
-    <div class="d-flex row align-items-start align-items-stretch">
-        <div class="col" id="col-1"
-             style="background-image: url('{{url_for('static',filename='/images/room_setup.jpg')}}');">
-            <div class="content">
-                <h1 id="infotext" style="color: #f2f2f2;">Build it yourself!</h1>
-                <p class="fs-5" style="color:#f2f2f2;">Here you can configure a light setup according to your liking.
-                    This scene can then be rendered in 3D and saved to your library.</p>
-                <a href="/simuled" type="button" class="btn btn-outline-primary">Simuled</a>
-            </div>
-        </div>
-        <div class="col" id="col-2"
-             style="background-image: url('{{url_for('static',filename='/images/phillips_lamp.jpg')}}');">
-            <div class="content">
-                <h1 id="infotext" style="color:#f2f2f2;">Choose your lamp!</h1>
-                <p class="fs-5" style="color:#f2f2f2;">In our shop you can choose between a variety of lamps with
-                    vibrant colors and modern designs.</p>
-                <a href="/shop" type="button" class="btn btn-outline-primary">Lamp Selection</a>
-            </div>
-        </div>
-        <div class="col" id="col-3"
-             style="background-image: url('{{url_for('static',filename='/images/company.jpg')}}');">
-            <div class="content">
-                <h1 id="infotext" style="color:#f2f2f2;">Learn about us!</h1>
-                <p class="fs-5" style="color:#f2f2f2;">We are a company which focuses on modern and innovative software
-                    solutions in UI/UX and Backend.</p>
-                <a href="#footer" type="button" class="btn btn-outline-primary">About Us</a>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<!--div class="container mt-2 flex-lg-fill" id="conainer-box">
-  <div class="d-flex row align-items-start align-items-stretch">
-    <div class="col" id="col-1">
-      <div class="content">
-        <h1 id="infotext" style="color:#f6f4f1">Build it yourself!</h1>
-      </div>
-      <div class="content">
-        <p class="fs-5" style="color:#f6f4f1">Here you can configure a light setup according to your liking. This scene can then be rendered in 3D and saved to your library.</p>
-      </div>
-      <button type="button" class="btn-lg btn-warning">Simuled</button>
-    </div>
-    <div class="col" id="col-2">
-      <div class="content">
-        <h1 id="infotext" style="color:#f6f4f1">Choose your lamp!</h1>
-      </div>
-      <div class="content">
-        <p class="fs-5" style="color:#f6f4f1">In our shop you can choose between a variety of lamps with vibrant colors and modern designs.</p>
-      </div>
-      <button type="button" class="btn-lg btn-warning">Lamp Selection</button>
-    </div>
-    <div class="col" id="col-3">
-      <div class="content">
-        <h1 id="infotext" style="color:#f6f4f1">Learn about us!</h1>
-      </div>
-      <div class="content">
-        <p class="fs-5" style="color:#f6f4f1;">We are a company which focuses on modern and innovative software solutions in UI/UX and Backend.</p>
-      </div>
-      <button type="button" class="btn-lg btn-warning">About Us</button>
-    </div>
-  </div>
-</div -->
-
-
-<!-- Optional JavaScript; choose one of the two! -->
-
-<!-- Option 1: Bootstrap Bundle with Popper -->
-
-</body>
-
-{% endblock %}
-=======
     {{ super() }}
     <link rel="stylesheet" href="{{ url_for('static',filename='/css/index_style.css') }}">
 {% endblock %}
@@ -146,4 +64,3 @@
         </div>
       </div -->
 {% endblock %}
->>>>>>> lukaspremerge

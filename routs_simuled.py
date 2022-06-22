@@ -1,6 +1,6 @@
 import re
 from app import *
-from flask import Flask, render_template, request, flash, url_for, redirect, make_response
+from flask import Flask, render_template, request, flash, url_for, redirect, make_response, send_from_directory
 from flask import render_template
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
@@ -63,6 +63,12 @@ def shoppingCart():
 
 def test():  # put application's code here
     return render_template('test.html')
+
+def expose_gltf(file):
+    return send_from_directory(os.path.join(app.root_path, 'static/Gltf'), file)
+
+def testglb():
+    return render_template('testglb.html')
 
 
 def index():  # put application's code here

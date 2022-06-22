@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Index{% endblock %}
+{% block head %}
+{{ super() }}
+
+
+{% endblock %}
+{% block content %}
+
+<body>
+
+<h1 style="margin-bottom:30px; font-family:Monospace; hyphens: auto; color:#D06ED4;text-align: center">SIMULED<br></h1>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12"style="height=1000px">
+
+        </div>
+        <div class="col-12">
+            <div class="card">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="/static/images/a-room-at-the-beach.jpg" class="img-fluid rounded-start" alt="...">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">Saved Room #1</h5>
+                            <p class="card-text">Living room</p>
+                            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+{% endblock %}

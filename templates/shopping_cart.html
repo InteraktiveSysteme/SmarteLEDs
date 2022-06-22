@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block title %}Shopping_Cart{% endblock %}
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static',filename='/css/shopping_cart_style.css') }}">
+{% endblock %}
+{% block content %}
+
+
+    <p class="fs-2">Shopping Cart</p>
+
+    <p class="fs-5">Articles: {{ shoppingCart|length }}</p>
+
+
+
+    <div class="container mt-2 flex-lg-fill" id="conainer-box">
+      <div class="d-flex row align-items-start align-items-stretch">
+        <div class="col-sm-9" id="col-1" style="">
+            {% for i in shoppingCart %}
+          <div class="card mb-3" style="width: auto; height: 300px;">
+            <div class="row g-0">
+              <div class="col-md-4">
+                <img src="{{url_for('static',filename='/images/exampleLamps/' + i + '.jpg')}}" class="img-fluid rounded-start" alt="..." id="card-img">
+              </div>
+              <div class="col-md-8">
+                <div class="card-body">
+                  <h5 class="card-title">{{ i }}</h5>
+                  {{ description }}
+                  <p class="fs-6">Price: 29.99€</p>
+                  <div class="row" style="margin-top: 20%;">
+                    <div class="col-3" style="width:fit-content">
+                      <a href="/deletefromcart/{{loop.index-1}}" type="button" class="btn btn-outline-primary">Delete</a>
+                    </div>
+                    <div class="col-3" style="width: fit-content;">
+                      <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle" type="button" id="card-btn" data-bs-toggle="dropdown" aria-expanded="false">
+                          1
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                          <li><a class="dropdown-item" href="#">1</a></li>
+                          <li><a class="dropdown-item" href="#">2</a></li>
+                          <li><a class="dropdown-item" href="#">3</a></li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>  
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+            <!--
+          <div class="card mb-3" style="width: auto; height: 300px;">
+            <div class="row g-0">
+              <div class="col-md-4">
+                <img src="{{url_for('static',filename='/images/lampList1.jpg')}}" class="img-fluid rounded-start" alt="..." id="card-img">
+              </div>
+              <div class="col-md-8">
+                <div class="card-body">
+                  <h5 class="card-title">Name of Product</h5>
+                  <p class="card-text">Short description of product</p>
+                  <p class="fs-6">Price: 29.99€</p>
+                  <div class="row" style="margin-top: 20%;">
+                    <div class="col-3" style="width:fit-content">
+                      <button type="button" class="btn btn-outline-primary">Delete</button>
+                    </div>
+                    <div class="col-3" style="width: fit-content;">
+                      <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle" type="button" id="card-btn" data-bs-toggle="dropdown" aria-expanded="false">
+                          1
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                          <li><a class="dropdown-item" href="#">1</a></li>
+                          <li><a class="dropdown-item" href="#">2</a></li>
+                          <li><a class="dropdown-item" href="#">3</a></li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>  
+                </div>
+              </div>
+            </div>
+          </div>
+        -->
+        {% endfor %}
+
+        </div>
+
+
+        <div class="col-3" id="col-2" style="">
+          <div class="card">
+            <h5 class="card-header">Order summary</h5>
+            <p class="fs-6 card-header">Subtotal: 29.99€</p>
+            <div class="card-body">
+              <h5 class="card-title">Total: 29.99€</h5>
+              <a href="#" class="btn btn-primary">Checkout</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+{% endblock %}

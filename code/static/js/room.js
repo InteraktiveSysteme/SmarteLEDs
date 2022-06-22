@@ -42,25 +42,23 @@ scene.add( ambient )
 
 // Spotlight 1
 // const spotLight = new THREE.SpotLight( 0xff0000, 0.7, 8, -(Math.PI / 4), 0.3, 2 )
-const spotLight = new THREE.SpotLight( 0xff0000, 0.7, 8 )
+const spotColor1 = 0xff0000;
+const spotLight = new THREE.SpotLight( spotColor1, 0.7, 8 )
 spotLight.penumbra = .3
 spotLight.decay = 2
 // spotLight.position.set( 0.45, 0.2, 0 )
 spotLight.position.set( 0,0,0 )
 spotLight.castShadow = true
-// const sLHelper = new THREE.SpotLightHelper( spotLight )
-// sLHelper.position.set( 0,0,0 )
 scene.add( spotLight )
 // scene.add( sLHelper )
 
 // Spotlight 2
 // const spotLight2 = new THREE.SpotLight( 0x0000ff, 0.7, 8, -(Math.PI / 4), 0.3, 2 )
-const spotLight2 = new THREE.SpotLight( 0x0000ff, 0.7, 8 )
+const spotColor2 = 0xff0000;
+const spotLight2 = new THREE.SpotLight( spotColor2, 0.7, 8 )
 spotLight2.penumbra = .3
 spotLight2.decay = .2
 spotLight2.position.set( 0,0,0 )
-// spotLight2.position.set( 0, 0.2, 0.45 )
-// spotLight2.rotation.y = - ( Math.Pi / 2 )
 spotLight2.castShadow = true
 //const sLHelper2 = new THREE.SpotLightHelper( spotLight2 )
 scene.add( spotLight2 )
@@ -151,7 +149,7 @@ cube.position.y = - ( height / 2 ) + ( vec.y / 2 )
  * Sizes
  */
 const sizes = {
-    width: window.innerWidth,
+    width: 0.95 * window.innerWidth,
     height: window.innerHeight
 }
 
@@ -183,8 +181,8 @@ scene.add(camera)
 
 //Eventlistener for mouse drag rotation
 
-let screenLog = document.querySelector('#screen-log');
-document.addEventListener('mousemove', logKey);
+// let screenLog = document.querySelector('#screen-log');
+// document.addEventListener('mousemove', logKey);
 
 function logKey(e) {
   screenLog.innerText = `
@@ -235,6 +233,56 @@ let targetY = 0
 
 const windowHalfX = window.innerWidth / 2;
 const windowHalfY = window.innerHeight / 2;
+
+/**
+ * GUI
+ */
+var GUI = lil.GUI;
+
+const gui = new GUI({ title: 'Light Parameters'  } );
+
+guiParams = {
+    
+    spotColor1: spotColor1,
+    intensity: 0.5,
+    spotColor2: spotColor2,
+    intensity2: 0.5,
+    Light1_on_off: true,
+    Light2_on_off: true,
+    
+}
+
+gui.addColor(guiParams, 'spotColor1').onChange(function (e) {
+	spotLight.color = new THREE.Color(e);
+})
+    .name('Light1 Color');
+
+gui.add(guiParams, 'intensity', 0, 5).onChange(function (e) {
+	spotLight.intensity = e;
+})
+    .name('Light1 Intensity');
+
+gui.add(guiParams, 'Light1_on_off').onChange(function (e) {
+    spotLight.visible = e;
+})
+    .name('Light1 On/Off');
+
+gui.addColor(guiParams, 'spotColor2').onChange(function (e) {
+	spotLight2.color = new THREE.Color(e);
+})
+    .name('Light2 Color');
+
+gui.add(guiParams, 'intensity2', 0, 5).onChange(function (e) {
+	spotLight2.intensity = e;
+})
+    .name('Light2 Intensity');
+
+gui.add(guiParams, 'Light2_on_off').onChange(function (e) {
+    spotLight2.visible = e;
+})
+    .name('Light2 On/Off');
+
+gui.add(guiParams, 'myFunction');
 
 /**
  * Renderer

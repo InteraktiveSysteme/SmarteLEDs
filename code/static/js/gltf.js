@@ -1,4 +1,5 @@
 import * as THREE from "three"
+import {normalMap} from "./three.js-master/examples/jsm/nodes/shadernode/ShaderNodeElements";
 //import { GLTFLoader } from "gltf";
 
 const canvas = document.getElementById('myCanvas');
@@ -45,7 +46,7 @@ const geometry = new THREE.SphereBufferGeometry(0.5, 64, 64);
 const material = new THREE.MeshStandardMaterial()
 material.metalness = 0.7
 material.roughness = 0.2
-material.normalMap = normalTexture
+material.normalMap = normalMap
 material.color = new THREE.Color(0x292929)
 
 // Mesh

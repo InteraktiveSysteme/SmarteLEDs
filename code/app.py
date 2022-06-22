@@ -1,7 +1,6 @@
 from flask import Flask
 from flask import render_template
 from flask import request, send_from_directory
-import time
 import os
 import re
 #import markdown
@@ -19,9 +18,17 @@ def test():  # put application's code here
 def test2():  # put application's code here
 	return render_template('testglb.html')
 
+@app.route('/testdrag')
+def drag():
+	return render_template('test_drag.html')
+
 @app.route('/get/<file>')
 def sendglb(file):
 	return send_from_directory(os.path.join(app.root_path, 'static/Gltf'), file);
+
+@app.route('/getjs/<file>')
+def sendjs(file):
+	return send_from_directory(os.path.join(app.root_path, 'static/js'), file);
 
 @app.route('/')
 def index():  # put application's code here

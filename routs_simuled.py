@@ -1,11 +1,12 @@
 import re
 from app import *
-from flask import Flask, render_template, request, flash, url_for, redirect
+from flask import Flask, render_template, request, flash, url_for, redirect, make_response
 from flask import render_template
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 import uuid as uuid
 import os
+import json
 from flask_login import *
 
 
@@ -13,13 +14,53 @@ def child():  # put application's code here
     return render_template('child.html')
 
 
-@login_required
+
 def shopLamp(id):  # put application's code here
-    cart = Cart(userID=current_user.userID, lampID=id, amount=1)
-    db.session.add(cart)
-    db.session.commit()
-    lamps = Lamp.query.order_by(Lamp.timeStamp)
-    return render_template('shop.html', lamps=lamps)
+
+    if current_user.is_authenticated:
+        cart = Cart(userID=current_user.userID, lampID=id, amount=1)
+        db.session.add(cart)
+        db.session.commit()
+        lamps = Lamp.query.order_by(Lamp.timeStamp)
+        resp = render_template("shop.html", lamps=lamps), 200
+    else:
+        lamps = Lamp.query.order_by(Lamp.timeStamp)
+        if request.cookies.get('cart') is None:
+            cartTEMP = []
+            cartTEMP.append(int(id))
+            resp = make_response(render_template("shop.html", lamps=lamps), 200)
+        else:
+            cartTEMP = json.loads(request.cookies.get('cart'))
+            cartTEMP.append(int(id))
+            resp = make_response(render_template("shop.html", lamps=lamps), 200)
+        cartJSON = json.dumps(cartTEMP)
+        resp.set_cookie('cart', cartJSON)
+
+    return resp
+
+def shoppingCart():
+    list = []
+    if current_user.is_authenticated:
+        print("getShoppingCart")
+
+        lamps = Cart.query.filter_by(userID = current_user.userID)
+
+        for lamp in lamps:
+
+            if lamp in list:
+                print("doppel")
+            else:
+                print("einzel")
+                list.append(Lamp.query.get_or_404(lamp.lampID))
+    else:
+        if (request.cookies.get('cart') is None):
+            return render_template('shoppingCart.html')
+        else:
+            cartTEMP = json.loads(request.cookies.get('cart'))
+            for i in cartTEMP:
+                list.append(Lamp.query.get(i))
+
+    return render_template('shoppingCart.html', lamps=list)
 
 
 def test():  # put application's code here
@@ -87,24 +128,6 @@ def admin():
         return render_template("admin.html", users=users, lamps=lamps), 200
     flash("Admin Page is for Admins only")
     return render_template("index"), 200
-
-
-@login_required
-def shoppingCart():
-    print("getShoppingCart")
-
-    lamps = Cart.query.filter_by(userID = current_user.userID)
-
-    list = []
-
-    for lamp in lamps:
-
-        if lamp in list:
-            print("doppel")
-        else:
-            print("einzel")
-            list.append(Lamp.query.get_or_404(lamp.lampID))
-    return render_template('shoppingCart.html', lamps=list)
 
 
 def registerPage():

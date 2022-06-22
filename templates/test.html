@@ -2,31 +2,6 @@
 {% block title %}Index{% endblock %}
 {% block head %}
     {{ super() }}
-<<<<<<< HEAD
-    <script  src="{{ url_for('static', filename='/js/three.js' ) }}"></script>
-    <script  src="{{ url_for('static', filename='/js/GLTFLoader.js' ) }}"></script>
-    <script  src="{{ url_for('static', filename='/js/DragControls.js' ) }}"></script>
-    <script type="module" src="{{ url_for('static', filename='/js/TextGeometry.js' ) }}"></script>
-    <script type="module" src="{{ url_for('static', filename='/js/TTFLoader.js' ) }}"></script>
-    <script type="module" src="{{ url_for('static', filename='/js/FontLoader.js' ) }}"></script>
-{% endblock %}
-{% block content %}
-<body style="background-color: rgb(255, 255, 255);">
-  <!--  Our code  -->
-    <div id="gl" style="width: auto;height: auto">
-        <canvas id="myCanvas" width="auto" height="auto" style="position: relativ;"></canvas>
-    </div>
-    <div class="slidecontainer">
-      <input type="range" min="0" max="360" value="180" class="slider" id="myRange" style="position:absolute;">
-    </div>
-    <script src="{{ url_for('static', filename='/js/landingPage.js' ) }}">
-
-    </script>
-  </body>
-
-{% endblock %}
-
-=======
     <link rel="stylesheet" href="{{ url_for('static',filename='/css/index_style.css') }}">
 {% endblock %}
 {% block content %}
@@ -87,4 +62,3 @@
     <!--p id="screen-log" style="color:white"></p-->
     <script src="{{ url_for('static', filename='/js/room.js' ) }}"></script>
 {% endblock %}
->>>>>>> lukaspremerge

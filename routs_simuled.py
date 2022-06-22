@@ -76,7 +76,7 @@ def render():
 
 
 def simuled():
-    return render_template('simuled.html')
+    return render_template('test.html')
 
 
 @login_required

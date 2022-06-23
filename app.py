@@ -13,7 +13,7 @@ app.config['SECRET_KEY'] = os.urandom(12)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///SQLTerror.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.config['SQLALCHEMY_ECHO'] = True
-UPLOAD_FOLDER = 'static\lamps'
+UPLOAD_FOLDER = 'static/lamps'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 Bootstrap(app)
 db = SQLAlchemy(app)

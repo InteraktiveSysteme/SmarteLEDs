@@ -9,59 +9,62 @@
 <div class="container-md">
 
     <div class="row justify-content-center">
-        <div class="col-6  ">
-            <h1 style="margin-bottom:30px; font-family:Monospace; hyphens: auto; color:#D06ED4;text-align: center">Add a new Lamp!<br></h1>
+        <div class="col-lg-10 col-sm-12 ">
+            <h1 style="margin-bottom:30px; font-family:Monospace; hyphens: auto; color:#D06ED4;text-align: center">Add a
+                new Lamp!<br></h1>
 
             <form action="#" method="POST" enctype="multipart/form-data">
-                <div style="margin-bottom: 30px" class="form-group">
-                    <input name="name" type="text" class="form-control" id="name" aria-describedby="emailHelp"
-                           placeholder="Input Lamp Name">
-                </div>
-                <div style="margin-bottom: 30px" class="input-group">
+                {{form.hidden_tag()}}
 
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Lamp Name</span>
+                    {{form.name(type="text", class="form-control", id="name", onkeyup="dun1();")}}
+                </div>
+                <div class="input-group mb-3">
                     <span class="input-group-text">Short Description</span>
-
-                    <input name="shorttext" id="text" class="textarea form-control" aria-label="With textarea"></input>
+                    {{form.shortText(type="text", class="form-control", id="text", onkeyup="dun1();")}}
                 </div>
-                <div style="margin-bottom: 30px" class="input-group">
-
+                <div class="input-group mb-3">
                     <span class="input-group-text">Long Description</span>
-
-                    <textarea  name="longtext" id="textlong" class="textarea form-control" aria-label="With textarea"></textarea>
+                    {{form.longText(type="textarea", class="form-control", onkeyup="dun1();")}}
                 </div>
+
                 <div style="margin-bottom: 30px" class="input-group mb-3">
                     <span class="input-group-text">Price</span>
-                    <input name="price" type="text" id="price" class="form-control">
+                    {{form.price(class="form-control",id="price", onkeyup="dun1();")}}
                     <span class="input-group-text">$</span>
                 </div>
-                
+
 
                 <div style="margin-bottom: 30px" class="form-group" style="padding = 10px">
-                    <label for="exampleFormControlFile1">Upload an Image</label>
-                    <input name="img" type="file" class="form-control-file" id="exampleFormControlFile1">
+                    <label>Upload an Image</label>
+                    {{form.img(class="form-control", id="img", onkeyup="dun1();")}}
                 </div>
                 <div style="margin-bottom: 30px" class="form-group" style="padding = 10px">
-                    <label for="exampleFormControlFile1">Upload an GLTF (optional)</label>
-                    <input name="gltf" type="file" class="form-control-file" id="gltf">
+                    <label>Upload an GLTF</label>
+                    {{form.gltf(class="form-control", onkeyup="dun1();")}}
                 </div>
                 <div style="margin-top: 30 px">
-                    <button type="submit" class="btn btn-outline-primary btn-block">Submit
-                    </button>
+                    <div class="d-grid gap-2">
+                        {{form.submit(class="btn btn-outline-warning")}}
+                    </div>
+
                 </div>
+
+            </form>
         </div>
-        </form>
         <div class="col-2  ">
-            <div class="col-12 col-md-6 col-lg-3 g-2">
+            <div class="col-lg-10 col-md-6 col-lg-3 g-2">
                 <div class="card mb-4 p-3  border-danger" style="width: 18rem;">
-                    <img id="imgOut" class="card-img-top" src="/static/lamps/"
-                         onerror="/static/images/inApp/8974589526046.jpg" alt="Card image cap">
+                    <img id="imgOut" alt="" class="card-img-top" src="/static/lamps/">
                     <div class="card-body">
-                        <h5 class="card-title" id="nameOut">#TODO</h5>
-                        <p class="card-text" id="textout">#TODO<br/></p>
+                        <h5 class="card-title" id="nameOut"></h5>
+                        <p class="card-text" id="textout"><br/></p>
 
                     </div>
                     <div class="card-footer">
-                        <big id="priceOut" style="color:#359DA3" class="text-mut">#TODO </big>  <big style="color:#359DA3" class="text-mut">$</big>
+                        <big id="priceOut" style="color:#359DA3" class="text-mut"> </big> <big
+                            style="color:#359DA3" class="text-mut">$</big>
                     </div>
                 </div>
             </div>
@@ -72,7 +75,7 @@
                 const title = document.getElementById('name');
                 const text = document.getElementById('text');
                 const price = document.getElementById('price');
-                const img = document.getElementById('exampleFormControlFile1');
+                const img = document.getElementById('img');
                 const btn = document.getElementById('showbtn');
                 const titleout = document.getElementById('nameOut');
                 const textout = document.getElementById('textout');
@@ -97,6 +100,14 @@
                         reader.readAsDataURL(file);
                     }
                 });
+
+
+
+
+
+
+
+
             </script>
         </div>
     </div>

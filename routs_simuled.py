@@ -8,6 +8,8 @@ import uuid as uuid
 import os
 import json
 from flask_login import *
+import forms
+
 
 
 def child():  # put application's code here
@@ -88,19 +90,19 @@ def simuled():
 @login_required
 def addLamp():
     if request.method == "GET":
-        return render_template('addLamp.html')
+        form = forms.AddLampForm()
+        return render_template('addLamp.html', form= form)
     if request.method == "POST":
         name = request.form["name"]
         img = request.files["img"]
         gltf = request.files["gltf"]
-        text = request.form["shorttext"]
-        longtext = request.form["longtext"]
+        text = request.form["shortText"]
+        longtext = request.form["longText"]
         price = request.form["price"]
         gltfName = secure_filename(img.filename)
         savegltfName = str(uuid.uuid1()) + "_" + gltfName
         gltfName = savegltfName
         gltf.save(os.path.join(app.config['UPLOAD_FOLDER'], savegltfName))
-
         imgName = secure_filename(img.filename)
         saveName = str(uuid.uuid1()) + "_" + imgName
         imgName = saveName
@@ -113,8 +115,8 @@ def addLamp():
         lamp = Lamp.query.order_by(Lamp.timeStamp)
         lamps = Lamp.query.order_by(Lamp.timeStamp)
         flash(message="Lamp added!")
-
-        return render_template("addLamp.html"), 200
+        form = forms.AddLampForm()
+        return render_template("addLamp.html", form =form), 200
 
 
 def shop():
@@ -134,7 +136,8 @@ def admin():
 
 
 def registerPage():
-    return render_template('registerPage.html')
+    form = forms.RegisterForm()
+    return render_template('registerPage.html', form = form)
 
 
 # liste mit allen lamp und

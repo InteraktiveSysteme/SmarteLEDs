@@ -70,6 +70,10 @@ def expose_gltf(file):
 def testglb():
     return render_template('testglb.html')
 
+def bpyrender():
+    exec(open("Demo.py").read())
+    return render_template('render.html')
+
 
 def index():  # put application's code here
     print("index")

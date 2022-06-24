@@ -3,21 +3,16 @@
 <head>
 
     <meta charset="UTF-8"/>
-    <title>Three.js 101</title>
-
-    <!--script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script-->
-
-    <!--  Three.js CDN  -->
+    <title>Blender Testrender</title>
 
 </head>
   <body style="background-color: black;">
   <!--  Our code  -->
     <div id="gl" style="width: auto;height: auto">
-        <canvas id="Canvas" width="auto" height="auto" style="position: relative;"></canvas>
+        <img src="{{ url_for('static', filename='flask_render.png') }}">Img Platzhalter</img>
     </div>
     <!--div class="slidecontainer">
       <input type="range" min="0" max="360" value="180" class="slider" id="myRange" style="position:absolute;">
     </div-->
-    <script type="module" src="{{ url_for('static', filename='/js/gltf_bundle.js' ) }}"></script>
   </body>
 </html>

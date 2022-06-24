@@ -93,7 +93,6 @@ def addLamp():
         name = request.form["name"]
         img = request.files["img"]
         gltf = request.files["gltf"]
-
         text = request.form["shorttext"]
         longtext = request.form["longtext"]
         price = request.form["price"]

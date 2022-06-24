@@ -42,7 +42,7 @@ scene.add( ambient )
 
 // Spotlight 1
 // const spotLight = new THREE.SpotLight( 0xff0000, 0.7, 8, -(Math.PI / 4), 0.3, 2 )
-const spotColor1 = 0xff0000;
+const spotColor1 = 0xfa05e1;
 const spotLight = new THREE.SpotLight( spotColor1, 0.7, 8 )
 spotLight.penumbra = .3
 spotLight.decay = 2
@@ -54,7 +54,7 @@ scene.add( spotLight )
 
 // Spotlight 2
 // const spotLight2 = new THREE.SpotLight( 0x0000ff, 0.7, 8, -(Math.PI / 4), 0.3, 2 )
-const spotColor2 = 0xff0000;
+const spotColor2 = 0x10efe4;
 const spotLight2 = new THREE.SpotLight( spotColor2, 0.7, 8 )
 spotLight2.penumbra = .3
 spotLight2.decay = .2

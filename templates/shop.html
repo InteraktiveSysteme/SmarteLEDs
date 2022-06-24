@@ -23,7 +23,7 @@
                             <div class="btn-group" role="group" aria-label="Basic example">
                                 {% if current_user.admin %}
                                 <a href="{{ url_for('loeschen',id=lamp.lampID) }}"
-                                    class="col-6 btn btn-outline-danger">Delete</a>
+                                    class="col-6 btn btn-outline-warning">Delete</a>
                                 {%endif%}
                                 <a href="{{ url_for('lamp',id=lamp.lampID) }}"
                                     class="col-6 btn btn-outline-primary btn-block">Details</a>

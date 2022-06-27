@@ -60,55 +60,54 @@ spotLight2.penumbra = .3
 spotLight2.decay = .2
 spotLight2.position.set( 0,0,0 )
 spotLight2.castShadow = true
-//const sLHelper2 = new THREE.SpotLightHelper( spotLight2 )
 scene.add( spotLight2 )
-//scene.add( sLHelper2 )
 
+
+function WallSetup( type, geo, material ){
+
+    const plane = new THREE.Mesh( geo, material )
+
+    if( type.localeCompare( "front" ) == 0 ){
+        
+        plane.rotation.x = Math.PI
+        plane.position.z = depth / 2
+    }
+    else if( type.localeCompare( "back" ) == 0 ){
+
+        plane.position.z = - ( depth / 2 )
+    }
+    else if( type.localeCompare( "left" ) == 0 ){
+
+        plane.rotation.y = Math.PI / 2
+        plane.position.x = - ( width / 2 )
+    }
+    else if( type.localeCompare( "right" ) == 0 ){
+
+        plane.rotation.y = - ( Math.PI / 2 )
+        plane.position.x = width / 2
+    }
+    else if( type.localeCompare( "top" ) == 0 ){
+
+        plane.rotation.x = Math.PI / 2
+        plane.position.y = height / 2
+    }
+    else if( type.localeCompare( "bottom" ) == 0 ){
+
+        plane.rotation.x = - ( Math.PI / 2 )
+        plane.position.y = - ( height / 2 )
+    }
+    plane.castShadow = true
+    plane.receiveShadow = true
+    scene.add( plane )
+}
 
 // Mesh and walls 
-//  Front and back wall
-const frontPlane = new THREE.Mesh(frontBackGeo, material3)
-frontPlane.castShadow = true
-frontPlane.receiveShadow = true
-frontPlane.rotation.x = Math.PI
-frontPlane.position.z = depth / 2
-scene.add(frontPlane)
-
-const backPlane = new THREE.Mesh(frontBackGeo, material3)
-backPlane.castShadow =true
-backPlane.receiveShadow = true
-backPlane.position.z = - ( depth / 2 )
-scene.add(backPlane)
-
-//  Left side and right side
-const leftPlane = new THREE.Mesh(SideGeo, material3)
-leftPlane.castShadow = true
-leftPlane.receiveShadow = true
-leftPlane.rotation.y = Math.PI / 2
-leftPlane.position.x = - ( width / 2 )
-scene.add(leftPlane)
-
-const rightPlane = new THREE.Mesh(SideGeo, material3)
-rightPlane.castShadow = true
-rightPlane.receiveShadow = true
-rightPlane.rotation.y = - ( Math.PI / 2 )
-rightPlane.position.x = width / 2
-scene.add(rightPlane)
-
-//  Top and bottom
-const topPlane = new THREE.Mesh(topBottomGeo, material3)
-topPlane.castShadow = true
-topPlane.receiveShadow = true
-topPlane.rotation.x = Math.PI / 2
-topPlane.position.y = height / 2
-scene.add(topPlane)
-
-const bottomPlane = new THREE.Mesh(topBottomGeo, material3)
-bottomPlane.castShadow = true
-bottomPlane.receiveShadow  = true
-bottomPlane.rotation.x = -( Math.PI / 2 )
-bottomPlane.position.y = - ( height / 2 )
-scene.add(bottomPlane)
+WallSetup( "front", frontBackGeo, material3 )
+WallSetup( "back", frontBackGeo, material3 )
+WallSetup( "left", SideGeo, material3 )
+WallSetup( "right", SideGeo, material3 )
+WallSetup( "top", topBottomGeo, material3 )
+WallSetup( "bottom", topBottomGeo, material3 )
 
 // interior Mesh
 const cube = new THREE.Mesh( cubeGeo, material2 )
@@ -180,15 +179,6 @@ let temp = 0
 scene.add(camera)
 
 //Eventlistener for mouse drag rotation
-
-// let screenLog = document.querySelector('#screen-log');
-// document.addEventListener('mousemove', logKey);
-
-function logKey(e) {
-  screenLog.innerText = `
-    Screen X/Y: ${e.screenX}, ${e.screenY}
-    Client X/Y: ${e.clientX}, ${e.clientY}`;
-}
 // all variables for the mouse tracking and dragging
 var dragBool = false
 var mousePos = .0
@@ -214,7 +204,7 @@ window.addEventListener('mouseup', () => {
 
 document.addEventListener('mousemove', (event) => {
 
-    if( dragBool && modeSwitch ){
+    if( dragBool && roundDragBool ){
 
         mouseX = ( event.screenX - mousePos )
 
@@ -299,21 +289,24 @@ renderer.shadowMap.type = THREE.VSMShadowMap
 //Array
 var objectArray = [ lightCone, lightCone2, cube ]
 
+//Controls
 // Drag Controls
 const controls = new THREE.DragControls( objectArray, camera, renderer.domElement );
+const firstPerson = new THREE.FirstPersonControls( camera, renderer.domElement )
+firstPerson.movementSpeed = 150
+firstPerson.lookSpeed = .5
 
 //Eventlistener for keeping Cube on the ground
 document.addEventListener( 'mousemove', () => {
 
-    if( !modeSwitch ){
-
+    if( !roundDragBool ){
 
         cube.position.y = - ( height / 2 ) + ( vec.y / 2 )
     }
 } )
 
 //EventListener for switching between roundtable and object drag
-var modeSwitch = true
+var roundDragBool = true
 
 document.addEventListener( 'keydown', onKeyPressS)
 
@@ -321,29 +314,46 @@ function onKeyPressS( event ){
 
     if( event.key === "s" ){
 
-        if( modeSwitch ){
+        if( roundDragBool ){
 
-            modeSwitch = false
+            roundDragBool = false
             objectArray.push( cube )
         }
         else{
     
-            modeSwitch = true
+            roundDragBool = true
             objectArray.pop()
         }
     }
 }
 
+var perspectiveBool = true
+
+document.addEventListener( 'keydown', onKeyPressP)
+
+function onKeyPressP( event ){
+
+    if( event.key === "p" ){
+
+        if( perspectiveBool ){
+
+            perspectiveBool = false
+            objectArray.push( cube )
+        }
+        else{
+            
+            firstPerson.dispatch()
+
+            perspectiveBool = true
+            objectArray.pop()
+        }
+    }
+}
+
+
 /**
  * Animate
  */
-
-//scroll animation
-/*const updateSphere = (event) => {
-    sphere.position.y = window.scrollY * .001
-}
-
-window.addEventListener('scroll', updateSphere)*/
 
 const clock = new THREE.Clock()
 
@@ -353,31 +363,7 @@ const tick = () =>
 
     const elapsedTime = clock.getElapsedTime()
 
-    // Update objects
-    //sphere.rotation.y = .5 * elapsedTime
-
-    //rotating camera
-    // camera.position.x = 2 * Math.cos(elapsedTime)
-    // camera.position.z = 2 * Math.sin(elapsedTime)
-
-    //mouse rotation
-    /*camera.position.x = Math.cos(targetX)
-    camera.position.z = Math.sin(targetX)*/
-    //constant rotation
-    /*
-    camera.position.x = Math.cos(elapsedTime)
-    camera.position.z = Math.sin(elapsedTime)
-    */
-    //var pos = sphere.position - camera.position
     camera.lookAt(0,0,0)
-    //cubeMesh.rotation.y = .5 * elapsedTime
-
-    /*sphere.rotation.y += .5 * (targetX - sphere.rotation.y)
-    sphere.rotation.x += .15 * (targetY - sphere.rotation.x)
-    sphere.position.z += .15 * (targetY - sphere.rotation.x)*/
-
-    // Update Orbital Controls
-    // controls.update()
 
     // Render
     renderer.render(scene, camera)

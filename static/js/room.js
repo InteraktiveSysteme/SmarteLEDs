@@ -350,7 +350,6 @@ function onKeyPressP( event ){
     }
 }
 
-
 /**
  * Animate
  */

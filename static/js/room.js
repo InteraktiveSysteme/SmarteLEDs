@@ -29,7 +29,7 @@ material2.metalness = 0.7
 material2.roughness = 0.3
 material2.color = new THREE.Color(0x808080)
 
-const material3 = new THREE.MeshPhongMaterial(  )
+const materialOneSide = new THREE.MeshPhongMaterial(  )
 material.metalness = 0.0
 material.roughness = 1.0
 material.color = new THREE.Color(0xFFFFFF)
@@ -95,6 +95,7 @@ function WallSetup( type, geo, material ){
 
         plane.rotation.x = - ( Math.PI / 2 )
         plane.position.y = - ( height / 2 )
+        plane.userData.ground = true
     }
     plane.castShadow = true
     plane.receiveShadow = true
@@ -102,18 +103,21 @@ function WallSetup( type, geo, material ){
 }
 
 // Mesh and walls 
-WallSetup( "front", frontBackGeo, material3 )
-WallSetup( "back", frontBackGeo, material3 )
-WallSetup( "left", SideGeo, material3 )
-WallSetup( "right", SideGeo, material3 )
-WallSetup( "top", topBottomGeo, material3 )
-WallSetup( "bottom", topBottomGeo, material3 )
+WallSetup( "front", frontBackGeo, materialOneSide )
+WallSetup( "back", frontBackGeo, materialOneSide )
+WallSetup( "left", SideGeo, materialOneSide )
+WallSetup( "right", SideGeo, materialOneSide )
+WallSetup( "top", topBottomGeo, materialOneSide )
+WallSetup( "bottom", topBottomGeo, materialOneSide )
 
 // interior Mesh
 const cube = new THREE.Mesh( cubeGeo, material2 )
 cube.castShadow = true
 cube.receiveShadow = true
 scene.add( cube )
+    // make object rotatable
+cube.userData.draggable = 'true'
+cube.userData.name = 'Cube'
 
 const cone = new THREE.ConeGeometry( .05, .1, 32 )
 const material4 = new THREE.MeshPhongMaterial( {color: 0xff0000, side: THREE.DoubleSide} )
@@ -224,55 +228,135 @@ let targetY = 0
 const windowHalfX = window.innerWidth / 2;
 const windowHalfY = window.innerHeight / 2;
 
+
+const raycaster = new THREE.Raycaster()
+
+const clickPos = new THREE.Vector2()
+const movePos = new THREE.Vector2()
+var draggable = new THREE.Object3D()
+var rotatable = new THREE.Object3D()
+
+// Event for dragging objects
+window.addEventListener( 'click', event => {
+
+    console.log( 'Hi' )
+
+    clickPos.x = ( event.clientX / window.innerWidth ) * 2 - 1
+    clickPos.y = - ( event.clientY / window.innerHeight ) * 2 + 1
+
+    raycaster.setFromCamera( clickPos, camera )
+    const found = raycaster.intersectObjects( scene.children )
+    console.log( found.length )
+    
+    if( ( found.length > 0 ) ){
+
+        draggable = found[ 0 ].object
+        console.log( 'Hallo' )
+    }
+} )
+
+function rotateObject(){
+
+    if(draggable != null){
+        raycaster.setFromCamera( movePos, camera )
+        const found = raycaster.intersectObjects( scene.children )
+
+        if( found.length > 0 ){
+
+            
+        }
+    }
+}
+
+window.addEventListener( 'mousemove', event => {
+
+    movePos.x = ( event.clientX / window.innerWidth ) * 2 - 1
+    movePos.y = - ( event.clientY / window.innerHeight ) * 2 + 1
+} )
+
+// Event for object rotation
+window.addEventListener( 'click', event => {
+
+    if( rotatable ){
+
+        rotatable = null
+        return
+    }
+
+    clickPos.x = ( event.clientX / window.innerWidth ) * 2 - 1
+    clickPos.y = - ( event.clientY / window.innerHeight ) * 2 + 1
+
+    raycaster.setFromCamera( clickPos, camera )
+    const found = raycaster.intersectObjects( scene.children )
+
+    if( found.length > 0 && found[ 0 ].object.userData.draggable ){
+
+        rotatable = found[ 0 ].object
+    }
+} )
+
+function rotateObject(){
+
+    if(rotatable != null){
+        raycaster.setFromCamera( movePos, camera )
+        const found = raycaster.intersectObjects( scene.children )
+
+        if( found.length > 0 ){
+
+
+        }
+    }
+}
+
 /**
  * GUI
  */
-var GUI = lil.GUI;
+// var GUI = lil.GUI;
 
-const gui = new GUI({ title: 'Light Parameters'  } );
+// const gui = new GUI({ title: 'Light Parameters'  } );
 
-guiParams = {
+// guiParams = {
     
-    spotColor1: spotColor1,
-    intensity: 0.5,
-    spotColor2: spotColor2,
-    intensity2: 0.5,
-    Light1_on_off: true,
-    Light2_on_off: true,
+//     spotColor1: spotColor1,
+//     intensity: 0.5,
+//     spotColor2: spotColor2,
+//     intensity2: 0.5,
+//     Light1_on_off: true,
+//     Light2_on_off: true,
     
-}
+// }
 
-gui.addColor(guiParams, 'spotColor1').onChange(function (e) {
-	spotLight.color = new THREE.Color(e);
-})
-    .name('Light1 Color');
+// gui.addColor(guiParams, 'spotColor1').onChange(function (e) {
+// 	spotLight.color = new THREE.Color(e);
+// })
+//     .name('Light1 Color');
 
-gui.add(guiParams, 'intensity', 0, 5).onChange(function (e) {
-	spotLight.intensity = e;
-})
-    .name('Light1 Intensity');
+// gui.add(guiParams, 'intensity', 0, 5).onChange(function (e) {
+// 	spotLight.intensity = e;
+// })
+//     .name('Light1 Intensity');
 
-gui.add(guiParams, 'Light1_on_off').onChange(function (e) {
-    spotLight.visible = e;
-})
-    .name('Light1 On/Off');
+// gui.add(guiParams, 'Light1_on_off').onChange(function (e) {
+//     spotLight.visible = e;
+// })
+//     .name('Light1 On/Off');
 
-gui.addColor(guiParams, 'spotColor2').onChange(function (e) {
-	spotLight2.color = new THREE.Color(e);
-})
-    .name('Light2 Color');
+// gui.addColor(guiParams, 'spotColor2').onChange(function (e) {
+// 	spotLight2.color = new THREE.Color(e);
+// })
+//     .name('Light2 Color');
 
-gui.add(guiParams, 'intensity2', 0, 5).onChange(function (e) {
-	spotLight2.intensity = e;
-})
-    .name('Light2 Intensity');
+// gui.add(guiParams, 'intensity2', 0, 5).onChange(function (e) {
+// 	spotLight2.intensity = e;
+// })
+//     .name('Light2 Intensity');
 
-gui.add(guiParams, 'Light2_on_off').onChange(function (e) {
-    spotLight2.visible = e;
-})
-    .name('Light2 On/Off');
+// gui.add(guiParams, 'Light2_on_off').onChange(function (e) {
+//     spotLight2.visible = e;
+// })
+//     .name('Light2 On/Off');
 
-gui.add(guiParams, 'myFunction');
+// gui.add(guiParams, 'myFunction');
 
 /**
  * Renderer
@@ -291,7 +375,7 @@ var objectArray = [ lightCone, lightCone2, cube ]
 
 //Controls
 // Drag Controls
-const controls = new THREE.DragControls( objectArray, camera, renderer.domElement );
+// const controls = new THREE.DragControls( objectArray, camera, renderer.domElement );
 const firstPerson = new THREE.FirstPersonControls( camera, renderer.domElement )
 firstPerson.movementSpeed = 150
 firstPerson.lookSpeed = .5
@@ -306,7 +390,7 @@ document.addEventListener( 'mousemove', () => {
 } )
 
 //EventListener for switching between roundtable and object drag
-var roundDragBool = true
+var roundDragBool = false
 
 document.addEventListener( 'keydown', onKeyPressS)
 
@@ -317,35 +401,33 @@ function onKeyPressS( event ){
         if( roundDragBool ){
 
             roundDragBool = false
-            objectArray.push( cube )
+            // objectArray.push( cube )
+            controls.activate()
         }
         else{
     
             roundDragBool = true
-            objectArray.pop()
+            // objectArray.pop()
+            controls.dispose()
         }
     }
 }
 
-var perspectiveBool = true
+var rotationBool = true
 
-document.addEventListener( 'keydown', onKeyPressP)
+document.addEventListener( 'keydown', onKeyPressR)
 
-function onKeyPressP( event ){
+function onKeyPressR( event ){
 
     if( event.key === "p" ){
 
-        if( perspectiveBool ){
+        if( rotationBool ){
 
-            perspectiveBool = false
-            objectArray.push( cube )
+            rotationBool = false
         }
         else{
-            
-            firstPerson.dispatch()
 
-            perspectiveBool = true
-            objectArray.pop()
+            rotationBool = true
         }
     }
 }

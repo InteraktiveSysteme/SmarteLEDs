@@ -5,7 +5,7 @@ module.exports = {
 			path.resolve(__dirname, 'src/three_module.js'),
 			path.resolve(__dirname, 'src/GLTFLoader.js'),
 			path.resolve(__dirname, 'src/DragControls_mod.js'),
-			path.resolve(__dirname, 'src/gltf.js')
+			path.resolve(__dirname, 'src/main.js')
 	            ]
 	},
 	output: {

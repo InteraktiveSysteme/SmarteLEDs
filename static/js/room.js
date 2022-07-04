@@ -116,8 +116,9 @@ cube.castShadow = true
 cube.receiveShadow = true
 scene.add( cube )
     // make object rotatable
-cube.userData.draggable = 'true'
-cube.userData.name = 'Cube'
+cube.userData.draggable = 1
+cube.userData.name = "Cube"
+
 
 const cone = new THREE.ConeGeometry( .05, .1, 32 )
 const material4 = new THREE.MeshPhongMaterial( {color: 0xff0000, side: THREE.DoubleSide} )
@@ -247,6 +248,11 @@ window.addEventListener( 'click', event => {
     raycaster.setFromCamera( clickPos, camera )
     const found = raycaster.intersectObjects( scene.children )
     console.log( found.length )
+
+    for( i = 0; i < found.length; i++ ){
+
+        console.log( found[ i ].object.userData.draggable )
+    }
     
     if( ( found.length > 0 ) ){
 

@@ -3,6 +3,7 @@ const canvas = document.getElementById('myCanvas')
 
 // Scene
 const scene = new THREE.Scene()
+const room = new THREE.Group()
 scene.background = new THREE.Color(0x111111)
 
 //Measures of the room
@@ -93,13 +94,14 @@ function WallSetup( type, geo, material ){
     }
     else if( type.localeCompare( "bottom" ) == 0 ){
 
+        this.type = type
         plane.rotation.x = - ( Math.PI / 2 )
         plane.position.y = - ( height / 2 )
         plane.userData.ground = true
     }
     plane.castShadow = true
     plane.receiveShadow = true
-    scene.add( plane )
+    room.add( plane )
 }
 
 // Mesh and walls 
@@ -108,23 +110,47 @@ WallSetup( "back", frontBackGeo, materialOneSide )
 WallSetup( "left", SideGeo, materialOneSide )
 WallSetup( "right", SideGeo, materialOneSide )
 WallSetup( "top", topBottomGeo, materialOneSide )
-WallSetup( "bottom", topBottomGeo, materialOneSide )
+const bottomPlane = WallSetup( "bottom", topBottomGeo, materialOneSide )
+
+scene.add( room )
+
+// Mesh creator class --> ToDo
+
+class MeshCreator{
+
+    constructor( geo, material, name, draggable ){
+
+        this.geo = geo
+        this.material = material
+        this.name = name
+        this.draggable = draggable
+    
+        this.mesh = new THREE.Mesh( geo, material )
+        this.mesh.castShadow = true
+        this.mesh.receiveShadow = true
+        scene.add( this.mesh )
+    }
+}
 
 // interior Mesh
-const cube = new THREE.Mesh( cubeGeo, material2 )
-cube.castShadow = true
-cube.receiveShadow = true
-scene.add( cube )
+// const cube = new THREE.Mesh( cubeGeo, material2 )
+// cube.castShadow = true
+// cube.receiveShadow = true
+// cube.userData.draggable = 1
+// cube.userData.name = "Cube"
+// scene.add( cube )
+
+const cube = new MeshCreator( cubeGeo, material2, 1, false )
     // make object rotatable
-cube.userData.draggable = 1
-cube.userData.name = "Cube"
+
 
 
 const cone = new THREE.ConeGeometry( .05, .1, 32 )
-const material4 = new THREE.MeshPhongMaterial( {color: 0xff0000, side: THREE.DoubleSide} )
-material4.emissiveIntensity = 1.0
+const spotLightMaterial1 = new THREE.MeshPhongMaterial( {color: 0xff0000, side: THREE.DoubleSide} )
 
-const lightCone = new THREE.Mesh ( cone, material4 )
+spotLightMaterial1.emissiveIntensity = 1.0
+
+const lightCone = new THREE.Mesh ( cone, spotLightMaterial1 )
 lightCone.position.set( 0.45, 0.2, 0 )
 lightCone.rotation.z = - ( Math.PI / 4 )
 spotLight.parent = lightCone
@@ -132,7 +158,11 @@ spotLight.parent = lightCone
 scene.add( lightCone )
 
 
-const lightCone2 = new THREE.Mesh ( cone, material4 )
+const spotLightMaterial2 = new THREE.MeshPhongMaterial( {color: 0xff0000, side: THREE.DoubleSide} )
+
+spotLightMaterial2.emissiveIntensity = 1.0
+
+const lightCone2 = new THREE.Mesh ( cone, spotLightMaterial2 )
 lightCone2.position.set( 0, 0.2, 0.45 )
 lightCone2.rotation.x = Math.PI / 4
 spotLight2.parent = lightCone2
@@ -141,26 +171,28 @@ scene.add( lightCone2 )
 // creating the bounding box for the cube
 //  parenting bounding box to object
 const box = new THREE.Box3( new THREE.Vector3(), new THREE.Vector3() )
-cube.geometry.computeBoundingBox()
-box.setFromObject( cube )
+cube.geo.computeBoundingBox()
+box.setFromObject( cube.mesh )
 
 // saving width, height and depth into a Vector3
 const vec = new THREE.Vector3()
 box.getSize( vec )
-cube.position.y = - ( height / 2 ) + ( vec.y / 2 )
+cube.mesh.position.y = - ( height / 2 ) + ( vec.y / 2 )
 
 /**
  * Sizes
  */
 const sizes = {
-    width: 0.95 * window.innerWidth,
+    width: .95 * window.innerWidth,
     height: window.innerHeight
+    // width: canvas.clientWidth,
+    // height: canvas.clientHeight
 }
 
 window.addEventListener('resize', () =>
 {
     // Update sizes
-    sizes.width = window.innerWidth
+    sizes.width = .95 * window.innerWidth
     sizes.height = window.innerHeight
 
     // Update camera
@@ -233,83 +265,59 @@ const windowHalfY = window.innerHeight / 2;
 const raycaster = new THREE.Raycaster()
 
 const clickPos = new THREE.Vector2()
-const movePos = new THREE.Vector2()
+const mouse = new THREE.Vector2()
 var draggable = new THREE.Object3D()
 var rotatable = new THREE.Object3D()
 
 // Event for dragging objects
-window.addEventListener( 'click', event => {
+function onClick( event ){
 
-    console.log( 'Hi' )
+    raycaster.setFromCamera( mouse, camera )
+    let intersects = raycaster.intersectObjects( scene.children )
 
-    clickPos.x = ( event.clientX / window.innerWidth ) * 2 - 1
-    clickPos.y = - ( event.clientY / window.innerHeight ) * 2 + 1
-
-    raycaster.setFromCamera( clickPos, camera )
-    const found = raycaster.intersectObjects( scene.children )
-    console.log( found.length )
-
-    for( i = 0; i < found.length; i++ ){
-
-        console.log( found[ i ].object.userData.draggable )
-    }
-    
-    if( ( found.length > 0 ) ){
-
-        draggable = found[ 0 ].object
-        console.log( 'Hallo' )
-    }
-} )
-
-function rotateObject(){
-
-    if(draggable != null){
-        raycaster.setFromCamera( movePos, camera )
-        const found = raycaster.intersectObjects( scene.children )
-
-        if( found.length > 0 ){
-
-            
-        }
+    if( intersects.length > 0 ){
+        console.log( bottomPlane.type )
+        intersects[ 0 ].object.draggable = true
     }
 }
 
-window.addEventListener( 'mousemove', event => {
+window.addEventListener( 'click', onClick )
 
-    movePos.x = ( event.clientX / window.innerWidth ) * 2 - 1
-    movePos.y = - ( event.clientY / window.innerHeight ) * 2 + 1
-} )
+window.addEventListener( 'mousemove', onMouseMove )
 
-// Event for object rotation
-window.addEventListener( 'click', event => {
+function onMouseMove( event ){
 
-    if( rotatable ){
+    // mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1
+    // mouse.y = - ( ( event.clientY ) / ( window.innerHeight ) ) * 2 + 1
 
-        rotatable = null
-        return
+    var mouseX = event.clientX - canvas.getBoundingClientRect().left
+    var mouseY = event.clientY - canvas.getBoundingClientRect().top
+
+    mouse.x = ( mouseX / sizes.width ) * 2 - 1
+    mouse.y = - ( mouseY / sizes.height ) * 2 + 1
+}
+
+function hoverObject(){
+
+    raycaster.setFromCamera( mouse, camera )
+    // hopefully only returns the surface level children and not the children of the room group
+    const intersects = raycaster.intersectObjects( scene.children )
+
+    for( let i = 0; i < intersects.length; i++ ){
+
+        intersects[ i ].object.material.transparent = true
+        intersects[ i ].object.material.opacity = .5
     }
+}
 
-    clickPos.x = ( event.clientX / window.innerWidth ) * 2 - 1
-    clickPos.y = - ( event.clientY / window.innerHeight ) * 2 + 1
+function resetMaterials(){
 
-    raycaster.setFromCamera( clickPos, camera )
-    const found = raycaster.intersectObjects( scene.children )
+    for( let i = 0; i < scene.children.length; i++ ){
 
-    if( found.length > 0 && found[ 0 ].object.userData.draggable ){
+        if( scene.children[ i ].material ){
 
-        rotatable = found[ 0 ].object
-    }
-} )
-
-function rotateObject(){
-
-    if(rotatable != null){
-        raycaster.setFromCamera( movePos, camera )
-        const found = raycaster.intersectObjects( scene.children )
-
-        if( found.length > 0 ){
-
-
+            //scene.children[ i ].material.opacity = scene.children[ i ].draggable == true ? .5 : 1.0
+            scene.children[ i ].material.opacity = 1.0
         }
     }
 }
@@ -391,7 +399,7 @@ document.addEventListener( 'mousemove', () => {
 
     if( !roundDragBool ){
 
-        cube.position.y = - ( height / 2 ) + ( vec.y / 2 )
+        cube.mesh.position.y = - ( height / 2 ) + ( vec.y / 2 )
     }
 } )
 
@@ -451,6 +459,10 @@ const tick = () =>
     const elapsedTime = clock.getElapsedTime()
 
     camera.lookAt(0,0,0)
+
+    resetMaterials()
+
+    hoverObject()
 
     // Render
     renderer.render(scene, camera)

@@ -63,6 +63,45 @@ spotLight2.position.set( 0,0,0 )
 spotLight2.castShadow = true
 scene.add( spotLight2 )
 
+class DragControls{
+
+    constructor(){
+
+    }
+}
+
+class RotationControls{
+
+    constructor(){
+
+    }
+}
+class State{
+
+    constructor(){
+
+        this.currentState = new DragControls()
+        this.name = "drag"
+    }
+    switch(){
+
+        if( this.name.localeCompare( "drag" ) == 0 ){
+
+            this.currentState = new RotationControls()
+            this.name = "rotation"
+        }
+        else{
+
+            this.currentState = new DragControls()
+            this.name = "drag"
+        }
+    }
+}
+
+var state = new State()
+state.switch()
+
+
 
 function WallSetup( type, geo, material ){
 
@@ -72,32 +111,37 @@ function WallSetup( type, geo, material ){
         
         plane.rotation.x = Math.PI
         plane.position.z = depth / 2
+        plane.userData.front = true
     }
     else if( type.localeCompare( "back" ) == 0 ){
 
         plane.position.z = - ( depth / 2 )
+        plane.userData.back = true
     }
     else if( type.localeCompare( "left" ) == 0 ){
 
         plane.rotation.y = Math.PI / 2
         plane.position.x = - ( width / 2 )
+        plane.userData.left = true
     }
     else if( type.localeCompare( "right" ) == 0 ){
 
         plane.rotation.y = - ( Math.PI / 2 )
         plane.position.x = width / 2
+        plane.userData.right = true
     }
     else if( type.localeCompare( "top" ) == 0 ){
 
         plane.rotation.x = Math.PI / 2
         plane.position.y = height / 2
+        plane.userData.top = true
     }
     else if( type.localeCompare( "bottom" ) == 0 ){
 
         this.type = type
         plane.rotation.x = - ( Math.PI / 2 )
         plane.position.y = - ( height / 2 )
-        plane.userData.ground = true
+        plane.userData.bottom = true
     }
     plane.castShadow = true
     plane.receiveShadow = true
@@ -128,19 +172,13 @@ class MeshCreator{
         this.mesh = new THREE.Mesh( geo, material )
         this.mesh.castShadow = true
         this.mesh.receiveShadow = true
+        this.mesh.userData.name = name
+        this.mesh.userData.drag = draggable
         scene.add( this.mesh )
     }
 }
 
-// interior Mesh
-// const cube = new THREE.Mesh( cubeGeo, material2 )
-// cube.castShadow = true
-// cube.receiveShadow = true
-// cube.userData.draggable = 1
-// cube.userData.name = "Cube"
-// scene.add( cube )
-
-const cube = new MeshCreator( cubeGeo, material2, 1, false )
+const cube = new MeshCreator( cubeGeo, material2, "Cube", true )
     // make object rotatable
 
 
@@ -154,7 +192,9 @@ const lightCone = new THREE.Mesh ( cone, spotLightMaterial1 )
 lightCone.position.set( 0.45, 0.2, 0 )
 lightCone.rotation.z = - ( Math.PI / 4 )
 spotLight.parent = lightCone
-// sLHelper.parent = lightCone
+lightCone.userData.name = "Light 1"
+lightCone.userData.drag = true
+lightCone.userData.light = true
 scene.add( lightCone )
 
 
@@ -166,6 +206,9 @@ const lightCone2 = new THREE.Mesh ( cone, spotLightMaterial2 )
 lightCone2.position.set( 0, 0.2, 0.45 )
 lightCone2.rotation.x = Math.PI / 4
 spotLight2.parent = lightCone2
+lightCone2.userData.name = "Light 2"
+lightCone2.userData.drag = true
+lightCone2.userData.light = true
 scene.add( lightCone2 )
 
 // creating the bounding box for the cube
@@ -185,8 +228,6 @@ cube.mesh.position.y = - ( height / 2 ) + ( vec.y / 2 )
 const sizes = {
     width: .95 * window.innerWidth,
     height: window.innerHeight
-    // width: canvas.clientWidth,
-    // height: canvas.clientHeight
 }
 
 window.addEventListener('resize', () =>
@@ -272,12 +313,21 @@ var rotatable = new THREE.Object3D()
 // Event for dragging objects
 function onClick( event ){
 
+    if( draggable ){
+
+        draggable = null
+        return
+    }
+
     raycaster.setFromCamera( mouse, camera )
     let intersects = raycaster.intersectObjects( scene.children )
 
-    if( intersects.length > 0 ){
-        console.log( bottomPlane.type )
+
+    if( ( intersects.length ) > 0 && ( intersects[ 0 ].object.userData.drag )){
         intersects[ 0 ].object.draggable = true
+
+        draggable = intersects[ 0 ].object
+        console.log( draggable.userData.name )
     }
 }
 
@@ -295,6 +345,56 @@ function onMouseMove( event ){
 
     mouse.x = ( mouseX / sizes.width ) * 2 - 1
     mouse.y = - ( mouseY / sizes.height ) * 2 + 1
+}
+
+function dragObject(){
+
+    if( draggable != null ){
+
+        raycaster.setFromCamera( mouse, camera )
+        const intersections = raycaster.intersectObjects( scene.children )
+        
+        if( intersections.length > 0 ){
+
+            for( let i = 0; i < intersections.length; i++ ){
+
+                if( intersections[ i ].object.userData.bottom ){
+                    draggable.position.x = intersections[ i ].point.x
+                    draggable.position.z = intersections[ i ].point.z
+                }
+
+                if( draggable.userData.light ){
+
+                    if( intersections[ i ].object.userData.back ){
+
+                        draggable.position.x = intersections[ i ].point.x
+                        draggable.position.y = intersections[ i ].point.y
+                    }
+
+                    else if( intersections[ i ].object.userData.front ){
+
+                        draggable.position.x = intersections[ i ].point.x
+                        draggable.position.y = intersections[ i ].point.y 
+                    }
+                    else if( intersections[ i ].object.userData.left ){
+
+                        draggable.position.z = intersections[ i ].point.z
+                        draggable.position.y = intersections[ i ].point.y                         
+                    }
+                    else if( intersections[ i ].object.userData.right ){
+
+                        draggable.position.z = intersections[ i ].point.z
+                        draggable.position.y = intersections[ i ].point.y                         
+                    }
+                    else if( intersections[ i ].object.userData.top ){
+
+                        draggable.position.x = intersections[ i ].point.x
+                        draggable.position.z = intersections[ i ].point.z                     
+                    }
+                }
+            }
+        }
+    }   
 }
 
 function hoverObject(){
@@ -463,6 +563,8 @@ const tick = () =>
     resetMaterials()
 
     hoverObject()
+
+    dragObject()
 
     // Render
     renderer.render(scene, camera)

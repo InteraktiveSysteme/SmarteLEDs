@@ -6,6 +6,25 @@ const scene = new THREE.Scene()
 const room = new THREE.Group()
 scene.background = new THREE.Color(0x111111)
 
+/**
+ * Sizes
+ */
+ const sizes = {
+    width: .95 * window.innerWidth,
+    height: window.innerHeight
+}
+
+/**
+ * Camera
+ */
+// Base camera
+const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
+camera.position.x = 1.3
+camera.position.y = 0
+camera.position.z = 0
+let temp = 0
+scene.add(camera)
+
 //Measures of the room
 const width = 1
 const height = .5
@@ -63,25 +82,13 @@ spotLight2.position.set( 0,0,0 )
 spotLight2.castShadow = true
 scene.add( spotLight2 )
 
-class DragControls{
-
-    constructor(){
-
-    }
-}
-
-class RotationControls{
-
-    constructor(){
-
-    }
-}
 class State{
 
-    constructor(){
+    constructor( state ){
 
-        this.currentState = new DragControls()
+        this.currentState = state
         this.name = "drag"
+        this.camera = camera
     }
     switch(){
 
@@ -96,12 +103,166 @@ class State{
             this.name = "drag"
         }
     }
+    get current(){
+
+        return this.currentState
+    }
 }
 
-var state = new State()
-state.switch()
+class DragControls{
 
+    constructor( _mouse ){
 
+        this.mouseX = 0
+        this.mouseY = 0
+        this.draggable = new THREE.Object3D()
+        this.rotatable = new THREE.Object3D()
+    }
+
+    onClick( event ){
+
+        const raycaster = new THREE.Raycaster()
+
+        if( this.draggable ){
+    
+            this.draggable = null
+            return
+        }
+    
+        raycaster.setFromCamera( new THREE.Vector2( this.mouseX, this.mouseY ), camera )
+        let intersects = raycaster.intersectObjects( scene.children )
+    
+    
+        if( ( intersects.length ) > 0 && ( intersects[ 0 ].object.userData.drag )){
+            intersects[ 0 ].object.draggable = true
+    
+            this.draggable = intersects[ 0 ].object
+            console.log( this.draggable.userData.name )
+        }
+        console.log( "mouseX: " + this.mouseX + ", mouseY: " + this.mouseY )
+    }
+    
+    onMouseMove( event ){
+
+        const sizes = {
+            width: .95 * window.innerWidth,
+            height: window.innerHeight
+        }
+    
+        this.mouseX = ( ( event.clientX - canvas.getBoundingClientRect().left ) / sizes.width ) * 2 - 1
+        this.mouseY = - ( ( event.clientY - canvas.getBoundingClientRect().top ) / sizes.height ) * 2 + 1
+    }
+
+    // only functions when called in an event
+
+    dragObject( event ){
+    
+        const raycaster = new THREE.Raycaster()
+        
+        if( this.draggable != null ){
+
+            raycaster.setFromCamera( new THREE.Vector2( this.mouseX, this.mouseY ), camera )
+            
+            const intersections = raycaster.intersectObjects( scene.children )
+            
+            if( intersections.length > 0 ){
+    
+                for( let i = 0; i < intersections.length; i++ ){
+    
+                    if( intersections[ i ].object.userData.bottom ){
+
+                        this.draggable.position.x = intersections[ i ].point.x
+                        this.draggable.position.z = intersections[ i ].point.z
+                    }
+    
+                    if( this.draggable.userData.light ){
+    
+                        if( intersections[ i ].object.userData.back ){
+    
+                            this.draggable.position.x = intersections[ i ].point.x
+                            this.draggable.position.y = intersections[ i ].point.y
+                        }
+    
+                        else if( intersections[ i ].object.userData.front ){
+    
+                            this.draggable.position.x = intersections[ i ].point.x
+                            this.draggable.position.y = intersections[ i ].point.y 
+                        }
+                        else if( intersections[ i ].object.userData.left ){
+    
+                            this.draggable.position.z = intersections[ i ].point.z
+                            this.draggable.position.y = intersections[ i ].point.y                         
+                        }
+                        else if( intersections[ i ].object.userData.right ){
+    
+                            this.draggable.position.z = intersections[ i ].point.z
+                            this.draggable.position.y = intersections[ i ].point.y                         
+                        }
+                        else if( intersections[ i ].object.userData.top ){
+    
+                            this.draggable.position.x = intersections[ i ].point.x
+                            this.draggable.position.z = intersections[ i ].point.z                     
+                        }
+                    }
+                }
+            }
+        }   
+    }
+
+    hoverObject( event ){
+
+        console.log( camera )
+
+        const raycaster = new THREE.Raycaster()
+
+        raycaster.setFromCamera( new THREE.Vector2( this.mouseX, this.mouseY ), camera )
+        // hopefully only returns the surface level children and not the children of the room group
+        const intersects = raycaster.intersectObjects( scene.children )
+    
+        for( let i = 0; i < intersects.length; i++ ){
+    
+            intersects[ i ].object.material.transparent = true
+            intersects[ i ].object.material.opacity = .5
+        }
+    }
+
+    resetMaterials( event ){
+    
+        for( let i = 0; i < scene.children.length; i++ ){
+    
+            if( scene.children[ i ].material ){
+    
+                //scene.children[ i ].material.opacity = scene.children[ i ].draggable == true ? .5 : 1.0
+                scene.children[ i ].material.opacity = 1.0
+            }
+        }
+    }
+}
+
+class RotationControls{
+
+    constructor(){
+
+    }
+}
+
+// // instantiating the state and drag controls
+var _mouse = new THREE.Vector2()
+const drag = new DragControls( _mouse )
+var state = new State( drag )
+// state.switch() // is in RotationControls?
+
+// setting the eventlisteners for the dragControls
+
+window.addEventListener( 'click', drag.onClick )
+
+window.addEventListener( 'mousemove', drag.onMouseMove )
+
+window.addEventListener( 'mousemove', drag.dragObject )
+
+window.addEventListener( 'mousemove', drag.hoverObject )
+
+window.addEventListener( 'mousemove', drag.resetMaterials )
 
 function WallSetup( type, geo, material ){
 
@@ -222,13 +383,7 @@ const vec = new THREE.Vector3()
 box.getSize( vec )
 cube.mesh.position.y = - ( height / 2 ) + ( vec.y / 2 )
 
-/**
- * Sizes
- */
-const sizes = {
-    width: .95 * window.innerWidth,
-    height: window.innerHeight
-}
+
 
 window.addEventListener('resize', () =>
 {
@@ -245,16 +400,7 @@ window.addEventListener('resize', () =>
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 })
 
-/**
- * Camera
- */
-// Base camera
-const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
-camera.position.x = 1.3
-camera.position.y = 0
-camera.position.z = 0
-let temp = 0
-scene.add(camera)
+
 
 //Eventlistener for mouse drag rotation
 // all variables for the mouse tracking and dragging
@@ -282,195 +428,156 @@ window.addEventListener('mouseup', () => {
 
 document.addEventListener('mousemove', (event) => {
 
-    if( dragBool && roundDragBool ){
+    if( dragBool /*&& roundDragBool*/ ){
 
         mouseX = ( event.screenX - mousePos )
 
         camera.position.x = camX * Math.cos( ( 3 * mouseX ) / window.innerWidth ) - camZ * Math.sin( ( 3 * mouseX ) / window.innerWidth ) 
-        camera.position.z = camX * Math.sin( ( 3 * mouseX ) / window.innerWidth ) + camZ * Math.cos( ( 3 * mouseX ) / window.innerWidth )
-       
-        console.log( "camAngle new: " + camAngle )
+        camera.position.z = camX * Math.sin( ( 3 * mouseX ) / window.innerWidth ) + camZ * Math.cos( ( 3 * mouseX ) / window.innerWidth )       
     }
 })
 
-let mouseX = 0
-let mouseY = 0
+// let mouseX = 0
+// let mouseY = 0
 
-let targetX = 0
-let targetY = 0
+// let targetX = 0
+// let targetY = 0
 
-const windowHalfX = window.innerWidth / 2;
-const windowHalfY = window.innerHeight / 2;
+// const windowHalfX = window.innerWidth / 2;
+// const windowHalfY = window.innerHeight / 2;
+
+// // Beginning of the DragControls ( not in a class )
+
+// const raycaster = new THREE.Raycaster()
+
+// const clickPos = new THREE.Vector2()
+// const mouse = new THREE.Vector2()
+// var draggable = new THREE.Object3D()
+// var rotatable = new THREE.Object3D()
+
+// // Event for dragging objects
+// function onClick( event ){
+
+//     if( draggable ){
+
+//         draggable = null
+//         return
+//     }
+
+//     raycaster.setFromCamera( mouse, camera )
+//     let intersects = raycaster.intersectObjects( scene.children )
 
 
-const raycaster = new THREE.Raycaster()
+//     if( ( intersects.length ) > 0 && ( intersects[ 0 ].object.userData.drag )){
+//         intersects[ 0 ].object.draggable = true
 
-const clickPos = new THREE.Vector2()
-const mouse = new THREE.Vector2()
-var draggable = new THREE.Object3D()
-var rotatable = new THREE.Object3D()
-
-// Event for dragging objects
-function onClick( event ){
-
-    if( draggable ){
-
-        draggable = null
-        return
-    }
-
-    raycaster.setFromCamera( mouse, camera )
-    let intersects = raycaster.intersectObjects( scene.children )
-
-
-    if( ( intersects.length ) > 0 && ( intersects[ 0 ].object.userData.drag )){
-        intersects[ 0 ].object.draggable = true
-
-        draggable = intersects[ 0 ].object
-        console.log( draggable.userData.name )
-    }
-}
-
-window.addEventListener( 'click', onClick )
-
-window.addEventListener( 'mousemove', onMouseMove )
-
-function onMouseMove( event ){
-
-    // mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1
-    // mouse.y = - ( ( event.clientY ) / ( window.innerHeight ) ) * 2 + 1
-
-    var mouseX = event.clientX - canvas.getBoundingClientRect().left
-    var mouseY = event.clientY - canvas.getBoundingClientRect().top
-
-    mouse.x = ( mouseX / sizes.width ) * 2 - 1
-    mouse.y = - ( mouseY / sizes.height ) * 2 + 1
-}
-
-function dragObject(){
-
-    if( draggable != null ){
-
-        raycaster.setFromCamera( mouse, camera )
-        const intersections = raycaster.intersectObjects( scene.children )
-        
-        if( intersections.length > 0 ){
-
-            for( let i = 0; i < intersections.length; i++ ){
-
-                if( intersections[ i ].object.userData.bottom ){
-                    draggable.position.x = intersections[ i ].point.x
-                    draggable.position.z = intersections[ i ].point.z
-                }
-
-                if( draggable.userData.light ){
-
-                    if( intersections[ i ].object.userData.back ){
-
-                        draggable.position.x = intersections[ i ].point.x
-                        draggable.position.y = intersections[ i ].point.y
-                    }
-
-                    else if( intersections[ i ].object.userData.front ){
-
-                        draggable.position.x = intersections[ i ].point.x
-                        draggable.position.y = intersections[ i ].point.y 
-                    }
-                    else if( intersections[ i ].object.userData.left ){
-
-                        draggable.position.z = intersections[ i ].point.z
-                        draggable.position.y = intersections[ i ].point.y                         
-                    }
-                    else if( intersections[ i ].object.userData.right ){
-
-                        draggable.position.z = intersections[ i ].point.z
-                        draggable.position.y = intersections[ i ].point.y                         
-                    }
-                    else if( intersections[ i ].object.userData.top ){
-
-                        draggable.position.x = intersections[ i ].point.x
-                        draggable.position.z = intersections[ i ].point.z                     
-                    }
-                }
-            }
-        }
-    }   
-}
-
-function hoverObject(){
-
-    raycaster.setFromCamera( mouse, camera )
-    // hopefully only returns the surface level children and not the children of the room group
-    const intersects = raycaster.intersectObjects( scene.children )
-
-    for( let i = 0; i < intersects.length; i++ ){
-
-        intersects[ i ].object.material.transparent = true
-        intersects[ i ].object.material.opacity = .5
-    }
-}
-
-function resetMaterials(){
-
-    for( let i = 0; i < scene.children.length; i++ ){
-
-        if( scene.children[ i ].material ){
-
-            //scene.children[ i ].material.opacity = scene.children[ i ].draggable == true ? .5 : 1.0
-            scene.children[ i ].material.opacity = 1.0
-        }
-    }
-}
-
-/**
- * GUI
- */
-// var GUI = lil.GUI;
-
-// const gui = new GUI({ title: 'Light Parameters'  } );
-
-// guiParams = {
-    
-//     spotColor1: spotColor1,
-//     intensity: 0.5,
-//     spotColor2: spotColor2,
-//     intensity2: 0.5,
-//     Light1_on_off: true,
-//     Light2_on_off: true,
-    
+//         draggable = intersects[ 0 ].object
+//         console.log( draggable.userData.name )
+//     }
 // }
 
-// gui.addColor(guiParams, 'spotColor1').onChange(function (e) {
-// 	spotLight.color = new THREE.Color(e);
-// })
-//     .name('Light1 Color');
+// window.addEventListener( 'click', onClick )
 
-// gui.add(guiParams, 'intensity', 0, 5).onChange(function (e) {
-// 	spotLight.intensity = e;
-// })
-//     .name('Light1 Intensity');
+// window.addEventListener( 'mousemove', onMouseMove )
 
-// gui.add(guiParams, 'Light1_on_off').onChange(function (e) {
-//     spotLight.visible = e;
-// })
-//     .name('Light1 On/Off');
+// // document.addEventListener( 'mousemove', rotateObject )
 
-// gui.addColor(guiParams, 'spotColor2').onChange(function (e) {
-// 	spotLight2.color = new THREE.Color(e);
-// })
-//     .name('Light2 Color');
+// function onMouseMove( event ){
 
-// gui.add(guiParams, 'intensity2', 0, 5).onChange(function (e) {
-// 	spotLight2.intensity = e;
-// })
-//     .name('Light2 Intensity');
+//     // mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1
+//     // mouse.y = - ( ( event.clientY ) / ( window.innerHeight ) ) * 2 + 1
 
-// gui.add(guiParams, 'Light2_on_off').onChange(function (e) {
-//     spotLight2.visible = e;
-// })
-//     .name('Light2 On/Off');
+//     var mouseX = event.clientX - canvas.getBoundingClientRect().left
+//     var mouseY = event.clientY - canvas.getBoundingClientRect().top
 
-// gui.add(guiParams, 'myFunction');
+//     mouse.x = ( mouseX / sizes.width ) * 2 - 1
+//     mouse.y = - ( mouseY / sizes.height ) * 2 + 1
+// }
+
+// function dragObject(){
+
+//     if( draggable != null ){
+
+//         raycaster.setFromCamera( mouse, camera )
+//         const intersections = raycaster.intersectObjects( scene.children )
+        
+//         if( intersections.length > 0 ){
+
+//             for( let i = 0; i < intersections.length; i++ ){
+
+//                 if( intersections[ i ].object.userData.bottom ){
+//                     draggable.position.x = intersections[ i ].point.x
+//                     draggable.position.z = intersections[ i ].point.z
+//                 }
+
+//                 if( draggable.userData.light ){
+
+//                     if( intersections[ i ].object.userData.back ){
+
+//                         draggable.position.x = intersections[ i ].point.x
+//                         draggable.position.y = intersections[ i ].point.y
+//                     }
+
+//                     else if( intersections[ i ].object.userData.front ){
+
+//                         draggable.position.x = intersections[ i ].point.x
+//                         draggable.position.y = intersections[ i ].point.y 
+//                     }
+//                     else if( intersections[ i ].object.userData.left ){
+
+//                         draggable.position.z = intersections[ i ].point.z
+//                         draggable.position.y = intersections[ i ].point.y                         
+//                     }
+//                     else if( intersections[ i ].object.userData.right ){
+
+//                         draggable.position.z = intersections[ i ].point.z
+//                         draggable.position.y = intersections[ i ].point.y                         
+//                     }
+//                     else if( intersections[ i ].object.userData.top ){
+
+//                         draggable.position.x = intersections[ i ].point.x
+//                         draggable.position.z = intersections[ i ].point.z                     
+//                     }
+//                 }
+//             }
+//         }
+//     }   
+// }
+
+// function rotateObject( event ){
+
+//     if( draggable != null ){
+
+//         mouseX = ( event.screenX - mousePos )
+
+//         draggable.rotation.y = mouseX / ( window.innerWidth / 10 )
+//     }
+// }
+
+// function hoverObject(){
+
+//     raycaster.setFromCamera( mouse, camera )
+//     // hopefully only returns the surface level children and not the children of the room group
+//     const intersects = raycaster.intersectObjects( scene.children )
+
+//     for( let i = 0; i < intersects.length; i++ ){
+
+//         intersects[ i ].object.material.transparent = true
+//         intersects[ i ].object.material.opacity = .5
+//     }
+// }
+
+// function resetMaterials(){
+
+//     for( let i = 0; i < scene.children.length; i++ ){
+
+//         if( scene.children[ i ].material ){
+
+//             //scene.children[ i ].material.opacity = scene.children[ i ].draggable == true ? .5 : 1.0
+//             scene.children[ i ].material.opacity = 1.0
+//         }
+//     }
+// }
 
 /**
  * Renderer
@@ -497,35 +604,35 @@ firstPerson.lookSpeed = .5
 //Eventlistener for keeping Cube on the ground
 document.addEventListener( 'mousemove', () => {
 
-    if( !roundDragBool ){
+    if( dragBool ){
 
         cube.mesh.position.y = - ( height / 2 ) + ( vec.y / 2 )
     }
 } )
 
 //EventListener for switching between roundtable and object drag
-var roundDragBool = false
+// var roundDragBool = false
 
-document.addEventListener( 'keydown', onKeyPressS)
+// document.addEventListener( 'keydown', onKeyPressS)
 
-function onKeyPressS( event ){
+// function onKeyPressS( event ){
 
-    if( event.key === "s" ){
+//     if( event.key === "s" ){
 
-        if( roundDragBool ){
+//         if( roundDragBool ){
 
-            roundDragBool = false
-            // objectArray.push( cube )
-            controls.activate()
-        }
-        else{
+//             roundDragBool = false
+//             // objectArray.push( cube )
+//             controls.activate()
+//         }
+//         else{
     
-            roundDragBool = true
-            // objectArray.pop()
-            controls.dispose()
-        }
-    }
-}
+//             roundDragBool = true
+//             // objectArray.pop()
+//             controls.dispose()
+//         }
+//     }
+// }
 
 var rotationBool = true
 
@@ -554,17 +661,21 @@ const clock = new THREE.Clock()
 
 const tick = () =>
 {
-    targetX = 2 * Math.PI * (mouseX / window.innerWidth)
+    // targetX = 2 * Math.PI * (mouseX / window.innerWidth)
 
     const elapsedTime = clock.getElapsedTime()
 
     camera.lookAt(0,0,0)
 
-    resetMaterials()
+    // drag.resetMaterials()
 
-    hoverObject()
+    // drag.hoverObject( camera )
 
-    dragObject()
+    // drag.dragObject( camera )
+
+    // resetMaterials()
+    // hoverObject()
+    // dragObject()
 
     // Render
     renderer.render(scene, camera)

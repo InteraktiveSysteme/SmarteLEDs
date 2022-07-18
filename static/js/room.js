@@ -111,7 +111,7 @@ class State{
 
 class DragControls{
 
-    constructor( _mouse ){
+    constructor(){
 
         this.mouseX = 0
         this.mouseY = 0
@@ -211,29 +211,40 @@ class DragControls{
 
     hoverObject( event ){
 
-        console.log( camera )
-
         const raycaster = new THREE.Raycaster()
 
         raycaster.setFromCamera( new THREE.Vector2( this.mouseX, this.mouseY ), camera )
         // hopefully only returns the surface level children and not the children of the room group
         const intersects = raycaster.intersectObjects( scene.children )
-    
+
+        let hovArray = []
+
         for( let i = 0; i < intersects.length; i++ ){
     
-            intersects[ i ].object.material.transparent = true
-            intersects[ i ].object.material.opacity = .5
-        }
-    }
+            if( intersects[i].object.userData.drag ){
 
-    resetMaterials( event ){
+                hovArray.push( intersects[ i ] )
+            }
+        }
     
-        for( let i = 0; i < scene.children.length; i++ ){
+        if( hovArray.length > 0 ){
+
+            for( let i = 0; i < intersects.length; i++ ){
     
-            if( scene.children[ i ].material ){
+                intersects[ i ].object.material.transparent = true
+                intersects[ i ].object.material.opacity = .5
+            }
+        }
+
+        else{
+
+            for( let i = 0; i < scene.children.length; i++ ){
     
-                //scene.children[ i ].material.opacity = scene.children[ i ].draggable == true ? .5 : 1.0
-                scene.children[ i ].material.opacity = 1.0
+                if( scene.children[ i ].material ){
+        
+                    //scene.children[ i ].material.opacity = scene.children[ i ].draggable == true ? .5 : 1.0
+                    scene.children[ i ].material.opacity = 1.0
+                }
             }
         }
     }
@@ -248,7 +259,7 @@ class RotationControls{
 
 // // instantiating the state and drag controls
 var _mouse = new THREE.Vector2()
-const drag = new DragControls( _mouse )
+const drag = new DragControls()
 var state = new State( drag )
 // state.switch() // is in RotationControls?
 
@@ -261,8 +272,6 @@ window.addEventListener( 'mousemove', drag.onMouseMove )
 window.addEventListener( 'mousemove', drag.dragObject )
 
 window.addEventListener( 'mousemove', drag.hoverObject )
-
-window.addEventListener( 'mousemove', drag.resetMaterials )
 
 function WallSetup( type, geo, material ){
 

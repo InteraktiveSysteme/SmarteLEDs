@@ -94,6 +94,18 @@ spotLight2.shadow.bias = .001
 spotLight2.shadow.normalBias = .01
 scene.add( spotLight2 )
 
+/**
+ * Renderer
+ */
+ const renderer = new THREE.WebGLRenderer({
+    canvas: canvas,
+    alpha: true
+})
+renderer.setSize(sizes.width, sizes.height)
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+renderer.shadowMap.enabled = true
+renderer.shadowMap.type = THREE.VSMShadowMap
+
 class State{
 
     constructor( state ){
@@ -101,21 +113,22 @@ class State{
         this.currentState = state
         this.name = state.name
         this.camera = camera
+        camera.position.set( 1.3, 0, 0 )
+        camera.lookAt( 0, 0, 0 )
+        this.perspective = new FirstPerson()
+        this.perspective.activate()
 
-        if( this.name.localeCompare( "drag" ) == 0 ){
+        if( this.perspective.name.localeCompare( "ego" ) != 0 ){
 
-            this.currentState.activate()
-        }
+            if( this.name.localeCompare( "drag" ) == 0 ){
 
-        else if( this.name.localeCompare( "rotate" ) == 0 ){
+                this.currentState.activate()
+            }
 
-            this.currentState.activate()
-        }
+            else if( this.name.localeCompare( "rotate" ) == 0 ){
 
-        else if( this.name.localeCompare( "ego" ) == 0 ){
-
-            window.addEventListener( 'keydown', this.currentState.walkStraight )
-            window.addEventListener( 'keydown', this.currentState.walkStrafe )
+                this.currentState.activate()
+            }
         }
 
         // adding eventlisteners for the controls
@@ -149,7 +162,30 @@ class State{
 
     switchPerspective(){
 
-        console.log( "Perspective changed." )
+        if( this.perspective.name.localeCompare( "round" ) == 0 ){
+
+            let old = this.perspective
+
+            this.perspective = new FirstPerson()
+
+            old.deactivate()
+
+            this.perspective.activate()
+
+            this.currentState.deactivate()
+
+            console.log( "FirstPerson" )
+        }
+        else{
+
+            this.perspective.deactivate()
+            this.perspective = new Roundtable()
+            this.perspective.activate()
+
+            this.currentState.activate()
+
+            console.log( "Roundtable" )
+        }
     }
 
     get current(){
@@ -200,6 +236,8 @@ class DragControls{
     
         if( ( intersects.length ) > 0 && ( intersects[ 0 ].object.userData.drag )){
             intersects[ 0 ].object.draggable = true
+
+            console.log( "intersects point: " + intersects[ 0 ].object.point )
     
             this.draggable = intersects[ 0 ].object
             console.log( this.draggable.userData.name )
@@ -440,59 +478,6 @@ class RotationControls{
     }
 }
 
-class EgoPerspective{
-
-    constructor( camera ){
-
-        this.name = "ego"
-        this.camera = camera
-        this.position = new THREE.Vector3( 0, 0, 0 )
-        this.camera.position.set( this.position )
-        this.look = new THREE.Vector3( -1, 0, 0 )
-        this.vector = new THREE.Vector3( this.look - this.position )
-
-        this.camera.position.x = this.position.x
-        this.camera.position.y = this.position.y
-        this.camera.position.z = this.position.z
-
-        this.camera.lookAt( this.look )
-        this.speed = 10
-    }
-
-    walkStraight( event ){
-
-        if( event.key === "w" ){
-
-            console.log( "w" )
-            this.position = this.position + this.vector * this.speed
-            this.camera.position = this.position
-        }
-        else if( event.key === "s" ){
-
-            this.position = this.position - this.vector * this.speed
-            this.camera.position = this.position
-        }
-    }
-    walkStrafe( event ){
-
-        let axisY = new THREE.Vector3( 0, 1, 0 )
-        let tmp = this.vector
-
-        if( event.key === "a" ){
-
-            tmp.applyAxisAngle( axisY, - Math.PI / 2 )
-            this.position = this.position + tmp * this.speed
-            this.camera.position = this.position
-        }
-        else if( event.key === "d" ){
-
-            tmp.applyAxisAngle( axisY, Math.PI / 2 )
-            this.position = this.position + tmp * this.speed
-            this.camera.position = this.position
-        }
-    }
-}
-
 class Controls{
 
     constructor( state ){
@@ -503,11 +488,13 @@ class Controls{
     activate(){
 
         window.addEventListener( 'keydown', this.switchControls )
+        window.addEventListener( 'keydown', this.switchPerspective )
     }
 
     deactivate(){
 
         window.removeEventListener( 'keydown', this.switchControls )
+        window.removeEventListener( 'keydown', this.switchPerspective )
     }
 
     switchControls( event ){
@@ -522,8 +509,165 @@ class Controls{
 
         if( event.key === 'q' ){
 
+            this.state.switchPerspective()
+        }
+    }
+
+    moveMouse( event ){
+
+        let mouseX = event.pageX - ( window.innerWidth / 2 )
+        let mouseY = event.pageY - ( window.innerHeight / 2 )
+    }
+}
+
+class Roundtable{
+
+    constructor(){
+
+        this.name = "round"
+        camera.position.set( 1.3, 0, 0 )
+        camera.lookAt( 0, 0, 0 )
+        this.dragBool = false
+        this.mousePos = .0
+        this.camAngle = .0
+        this.camX = .0
+        this.camZ = .0
+        this.count = 0
+    }
+
+    activate(){
+
+        window.addEventListener( 'mousedown', this.startDrag )
+        window.addEventListener( 'mousemove', this.drag )
+        window.addEventListener( 'mouseup', this.cancelDrag )
+    }
+
+    deactivate(){
+
+        window.addEventListener( 'mousedwon', this.startDrag )
+        window.addEventListener( 'mousemove', this.drag )
+        window.addEventListener( 'mouseup', this.cancelDrag )
+    }
+
+    startDrag( event ){
+
+        this.count++
+        this.console.log( this.count )
+        this.dragBool = true
+        this.mousePos = event.screenX
+        this.camX = camera.position.x
+        this.camZ = camera.position.z
+    }
+
+    drag( event ){
+
+        if( this.dragBool ){
+
+            this.mouseX = ( event.screenX - mousePos )
+
+            console.log( "camX: " + this.camX + ", camZ: " + this.camZ + ", mouseX: " + this.mouseX )
+
+            camera.position.x = this.camX * Math.cos( ( 3 * this.mouseX ) / window.innerWidth ) - this.camZ * Math.sin( ( 3 * this.mouseX ) / window.innerWidth )
+            camera.position.z = this.camX * Math.sin( ( 3 * this.mouseX ) / window.innerWidth ) + this.camZ * Math.cos( ( 3 * this.mouseX ) / window.innerWidth )
+
+            camera.lookAt( 0, 0, 0 )
 
         }
+    }
+
+    cancelDrag( event ){
+
+        this.dragBool = false
+        this.camAngle = 0
+    }
+}
+
+
+class FirstPerson{
+
+    constructor(){
+
+        this.name = "ego"
+        this.position = new THREE.Vector3( 0, 0, 0 )
+        camera.position.set( 0, 0, 0 )
+        camera.lookAt( 0, 0, 1 )
+        this.dragBool = false
+        this.mousePos = .0
+        this.camAngle = .0
+        this.startX = .0
+        this.startY = .0
+        this.count = 0
+        this.mouseX = .0
+        this.mouseY = .0
+    }
+
+    activate(){
+
+        window.addEventListener( 'mousemove', this.onMouseMove )
+        window.addEventListener( 'mousedown', this.startDrag )
+        window.addEventListener( 'mousemove', this.drag )
+        window.addEventListener( 'mouseup', this.cancelDrag )
+    }
+
+    deactivate(){
+
+        window.removeEventListener( 'mousemove', this.onMouseMove )
+        window.removeEventListener( 'mousedown', this.startDrag )
+        window.removeEventListener( 'mousemove', this.drag )
+        window.removeEventListener( 'mouseup', this.cancelDrag )
+    }
+
+    onMouseMove( event ){
+
+        const sizes = {
+            width: .95 * window.innerWidth,
+            height: window.innerHeight
+        }
+    
+        this.dirX = ( ( event.clientX - canvas.getBoundingClientRect().left ) / sizes.width ) * 2 - 1
+        this.dirY = - ( ( event.clientY - canvas.getBoundingClientRect().top ) / sizes.height ) * 2 + 1
+
+        this.mouseX = ( ( event.clientX - canvas.getBoundingClientRect().left ) / sizes.width )
+        this.mouseY = ( ( event.clientY - canvas.getBoundingClientRect().top ) / sizes.height )
+
+        if( this.dirX < 0 ){
+
+            this.mouseX = -1 * this.mouseX
+        }
+
+        if(this.dirY < 0 ){
+
+            this.mouseY = -1 * this.mouseY
+        }
+    }
+
+    startDrag( event ){
+
+        this.count++
+        // this.console.log( this.count )
+        this.dragBool = true
+        this.mousePos = event.screenX
+        this.startX = 
+        this.startY = camera.position.z
+    }
+
+    drag( event ){
+
+        if( this.dragBool ){
+
+            console.log( "Hello" )
+            this.mouseDif = ( event.screenX - mousePos )
+
+            camera.rotation.y += 2 * this.mouseDif / window.innerWidth
+
+            mousePos = event.screenX
+        }
+    }
+
+    cancelDrag( event ){
+
+        this.dragBool = false
+        this.camAngle = 0
     }
 }
 
@@ -531,7 +675,7 @@ class Controls{
 
 const drag = new DragControls()
 const rot = new RotationControls()
-var state = new State( drag )
+var state = new State( drag, camera )
 
 function WallSetup( type, geo, material ){
 
@@ -575,6 +719,7 @@ function WallSetup( type, geo, material ){
     }
     plane.castShadow = true
     plane.receiveShadow = true
+    plane.userData.drag = false
     room.add( plane )
 }
 
@@ -619,9 +764,9 @@ class MeshCreator{
     }
 }
 
-const cube = new MeshCreator( cubeGeo, material2, "Cube", true, true )
-const cube2 = new MeshCreator( cubeGeo2, material3, "Cube 2", true, true )
-cube2.mesh.position.x = .5
+// const cube = new MeshCreator( cubeGeo, material2, "Cube", true, true )
+// const cube2 = new MeshCreator( cubeGeo2, material3, "Cube 2", true, true )
+// cube2.mesh.position.x = .3
 
 const cone = new THREE.ConeGeometry( .05, .1, 32 )
 const spotLightMaterial1 = new THREE.MeshPhongMaterial( { color: 0xff0000, side: THREE.DoubleSide } )
@@ -668,90 +813,6 @@ window.addEventListener('resize', () =>
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 })
 
-//Eventlistener for mouse drag rotation
-// all variables for the mouse tracking and dragging
-var dragBool = false
-var mousePos = .0
-var camAngle = .0
-var camX = .0
-var camZ = .0
-var count = 0
-
-window.addEventListener('mousedown', (event) => {
-
-    count++
-    console.log( count )
-    dragBool = true
-    mousePos = event.screenX
-    camX = camera.position.x
-    camZ = camera.position.z
-})
-window.addEventListener('mouseup', () => {
-
-    dragBool = false
-    camAngle = 0;
-})
-
-document.addEventListener('mousemove', (event) => {
-
-    if( dragBool /*&& roundDragBool*/ ){
-
-        mouseX = ( event.screenX - mousePos )
-
-        camera.position.x = camX * Math.cos( ( 3 * mouseX ) / window.innerWidth ) - camZ * Math.sin( ( 3 * mouseX ) / window.innerWidth ) 
-        camera.position.z = camX * Math.sin( ( 3 * mouseX ) / window.innerWidth ) + camZ * Math.cos( ( 3 * mouseX ) / window.innerWidth )       
-    }
-})
-
-/**
- * Renderer
- */
-const renderer = new THREE.WebGLRenderer({
-    canvas: canvas,
-    alpha: true
-})
-renderer.setSize(sizes.width, sizes.height)
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-renderer.shadowMap.enabled = true
-renderer.shadowMap.type = THREE.VSMShadowMap
-
-
-//Controls
-// Drag Controls
-// const controls = new THREE.DragControls( objectArray, camera, renderer.domElement );
-const firstPerson = new THREE.FirstPersonControls( camera, renderer.domElement )
-firstPerson.movementSpeed = 150
-firstPerson.lookSpeed = .5
-
-// to be modified
-//Eventlistener for keeping Cube on the ground
-// document.addEventListener( 'mousemove', () => {
-
-//     if( dragBool ){
-
-//         cube.mesh.position.y = - ( height / 2 ) + ( vec.y / 2 )
-//     }
-// } )
-
-var rotationBool = true
-
-document.addEventListener( 'keydown', onKeyPressR)
-
-function onKeyPressR( event ){
-
-    if( event.key === "p" ){
-
-        if( rotationBool ){
-
-            rotationBool = false
-        }
-        else{
-
-            rotationBool = true
-        }
-    }
-}
-
 /**
  * Animate
  */
@@ -764,7 +825,7 @@ const tick = () =>
 
     const elapsedTime = clock.getElapsedTime()
 
-    camera.lookAt(0,0,0)
+    // camera.lookAt(0,0,0)
 
     // Render
     renderer.render(scene, camera)
@@ -774,3 +835,328 @@ const tick = () =>
 }
 
 tick()
+
+const _lookDirection = new THREE.Vector3();
+const _spherical = new THREE.Spherical();
+const _target = new THREE.Vector3();
+
+class FirstPersonControls {
+
+	constructor( object, domElement ) {
+
+		if ( domElement === undefined ) {
+
+			console.warn( 'THREE.FirstPersonControls: The second parameter "domElement" is now mandatory.' );
+			domElement = document;
+
+		}
+
+		this.object = object;
+		this.domElement = domElement;
+
+		// API
+
+		this.enabled = true;
+
+		this.movementSpeed = 1.0;
+		this.lookSpeed = 0.005;
+
+		this.lookVertical = true;
+		this.autoForward = false;
+
+		this.activeLook = true;
+
+		this.heightSpeed = false;
+		this.heightCoef = 1.0;
+		this.heightMin = 0.0;
+		this.heightMax = 1.0;
+
+		this.constrainVertical = false;
+		this.verticalMin = 0;
+		this.verticalMax = Math.PI;
+
+		this.mouseDragOn = false;
+
+		// internals
+
+		this.autoSpeedFactor = 0.0;
+
+		this.mouseX = 0;
+		this.mouseY = 0;
+
+		this.moveForward = false;
+		this.moveBackward = false;
+		this.moveLeft = false;
+		this.moveRight = false;
+
+		this.viewHalfX = 0;
+		this.viewHalfY = 0;
+
+		// private variables
+
+		let lat = 0;
+		let lon = 0;
+
+		//
+
+		this.handleResize = function () {
+
+			if ( this.domElement === document ) {
+
+				this.viewHalfX = window.innerWidth / 2;
+				this.viewHalfY = window.innerHeight / 2;
+
+			} else {
+
+				this.viewHalfX = this.domElement.offsetWidth / 2;
+				this.viewHalfY = this.domElement.offsetHeight / 2;
+
+			}
+
+		};
+
+		this.onMouseDown = function ( event ) {
+
+			if ( this.domElement !== document ) {
+
+				this.domElement.focus();
+
+			}
+
+			if ( this.activeLook ) {
+
+				switch ( event.button ) {
+
+					case 0: this.moveForward = true; break;
+					case 2: this.moveBackward = true; break;
+
+				}
+
+			}
+
+			this.mouseDragOn = true;
+
+		};
+
+		this.onMouseUp = function ( event ) {
+
+			if ( this.activeLook ) {
+
+				switch ( event.button ) {
+
+					case 0: this.moveForward = false; break;
+					case 2: this.moveBackward = false; break;
+
+				}
+
+			}
+
+			this.mouseDragOn = false;
+
+		};
+
+		this.onMouseMove = function ( event ) {
+
+			if ( this.domElement === document ) {
+
+				this.mouseX = event.pageX - this.viewHalfX;
+				this.mouseY = event.pageY - this.viewHalfY;
+
+			} else {
+
+				this.mouseX = event.pageX - this.domElement.offsetLeft - this.viewHalfX;
+				this.mouseY = event.pageY - this.domElement.offsetTop - this.viewHalfY;
+
+			}
+
+		};
+
+		this.onKeyDown = function ( event ) {
+
+			switch ( event.code ) {
+
+				case 'ArrowUp':
+				case 'KeyW': this.moveForward = true; break;
+
+				case 'ArrowLeft':
+				case 'KeyA': this.moveLeft = true; break;
+
+				case 'ArrowDown':
+				case 'KeyS': this.moveBackward = true; break;
+
+				case 'ArrowRight':
+				case 'KeyD': this.moveRight = true; break;
+
+				case 'KeyR': this.moveUp = true; break;
+				case 'KeyF': this.moveDown = true; break;
+
+			}
+
+		};
+
+		this.onKeyUp = function ( event ) {
+
+			switch ( event.code ) {
+
+				case 'ArrowUp':
+				case 'KeyW': this.moveForward = false; break;
+
+				case 'ArrowLeft':
+				case 'KeyA': this.moveLeft = false; break;
+
+				case 'ArrowDown':
+				case 'KeyS': this.moveBackward = false; break;
+
+				case 'ArrowRight':
+				case 'KeyD': this.moveRight = false; break;
+
+				case 'KeyR': this.moveUp = false; break;
+				case 'KeyF': this.moveDown = false; break;
+
+			}
+
+		};
+
+		this.lookAt = function ( x, y, z ) {
+
+			if ( x.isVector3 ) {
+
+				_target.copy( x );
+
+			} else {
+
+				_target.set( x, y, z );
+
+			}
+
+			this.object.lookAt( _target );
+
+			setOrientation( this );
+
+			return this;
+
+		};
+
+		this.update = function () {
+
+			const targetPosition = new THREE.Vector3();
+
+			return function update( delta ) {
+
+				if ( this.enabled === false ) return;
+
+				if ( this.heightSpeed ) {
+
+					const y = THREE.THREE.MathUtils.clamp( this.object.position.y, this.heightMin, this.heightMax );
+					const heightDelta = y - this.heightMin;
+
+					this.autoSpeedFactor = delta * ( heightDelta * this.heightCoef );
+
+				} else {
+
+					this.autoSpeedFactor = 0.0;
+
+				}
+
+				const actualMoveSpeed = delta * this.movementSpeed;
+
+				if ( this.moveForward || ( this.autoForward && ! this.moveBackward ) ) this.object.translateZ( - ( actualMoveSpeed + this.autoSpeedFactor ) );
+				if ( this.moveBackward ) this.object.translateZ( actualMoveSpeed );
+
+				if ( this.moveLeft ) this.object.translateX( - actualMoveSpeed );
+				if ( this.moveRight ) this.object.translateX( actualMoveSpeed );
+
+				if ( this.moveUp ) this.object.translateY( actualMoveSpeed );
+				if ( this.moveDown ) this.object.translateY( - actualMoveSpeed );
+
+				let actualLookSpeed = delta * this.lookSpeed;
+
+				if ( ! this.activeLook ) {
+
+					actualLookSpeed = 0;
+
+				}
+
+				let verticalLookRatio = 1;
+
+				if ( this.constrainVertical ) {
+
+					verticalLookRatio = Math.PI / ( this.verticalMax - this.verticalMin );
+
+				}
+
+				lon -= this.mouseX * actualLookSpeed;
+				if ( this.lookVertical ) lat -= this.mouseY * actualLookSpeed * verticalLookRatio;
+
+				lat = Math.max( - 85, Math.min( 85, lat ) );
+
+				let phi = THREE.MathUtils.degToRad( 90 - lat );
+				const theta = THREE.MathUtils.degToRad( lon );
+
+				if ( this.constrainVertical ) {
+
+					phi = THREE.MathUtils.mapLinear( phi, 0, Math.PI, this.verticalMin, this.verticalMax );
+
+				}
+
+				const position = this.object.position;
+
+				targetPosition.setFromSphericalCoords( 1, phi, theta ).add( position );
+
+				this.object.lookAt( targetPosition );
+
+			};
+
+		}();
+
+		this.dispose = function () {
+
+			this.domElement.removeEventListener( 'contextmenu', contextmenu );
+			this.domElement.removeEventListener( 'mousedown', _onMouseDown );
+			this.domElement.removeEventListener( 'mousemove', _onMouseMove );
+			this.domElement.removeEventListener( 'mouseup', _onMouseUp );
+
+			window.removeEventListener( 'keydown', _onKeyDown );
+			window.removeEventListener( 'keyup', _onKeyUp );
+
+		};
+
+		const _onMouseMove = this.onMouseMove.bind( this );
+		const _onMouseDown = this.onMouseDown.bind( this );
+		const _onMouseUp = this.onMouseUp.bind( this );
+		const _onKeyDown = this.onKeyDown.bind( this );
+		const _onKeyUp = this.onKeyUp.bind( this );
+
+		this.domElement.addEventListener( 'contextmenu', contextmenu );
+		this.domElement.addEventListener( 'mousemove', _onMouseMove );
+		this.domElement.addEventListener( 'mousedown', _onMouseDown );
+		this.domElement.addEventListener( 'mouseup', _onMouseUp );
+
+		window.addEventListener( 'keydown', _onKeyDown );
+		window.addEventListener( 'keyup', _onKeyUp );
+
+		function setOrientation( controls ) {
+
+			const quaternion = controls.object.quaternion;
+
+			_lookDirection.set( 0, 0, - 1 ).applyQuaternion( quaternion );
+			_spherical.setFromVector3( _lookDirection );
+
+			lat = 90 - THREE.MathUtils.radToDeg( _spherical.phi );
+			lon = THREE.MathUtils.radToDeg( _spherical.theta );
+
+		}
+
+		this.handleResize();
+
+		setOrientation( this );
+
+	}
+
+}
+
+function contextmenu( event ) {
+
+	event.preventDefault();
+
+}

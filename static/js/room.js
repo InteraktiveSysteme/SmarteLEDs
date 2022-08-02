@@ -427,12 +427,10 @@ class RotationControls{
     
             this.rotatable.rotation.y = this.mouseX / ( window.innerWidth / 10 )
 
-            if( this.rotatable.children != null ){
+            if( this.rotatable.userData.child != null ){
 
-                for( let i = 0; i < this.rotatable.children.length; i++ ){
-
-                    this.rotatable.children[ i ].rotation.set( this.mouseX / ( winow.innerWidth / 10 ) )
-                }
+                console.log( this.rotatable.userData.child )
+                this.rotatable.userData.child.rotation.x = this.mouseX / ( window.innerWidth / 10 )
             }
         }
     }
@@ -590,84 +588,112 @@ class FirstPerson{
         this.name = "ego"
         this.position = new THREE.Vector3( 0, 0, 0 )
         camera.position.set( 0, 0, 0 )
-        camera.lookAt( 0, 0, 1 )
+        camera.lookAt( 0, 0, -1 )
         this.dragBool = false
-        this.mousePos = .0
-        this.camAngle = .0
-        this.startX = .0
-        this.startY = .0
-        this.count = 0
         this.mouseX = .0
         this.mouseY = .0
+        this.rotX = .0
+        this.rotY = .0
     }
 
     activate(){
 
-        window.addEventListener( 'mousemove', this.onMouseMove )
         window.addEventListener( 'mousedown', this.startDrag )
         window.addEventListener( 'mousemove', this.drag )
         window.addEventListener( 'mouseup', this.cancelDrag )
+        window.addEventListener( 'keydown', this.forward )
+        window.addEventListener( 'keydown', this.strafe )
     }
 
     deactivate(){
 
-        window.removeEventListener( 'mousemove', this.onMouseMove )
         window.removeEventListener( 'mousedown', this.startDrag )
         window.removeEventListener( 'mousemove', this.drag )
         window.removeEventListener( 'mouseup', this.cancelDrag )
+        window.removeEventListener( 'keydown', this.forward )
+        window.removeEventListener( 'keydown', this.strafe )
     }
 
-    onMouseMove( event ){
+    update( time ){
 
-        const sizes = {
-            width: .95 * window.innerWidth,
-            height: window.innerHeight
-        }
-    
-        this.dirX = ( ( event.clientX - canvas.getBoundingClientRect().left ) / sizes.width ) * 2 - 1
-        this.dirY = - ( ( event.clientY - canvas.getBoundingClientRect().top ) / sizes.height ) * 2 + 1
 
-        this.mouseX = ( ( event.clientX - canvas.getBoundingClientRect().left ) / sizes.width )
-        this.mouseY = ( ( event.clientY - canvas.getBoundingClientRect().top ) / sizes.height )
-
-        if( this.dirX < 0 ){
-
-            this.mouseX = -1 * this.mouseX
-        }
-
-        if(this.dirY < 0 ){
-
-            this.mouseY = -1 * this.mouseY
-        }
     }
 
     startDrag( event ){
 
-        this.count++
-        // this.console.log( this.count )
         this.dragBool = true
-        this.mousePos = event.screenX
-        this.startX = 
-        this.startY = camera.position.z
+        this.mouseX = event.screenX
+        this.mouseY = event.screenY
+
     }
 
     drag( event ){
 
         if( this.dragBool ){
 
-            console.log( "Hello" )
-            this.mouseDif = ( event.screenX - mousePos )
+            if( this.rotX == null ){
 
-            camera.rotation.y += 2 * this.mouseDif / window.innerWidth
+                this.rotX = .0
+                this.rotY = .0
+            }
 
-            mousePos = event.screenX
+            let quaternionX = new THREE.Quaternion()
+            let quaternionY = new THREE.Quaternion()
+
+            this.difX = ( event.screenX - this.mouseX )
+            this.difY = ( event.screenY - this.mouseY )
+
+            this.rotX += 2 * this.difX / window.innerWidth
+            quaternionX.setFromAxisAngle( new THREE.Vector3( 0, 1, 0 ), this.rotX )
+
+            this.rotY += 2 * this.difY / window.innerHeight
+            quaternionY.setFromAxisAngle( new THREE.Vector3( 1, 0, 0 ), this.rotY )
+
+            let quaternion = new THREE.Quaternion()
+            quaternion.multiplyQuaternions( quaternionX, quaternionY )
+
+            camera.rotation.setFromQuaternion( quaternion )
+
+            this.mouseY = event.screenY
+            this.mouseX = event.screenX
         }
     }
 
     cancelDrag( event ){
 
         this.dragBool = false
-        this.camAngle = 0
+    }
+
+    forward( event ){
+
+        switch( event.key ){
+
+            case 'w':
+                camera.translateZ(  - .01 )
+                camera.position.y = 0
+                break
+
+            case 's':
+                camera.translateZ( .01 )
+                camera.position.y = 0
+                break
+        }
+    }
+
+    strafe( event ){
+
+        switch( event.key ){
+
+            case 'a':
+                camera.translateX( - .01 )
+                camera.position.y = 0
+                break
+        
+            case 'd':
+                camera.translateX( .01 )
+                camera.position.y = 0
+                break
+        }
     }
 }
 
@@ -781,6 +807,7 @@ lightCone.userData.name = "Light 1"
 lightCone.userData.drag = true
 lightCone.userData.rot = true
 lightCone.userData.light = true
+lightCone.userData.child = spotLight
 scene.add( lightCone )
 
 const cone2 = new THREE.ConeGeometry( .05, .1, 32 )
@@ -796,6 +823,7 @@ lightCone2.userData.name = "Light 2"
 lightCone2.userData.drag = true
 lightCone2.userData.rot = true
 lightCone2.userData.light = true
+lightCone2.userData.child = spotLight2
 scene.add( lightCone2 )
 
 window.addEventListener('resize', () =>

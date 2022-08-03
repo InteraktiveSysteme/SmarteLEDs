@@ -14,21 +14,22 @@ scene.background = new THREE.Color(0x111111)
     height: window.innerHeight
 }
 
+//Measures of the room
+const width = 1
+const height = .5
+const depth = 1.3
+
 /**
  * Camera
  */
 // Base camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
-camera.position.x = 1.3
+
+camera.position.x = Math.max( width, height, depth )
 camera.position.y = 0
 camera.position.z = 0
 let temp = 0
 scene.add( camera )
-
-//Measures of the room
-const width = 1
-const height = .5
-const depth = 1.3
 
 // Objects
 const geometry = new THREE.SphereBufferGeometry(0.5, 64, 64);
@@ -40,10 +41,6 @@ const cubeGeo2 = new THREE.BoxGeometry( .25, 0.25, .25)
 const lightGeo = new THREE.BoxGeometry( .1, .1, .1 )
 
 // Materials
-const material = new THREE.MeshPhongMaterial( {color: 0xffff00, side: THREE.DoubleSide} )
-material.metalness = 0.0
-material.roughness = 1.0
-material.color = new THREE.Color(0xFFFFFF)
 
 const material2 = new THREE.MeshPhongMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
 material2.metalness = 0.7
@@ -56,15 +53,22 @@ material3.roughness = 0.3
 material3.color = new THREE.Color(0x808080)
 
 const materialOneSide = new THREE.MeshPhongMaterial(  )
-material.metalness = 0.0
-material.roughness = 1.0
-material.color = new THREE.Color(0xFFFFFF)
 
 //Lights
 
 // Ambient Light
 const ambient = new THREE.AmbientLight( 0xffffff, .05 )
 scene.add( ambient )
+
+// Pointlight
+const pointLight = new THREE.PointLight( 0xff0000, .7, 1.3, .8 )
+pointLight.castShadow = true
+pointLight.shadowMapWidth = 2048
+pointLight.shadowMapHeight = 2048
+pointLight.position.set( 0, height / 2, 0 )
+pointLight.shadow.bias = .001
+pointLight.shadow.normalBias = .01
+scene.add( pointLight )
 
 // Spotlight 1
 const spotColor1 = 0xfa05e1;
@@ -113,7 +117,7 @@ class State{
         this.currentState = state
         this.name = state.name
         this.camera = camera
-        camera.position.set( 1.3, 0, 0 )
+        camera.position.set( Math.max( width, height, depth ), 0, 0 )
         camera.lookAt( 0, 0, 0 )
         this.perspective = new FirstPerson( width, height, depth )
         this.perspective.activate()
@@ -532,7 +536,7 @@ class Roundtable{
     constructor(){
 
         this.name = "round"
-        camera.position.set( 1.3, 0, 0 )
+        camera.position.set( Math.max( width, height, depth ), 0, 0 )
         camera.lookAt( 0, 0, 0 )
         this.dragBool = false
         this.mousePos = .0
@@ -687,9 +691,7 @@ class FirstPerson{
         camera.getWorldPosition( this.position )
         console.log( this.position )
 
-        // if( ( this.position.x >= this.depthH ) || ( this.position.x < ( - this.depthH ) ) || ( this.position.z >= this.widthH ) || ( this.position.z < ( - this.widthH ) ) ){
         if( ( this.position.x >= .65 ) || ( this.position.x < ( - .65 ) ) || ( this.position.z >= .5 ) || ( this.position.z < ( - .5 ) ) ){
-        
 
             this.inRoom = false
         }
@@ -739,12 +741,6 @@ class FirstPerson{
     }
 }
 
-// instantiating the state and drag controls
-
-const drag = new DragControls()
-const rot = new RotationControls()
-var state = new State( drag, camera )
-
 function WallSetup( type, geo, material ){
 
     const plane = new THREE.Mesh( geo, material )
@@ -791,6 +787,11 @@ function WallSetup( type, geo, material ){
     room.add( plane )
 }
 
+// instantiating the state and drag controls
+
+const drag = new DragControls()
+const rot = new RotationControls()
+var state = new State( drag, camera )
 
 // Mesh and walls 
 WallSetup( "front", frontBackGeo, materialOneSide )
@@ -832,9 +833,11 @@ class MeshCreator{
     }
 }
 
-// const cube = new MeshCreator( cubeGeo, material2, "Cube", true, true )
-// const cube2 = new MeshCreator( cubeGeo2, material3, "Cube 2", true, true )
-// cube2.mesh.position.x = .3
+const cube = new MeshCreator( cubeGeo, material2, "Cube", true, true )
+const cube2 = new MeshCreator( cubeGeo2, material3, "Cube 2", true, true )
+cube2.mesh.position.x = .3
+
+// cones are a substitute for actual lamp GLBs
 
 const cone = new THREE.ConeGeometry( .05, .1, 32 )
 const spotLightMaterial1 = new THREE.MeshPhongMaterial( { color: 0xff0000, side: THREE.DoubleSide } )
@@ -868,6 +871,8 @@ lightCone2.userData.light = true
 lightCone2.userData.child = spotLight2
 scene.add( lightCone2 )
 
+// dynamic canvas size according to window size
+
 window.addEventListener('resize', () =>
 {
     // Update sizes
@@ -891,11 +896,7 @@ const clock = new THREE.Clock()
 
 const tick = () =>
 {
-    // targetX = 2 * Math.PI * (mouseX / window.innerWidth)
-
-    const elapsedTime = clock.getElapsedTime()
-
-    // camera.lookAt(0,0,0)
+    // const elapsedTime = clock.getElapsedTime()
 
     // Render
     renderer.render(scene, camera)

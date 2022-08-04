@@ -1,5 +1,5 @@
 from app import app
-from routs_simuled import *
+from routes_simuled import *
 
 app.route("/child", methods=['GET'])(child)
 app.route("/", methods=['GET'])(index)

@@ -54,6 +54,62 @@
   </style>
 
   <!--  Our code  -->
+  <div id="input">
+    <div style="margin-left: 2.5%">
+      <h1>Define the measures of your Room:</h1>
+      <h5>seperate the digits with a "."</h5>
+    </div>
+    <div style="margin-top: 2%; margin-bottom: 1%;">
+      <center>
+        <div class="input-group mb-3" style="margin-left: 2.5%; margin-right: 2.5%; width: auto;">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-default">Width (in m):</span>
+          </div>
+          <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+        </div>
+        <div class="input-group mb-3" style="margin-left: 2.5%; margin-right: 2.5%; width: auto;">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-default">Height (in m):</span>
+          </div>
+          <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+        </div>
+        <div class="input-group mb-3" style="margin-left: 2.5%; margin-right: 2.5%; width: auto;">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-default">Depth (in m):</span>
+          </div>
+          <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+        </div>
+      </center>
+      <div style="margin-left: 2.5%;">
+        <button type="button" id="submit" class=" btn btn-outline-primary">Submit</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const input = document.getElementById( 'input' )
+
+    const button = document.getElementById( 'submit' )
+
+    function elementFromHTML( html ){
+
+      const canvas = document.createElement( "canvas" )
+
+      canvas.innerHTML = html.trim()
+
+      return canvas.content.firstElementChild
+    }
+
+    button.addEventListener( 'click', function deleteField(event){
+
+      input.remove()
+
+      // const canvas = elementFromHTML("  <center><div id='gl' style='width: auto; height: auto;'><canvas id='myCanvas' width='auto' height='auto' style='position: relativ; border-radius: 15px;'></canvas></div></center>")
+
+      // document.body.appendChild( canvas )
+    } )
+  </script>
+
   <center>
     <div id="gl" style="width: auto; height: auto;">
       <canvas id="myCanvas" width="auto" height="auto" style="position: relativ; border-radius: 15px;"></canvas>

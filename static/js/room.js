@@ -15,6 +15,8 @@ scene.background = new THREE.Color(0x111111)
 }
 
 //Measures of the room
+// only use the ratio of the user input so the measures are between 0 and 1.5
+
 const width = 1
 const height = .5
 const depth = 1.3
@@ -23,7 +25,7 @@ const depth = 1.3
  * Camera
  */
 // Base camera
-const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
+const camera = new THREE.PerspectiveCamera( 75, sizes.width / sizes.height, 0.05, 10 )
 
 camera.position.x = Math.max( width, height, depth )
 camera.position.y = 0
@@ -61,14 +63,14 @@ const ambient = new THREE.AmbientLight( 0xffffff, .05 )
 scene.add( ambient )
 
 // Pointlight
-const pointLight = new THREE.PointLight( 0xff0000, .7, 1.3, .8 )
-pointLight.castShadow = true
-pointLight.shadowMapWidth = 2048
-pointLight.shadowMapHeight = 2048
-pointLight.position.set( 0, height / 2, 0 )
-pointLight.shadow.bias = .001
-pointLight.shadow.normalBias = .01
-scene.add( pointLight )
+// const pointLight = new THREE.PointLight( 0xff0000, .7, 1.3, .8 )
+// pointLight.position.set( 0, height / 2, 0 )
+// pointLight.castShadow = true
+// pointLight.shadowMapWidth = 2048
+// pointLight.shadowMapHeight = 2048
+// pointLight.shadow.bias = .001
+// pointLight.shadow.normalBias = .01
+// scene.add( pointLight )
 
 // Spotlight 1
 const spotColor1 = 0xfa05e1;
@@ -77,9 +79,9 @@ spotLight.penumbra = .3
 spotLight.decay = 2
 spotLight.position.set( 0,0,0 )
 spotLight.castShadow = true
-spotLight.shadowMapWidth = 2048
-spotLight.shadowMapHeight = 2048
-//  solves the shadow artifacts of the spotLight
+// spotLight.shadowMapWidth = 2048
+// spotLight.shadowMapHeight = 2048
+// //  solves the shadow artifacts of the spotLight
 spotLight.shadow.bias = .001
 spotLight.shadow.normalBias = .01
 scene.add( spotLight )
@@ -91,9 +93,9 @@ spotLight2.penumbra = .3
 spotLight2.decay = .2
 spotLight2.position.set( 0,0,0 )
 spotLight2.castShadow = true
-spotLight2.shadowMapWidth = 2048
-spotLight2.shadowMapHeight = 2048
-//  solves the shadow artifacts of the spotlight 2
+// spotLight2.shadowMapWidth = 2048
+// spotLight2.shadowMapHeight = 2048
+// //  solves the shadow artifacts of the spotlight 2
 spotLight2.shadow.bias = .001
 spotLight2.shadow.normalBias = .01
 scene.add( spotLight2 )
@@ -114,7 +116,7 @@ class State{
 
     constructor( state ){
 
-        this.currentState = state
+        this.controls = state
         this.name = state.name
         this.camera = camera
         camera.position.set( Math.max( width, height, depth ), 0, 0 )
@@ -126,12 +128,12 @@ class State{
 
             if( this.name.localeCompare( "drag" ) == 0 ){
 
-                this.currentState.activate()
+                this.controls.activate()
             }
 
             else if( this.name.localeCompare( "rotate" ) == 0 ){
 
-                this.currentState.activate()
+                this.controls.activate()
             }
         }
 
@@ -144,23 +146,23 @@ class State{
 
         if( this.name.localeCompare( "drag" ) == 0 ){
 
-            let oldState = this.currentState
-            this.currentState = new RotationControls()
+            let oldState = this.controls
+            this.controls = new RotationControls()
             this.name = "rotate"
 
             oldState.deactivate()
 
-            this.currentState.activate()
+            this.controls.activate()
         }
         else if( this.name.localeCompare( "rotate" ) == 0 ){
 
-            let oldState = this.currentState
-            this.currentState = new DragControls()
+            let oldState = this.controls
+            this.controls = new DragControls()
             this.name = "drag"
 
             oldState.deactivate()
 
-            this.currentState.activate()
+            this.controls.activate()
         }
     }
 
@@ -176,7 +178,7 @@ class State{
 
             this.perspective.activate()
 
-            this.currentState.deactivate()
+            this.controls.deactivate()
 
             console.log( "FirstPerson" )
         }
@@ -186,7 +188,7 @@ class State{
             this.perspective = new Roundtable()
             this.perspective.activate()
 
-            this.currentState.activate()
+            this.controls.activate()
 
             console.log( "Roundtable" )
         }
@@ -194,7 +196,7 @@ class State{
 
     get current(){
 
-        return this.currentState
+        return this.controls
     }
 }
 
@@ -241,12 +243,12 @@ class DragControls{
         if( ( intersects.length ) > 0 && ( intersects[ 0 ].object.userData.drag )){
             intersects[ 0 ].object.draggable = true
 
-            console.log( "intersects point: " + intersects[ 0 ].object.point )
+            // console.log( "intersects point: " + intersects[ 0 ].object.point )
     
             this.draggable = intersects[ 0 ].object
             console.log( this.draggable.userData.name )
         }
-        console.log( "mouseX: " + this.mouseX + ", mouseY: " + this.mouseY )
+        // console.log( "mouseX: " + this.mouseX + ", mouseY: " + this.mouseY )
     }
     
     onMouseMove( event ){
@@ -418,7 +420,7 @@ class RotationControls{
             console.log( this.rotatable.userData.name )
         }
 
-        console.log( "mouseX: " + this.mouseX + ", mouseY: " + this.mouseY )
+        // console.log( "mouseX: " + this.mouseX + ", mouseY: " + this.mouseY )
     }
     
     onMouseMove( event ){
@@ -563,7 +565,7 @@ class Roundtable{
     startDrag( event ){
 
         this.count++
-        this.console.log( this.count )
+        // this.console.log( this.count )
         this.dragBool = true
         this.mousePos = event.screenX
         this.camX = camera.position.x
@@ -574,14 +576,15 @@ class Roundtable{
 
         if( this.dragBool ){
 
-            this.mouseX = ( event.screenX - mousePos )
+            this.mouseX = ( event.screenX - this.mousePos )
 
-            console.log( "camX: " + this.camX + ", camZ: " + this.camZ + ", mouseX: " + this.mouseX )
+            // console.log( "camX: " + this.camX + ", camZ: " + this.camZ + ", mouseX: " + this.mouseX )
 
             camera.position.x = this.camX * Math.cos( ( 3 * this.mouseX ) / window.innerWidth ) - this.camZ * Math.sin( ( 3 * this.mouseX ) / window.innerWidth )
             camera.position.z = this.camX * Math.sin( ( 3 * this.mouseX ) / window.innerWidth ) + this.camZ * Math.cos( ( 3 * this.mouseX ) / window.innerWidth )
 
-            camera.lookAt( 0, 0, 0 )
+            // camera.lookAt( 0, 0, 0 )
+            this.update
 
         }
     }
@@ -591,6 +594,11 @@ class Roundtable{
         this.dragBool = false
         this.camAngle = 0
     }
+
+    update(){
+
+        camera.lookAt( 0, 0, 0 )
+    } 
 }
 
 
@@ -608,136 +616,190 @@ class FirstPerson{
         this.rotX = .0
         this.rotY = .0
 
-        this.widthH = width / 2
-        this.height = height
-        this.depthH = depth / 2
-        this.inRoom = true
-    }
+        this.moveForward = false
+        this.moveBackward = false
+        this.moveLeft = false
+        this.moveRight = false
 
-    activate(){
+        this.vec = new THREE.Vector3()
 
-        window.addEventListener( 'mousedown', this.startDrag )
-        window.addEventListener( 'mousemove', this.drag )
-        window.addEventListener( 'mouseup', this.cancelDrag )
-        window.addEventListener( 'keydown', this.check )
-        window.addEventListener( 'keydown', this.forward )
-        window.addEventListener( 'keydown', this.strafe )
-    }
+        this.activate = function(){
 
-    deactivate(){
+            window.addEventListener( 'mousedown', this.startDrag )
+            window.addEventListener( 'mousemove', this.drag )
+            window.addEventListener( 'mouseup', this.cancelDrag )
+            window.addEventListener( 'keydown', this.keyMove )
+            window.addEventListener( 'keyup', this.keyStop )
+            window.addEventListener( 'keydown', this.update )
+        }
+    
+        this.deactivate = function(){
+    
+            window.removeEventListener( 'mousedown', this.startDrag )
+            window.removeEventListener( 'mousemove', this.drag )
+            window.removeEventListener( 'mouseup', this.cancelDrag )
+            window.removeEventListener( 'keydown', this.keyMove )
+            window.removeEventListener( 'keyup', this.keyStop )
+            window.removeEventListener( 'keydown', this.update )
+        }
 
-        window.removeEventListener( 'mousedown', this.startDrag )
-        window.removeEventListener( 'mousemove', this.drag )
-        window.removeEventListener( 'mouseup', this.cancelDrag )
-        window.removeEventListener( 'keydown', this.check )
-        window.removeEventListener( 'keydown', this.forward )
-        window.removeEventListener( 'keydown', this.strafe )
-    }
+        this.startDrag = function( event ){
 
-    update( time ){
-
-
-    }
-
-    startDrag( event ){
-
-        this.dragBool = true
-        this.mouseX = event.screenX
-        this.mouseY = event.screenY
-
-    }
-
-    drag( event ){
-
-        if( this.dragBool ){
-
-            if( this.rotX == null ){
-
-                this.rotX = .0
-                this.rotY = .0
-            }
-
-            let quaternionX = new THREE.Quaternion()
-            let quaternionY = new THREE.Quaternion()
-
-            this.difX = ( event.screenX - this.mouseX )
-            this.difY = ( event.screenY - this.mouseY )
-
-            this.rotX += 2 * this.difX / window.innerWidth
-            quaternionX.setFromAxisAngle( new THREE.Vector3( 0, 1, 0 ), this.rotX )
-
-            this.rotY += 2 * this.difY / window.innerHeight
-            quaternionY.setFromAxisAngle( new THREE.Vector3( 1, 0, 0 ), this.rotY )
-
-            let quaternion = new THREE.Quaternion()
-            quaternion.multiplyQuaternions( quaternionX, quaternionY )
-
-            camera.rotation.setFromQuaternion( quaternion )
-
-            this.mouseY = event.screenY
+            this.dragBool = true
             this.mouseX = event.screenX
+            this.mouseY = event.screenY
+    
         }
-    }
 
-    cancelDrag( event ){
+        this.drag = function( event ){
 
-        this.dragBool = false
-    }
-
-    check( event ){
-
-        this.position = new THREE.Vector3()
-
-        camera.getWorldPosition( this.position )
-        console.log( this.position )
-
-        if( ( this.position.x >= .65 ) || ( this.position.x < ( - .65 ) ) || ( this.position.z >= .5 ) || ( this.position.z < ( - .5 ) ) ){
-
-            this.inRoom = false
-        }
-        else{
-
-            this.inRoom = true
-        }
-        console.log( this.inRoom )
-    }
-
-    forward( event ){
-
-        switch( event.key ){
-
-            case 'w':
-                this.check
-                if( this.inRoom ){
-
-                    camera.translateZ(  - .01 )
+            if( this.dragBool ){
+    
+                if( this.rotX == null ){
+    
+                    this.rotX = .0
+                    this.rotY = .0
                 }
-                // camera.translateZ(  - .01 )
-
-                camera.position.y = 0
-                break
-
-            case 's':
-                camera.translateZ( .01 )
-                camera.position.y = 0
-                break
+    
+                let quaternionX = new THREE.Quaternion()
+                let quaternionY = new THREE.Quaternion()
+    
+                this.difX = ( event.screenX - this.mouseX )
+                this.difY = ( event.screenY - this.mouseY )
+    
+                this.rotX += 2 * this.difX / window.innerWidth
+                quaternionX.setFromAxisAngle( new THREE.Vector3( 0, 1, 0 ), this.rotX )
+    
+                this.rotY += 2 * this.difY / window.innerHeight
+                quaternionY.setFromAxisAngle( new THREE.Vector3( 1, 0, 0 ), this.rotY )
+    
+                let quaternion = new THREE.Quaternion()
+                quaternion.multiplyQuaternions( quaternionX, quaternionY )
+    
+                camera.rotation.setFromQuaternion( quaternion )
+    
+                this.mouseY = event.screenY
+                this.mouseX = event.screenX
+            }
         }
-    }
 
-    strafe( event ){
+        this.cancelDrag = function( event ){
 
-        switch( event.key ){
+            this.dragBool = false
+        }
 
-            case 'a':
+        this.keyMove = function( event ){
+
+            // console.log( "before keyMove: " + this.moveForward )
+
+            switch( event.key ){
+    
+                case 'w':
+                    this.moveForward = true
+                    break
+    
+                case 'a':
+                    this.moveLeft = true
+                    break
+    
+                case 's':
+                    this.moveBackward = true
+                    break
+                
+                case 'd':
+                    this.moveRight = true
+                    break
+            }
+            // console.log( "after keyMove: " + this.moveForward )
+        }
+
+        this.keyStop = function( event ){
+
+            // console.log( "before keyStop: " + this.moveForward ) 
+    
+            switch( event.key ){
+    
+                case 'w':
+                    this.moveForward = false
+                    break
+                
+                case 'a':
+                    this.moveLeft = false
+                    break
+    
+                case 's':
+                    this.moveBackward = false
+                    break
+    
+                case 'd':
+                    this.moveRight = false
+                    break
+            }
+            // console.log( "after keyStop: " + this.moveForward )
+        }
+
+// I would've narrowed the update function down, especially the clamp process but javascript won't let me call a this.function of the own object
+
+        this.update = function( event ){
+
+            if( this.moveForward ){
+
+                camera.translateZ( - .01 )
+
+                this.vec = new THREE.Vector3()
+                camera.getWorldPosition( this.vec )
+
+                this.vec = new THREE.Vector3( THREE.MathUtils.clamp( this.vec.x, - ( width / 2 ) + .1, ( width / 2 ) - .1), 0, THREE.MathUtils.clamp( this.vec.z, - ( depth / 2 ) + .1, ( depth / 2 ) - .1 ) )
+
+                camera.position.x = this.vec.x
+                camera.position.y = this.vec.y
+                camera.position.z = this.vec.z
+            }
+    
+            if( this.moveLeft ){
+    
                 camera.translateX( - .01 )
-                camera.position.y = 0
-                break
+                
+                this.vec = new THREE.Vector3()
+                camera.getWorldPosition( this.vec )
+
+                vec = new THREE.Vector3( THREE.MathUtils.clamp( vec.x, - ( width / 2 ) + .1, ( width / 2 ) - .1), 0, THREE.MathUtils.clamp( vec.z, - ( depth / 2 ) + .1, ( depth / 2 ) - .1 ) )
+
+                camera.position.x = this.vec.x
+                camera.position.y = this.vec.y
+                camera.position.z = this.vec.z
+            }
+    
+            if( this.moveBackward ){
+    
+                camera.translateZ( .01 )
+
+                this.vec = new THREE.Vector3()
+                camera.getWorldPosition( this.vec )
         
-            case 'd':
+                vec = new THREE.Vector3( THREE.MathUtils.clamp( vec.x, - ( width / 2 ) + .1, ( width / 2 ) - .1), 0, THREE.MathUtils.clamp( vec.z, - ( depth / 2 ) + .1, ( depth / 2 ) - .1 ) )
+        
+                camera.position.x = this.vec.x
+                camera.position.y = this.vec.y
+                camera.position.z = this.vec.z            
+            }
+    
+            if( this.moveRight ){
+    
                 camera.translateX( .01 )
-                camera.position.y = 0
-                break
+
+                this.vec = new THREE.Vector3()
+                camera.getWorldPosition( this.vec )
+        
+                vec = new THREE.Vector3( THREE.MathUtils.clamp( vec.x, - ( width / 2 ) + .1, ( width / 2 ) - .1), 0, THREE.MathUtils.clamp( vec.z, - ( depth / 2 ) + .1, ( depth / 2 ) - .1 ) )
+        
+                camera.position.x = this.vec.x
+                camera.position.y = this.vec.y
+                camera.position.z = this.vec.z            
+            }
         }
+
+        this.activate()
     }
 }
 
@@ -892,12 +954,15 @@ window.addEventListener('resize', () =>
  * Animate
  */
 
-const clock = new THREE.Clock()
+var clock = new THREE.Clock()
+var time = .0
 
 const tick = () =>
 {
     // const elapsedTime = clock.getElapsedTime()
+    time = clock.getDelta()
 
+    state.perspective.update( 'keydown' )
     // Render
     renderer.render(scene, camera)
 

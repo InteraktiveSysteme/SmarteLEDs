@@ -77,7 +77,7 @@ const spotColor1 = 0xfa05e1;
 const spotLight = new THREE.SpotLight( spotColor1, 0.7, 8 )
 spotLight.penumbra = .3
 spotLight.decay = 2
-spotLight.position.set( 0,0,0 )
+spotLight.position.set( 0, height / 2, 0 )
 spotLight.castShadow = true
 // spotLight.shadowMapWidth = 2048
 // spotLight.shadowMapHeight = 2048
@@ -278,12 +278,15 @@ class DragControls{
     
                 for( let i = 0; i < intersections.length; i++ ){
 
-                    if( intersections[ i ].object.userData.topLight ){
+                    if( this.draggable.userData.topLight ){
 
                         if( intersections[ i ].object.userData.top ){ // for topLight
 
                             this.draggable.position.x = intersections[ i ].point.x
                             this.draggable.position.z = intersections[ i ].point.z
+
+                            this.draggable.userData.target.position.x = this.draggable.position.x
+                            this.draggable.userData.target.position.z = this.draggable.position.z
                         }
                     }
     
@@ -293,35 +296,35 @@ class DragControls{
                         this.draggable.position.z = intersections[ i ].point.z
                     }
     
-                    if( this.draggable.userData.light ){
+                    // if( this.draggable.userData.light ){
     
-                        if( intersections[ i ].object.userData.back ){
+                    //     if( intersections[ i ].object.userData.back ){
     
-                            this.draggable.position.x = intersections[ i ].point.x
-                            this.draggable.position.y = intersections[ i ].point.y
-                        }
+                    //         this.draggable.position.x = intersections[ i ].point.x
+                    //         this.draggable.position.y = intersections[ i ].point.y
+                    //     }
     
-                        else if( intersections[ i ].object.userData.front ){
+                    //     else if( intersections[ i ].object.userData.front ){
     
-                            this.draggable.position.x = intersections[ i ].point.x
-                            this.draggable.position.y = intersections[ i ].point.y 
-                        }
-                        else if( intersections[ i ].object.userData.left ){
+                    //         this.draggable.position.x = intersections[ i ].point.x
+                    //         this.draggable.position.y = intersections[ i ].point.y 
+                    //     }
+                    //     else if( intersections[ i ].object.userData.left ){
     
-                            this.draggable.position.z = intersections[ i ].point.z
-                            this.draggable.position.y = intersections[ i ].point.y                         
-                        }
-                        else if( intersections[ i ].object.userData.right ){
+                    //         this.draggable.position.z = intersections[ i ].point.z
+                    //         this.draggable.position.y = intersections[ i ].point.y                         
+                    //     }
+                    //     else if( intersections[ i ].object.userData.right ){
     
-                            this.draggable.position.z = intersections[ i ].point.z
-                            this.draggable.position.y = intersections[ i ].point.y                         
-                        }
-                        else if( intersections[ i ].object.userData.top ){
+                    //         this.draggable.position.z = intersections[ i ].point.z
+                    //         this.draggable.position.y = intersections[ i ].point.y                         
+                    //     }
+                    //     else if( intersections[ i ].object.userData.top ){
     
-                            this.draggable.position.x = intersections[ i ].point.x
-                            this.draggable.position.z = intersections[ i ].point.z                     
-                        }
-                    }
+                    //         this.draggable.position.x = intersections[ i ].point.x
+                    //         this.draggable.position.z = intersections[ i ].point.z                     
+                    //     }
+                    // }
                 }
             }
         }   
@@ -444,7 +447,6 @@ class RotationControls{
 
             if( this.rotatable.userData.child != null ){
 
-                console.log( this.rotatable.userData.child )
                 this.rotatable.userData.child.rotation.x = this.mouseX / ( window.innerWidth / 10 )
             }
         }
@@ -849,6 +851,11 @@ function WallSetup( type, geo, material ){
     room.add( plane )
 }
 
+function exportJSON( width, height, depth, objects, camera ){
+
+    
+}
+
 // instantiating the state and drag controls
 
 const drag = new DragControls()
@@ -906,30 +913,44 @@ const spotLightMaterial1 = new THREE.MeshPhongMaterial( { color: 0xff0000, side:
 
 spotLightMaterial1.emissiveIntensity = 1.0
 
+const target1 = new THREE.Object3D()
+target1.position.set( .45, -1, 0 )
+spotLight.target = target1
+scene.add( target1 )
+
 const lightCone = new THREE.Mesh ( cone, spotLightMaterial1 )
-lightCone.position.set( 0.45, 0.2, 0 )
-lightCone.rotation.z = - ( Math.PI / 4 )
+lightCone.position.set( .45, height/2, 0 )
+// lightCone.rotation.z = - ( Math.PI / 4 )
 spotLight.parent = lightCone
 lightCone.userData.name = "Light 1"
 lightCone.userData.drag = true
 lightCone.userData.rot = true
-lightCone.userData.light = true
+// lightCone.userData.light = true
+lightCone.userData.topLight = true
 lightCone.userData.child = spotLight
+lightCone.userData.target = target1
 scene.add( lightCone )
 
 const cone2 = new THREE.ConeGeometry( .05, .1, 32 )
 const spotLightMaterial2 = new THREE.MeshPhongMaterial( { color: 0xff0000, side: THREE.DoubleSide } )
 
+const target2 = new THREE.Object3D()
+target2.position.set( 0, -1, .45 )
+spotLight2.target = target2
+scene.add( target2 )
+
 spotLightMaterial1.emissiveIntensity = 1.0
 
 const lightCone2 = new THREE.Mesh ( cone2, spotLightMaterial2 )
-lightCone2.position.set( 0, 0.2, 0.45 )
-lightCone2.rotation.z = - ( Math.PI / 4 )
+lightCone2.position.set( 0, .2, .45 )
+// lightCone2.rotation.z = - ( Math.PI / 4 )
 spotLight2.parent = lightCone2
 lightCone2.userData.name = "Light 2"
 lightCone2.userData.drag = true
 lightCone2.userData.rot = true
 lightCone2.userData.light = true
+lightCone2.userData.topLight = true
+lightCone2.userData.target = target2
 lightCone2.userData.child = spotLight2
 scene.add( lightCone2 )
 

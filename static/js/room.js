@@ -21,6 +21,10 @@ const width = 1
 const height = .5
 const depth = 1.3
 
+// const width = 3
+// const height = .5
+// const depth = 5
+
 /**
  * Camera
  */
@@ -59,18 +63,8 @@ const materialOneSide = new THREE.MeshPhongMaterial(  )
 //Lights
 
 // Ambient Light
-const ambient = new THREE.AmbientLight( 0xffffff, .05 )
+const ambient = new THREE.AmbientLight( 0xffffff, .1 )
 scene.add( ambient )
-
-// Pointlight
-// const pointLight = new THREE.PointLight( 0xff0000, .7, 1.3, .8 )
-// pointLight.position.set( 0, height / 2, 0 )
-// pointLight.castShadow = true
-// pointLight.shadowMapWidth = 2048
-// pointLight.shadowMapHeight = 2048
-// pointLight.shadow.bias = .001
-// pointLight.shadow.normalBias = .01
-// scene.add( pointLight )
 
 // Spotlight 1
 const spotColor1 = 0xfa05e1;
@@ -79,8 +73,8 @@ spotLight.penumbra = .3
 spotLight.decay = 2
 spotLight.position.set( 0, height / 2, 0 )
 spotLight.castShadow = true
-// spotLight.shadowMapWidth = 2048
-// spotLight.shadowMapHeight = 2048
+// spotLight.shadowMapWidth = 1024
+// spotLight.shadowMapHeight = 1024
 // //  solves the shadow artifacts of the spotLight
 spotLight.shadow.bias = .001
 spotLight.shadow.normalBias = .01
@@ -93,8 +87,8 @@ spotLight2.penumbra = .3
 spotLight2.decay = .2
 spotLight2.position.set( 0,0,0 )
 spotLight2.castShadow = true
-// spotLight2.shadowMapWidth = 2048
-// spotLight2.shadowMapHeight = 2048
+// spotLight2.shadowMapWidth = 1024
+// spotLight2.shadowMapHeight = 1024
 // //  solves the shadow artifacts of the spotlight 2
 spotLight2.shadow.bias = .001
 spotLight2.shadow.normalBias = .01
@@ -242,13 +236,10 @@ class DragControls{
     
         if( ( intersects.length ) > 0 && ( intersects[ 0 ].object.userData.drag )){
             intersects[ 0 ].object.draggable = true
-
-            // console.log( "intersects point: " + intersects[ 0 ].object.point )
     
             this.draggable = intersects[ 0 ].object
             console.log( this.draggable.userData.name )
         }
-        // console.log( "mouseX: " + this.mouseX + ", mouseY: " + this.mouseY )
     }
     
     onMouseMove( event ){
@@ -295,36 +286,6 @@ class DragControls{
                         this.draggable.position.x = intersections[ i ].point.x
                         this.draggable.position.z = intersections[ i ].point.z
                     }
-    
-                    // if( this.draggable.userData.light ){
-    
-                    //     if( intersections[ i ].object.userData.back ){
-    
-                    //         this.draggable.position.x = intersections[ i ].point.x
-                    //         this.draggable.position.y = intersections[ i ].point.y
-                    //     }
-    
-                    //     else if( intersections[ i ].object.userData.front ){
-    
-                    //         this.draggable.position.x = intersections[ i ].point.x
-                    //         this.draggable.position.y = intersections[ i ].point.y 
-                    //     }
-                    //     else if( intersections[ i ].object.userData.left ){
-    
-                    //         this.draggable.position.z = intersections[ i ].point.z
-                    //         this.draggable.position.y = intersections[ i ].point.y                         
-                    //     }
-                    //     else if( intersections[ i ].object.userData.right ){
-    
-                    //         this.draggable.position.z = intersections[ i ].point.z
-                    //         this.draggable.position.y = intersections[ i ].point.y                         
-                    //     }
-                    //     else if( intersections[ i ].object.userData.top ){
-    
-                    //         this.draggable.position.x = intersections[ i ].point.x
-                    //         this.draggable.position.z = intersections[ i ].point.z                     
-                    //     }
-                    // }
                 }
             }
         }   
@@ -422,8 +383,6 @@ class RotationControls{
             this.rotatable = intersects[ 0 ].object
             console.log( this.rotatable.userData.name )
         }
-
-        // console.log( "mouseX: " + this.mouseX + ", mouseY: " + this.mouseY )
     }
     
     onMouseMove( event ){
@@ -547,7 +506,6 @@ class Roundtable{
         this.camAngle = .0
         this.camX = .0
         this.camZ = .0
-        this.count = 0
     }
 
     activate(){
@@ -566,8 +524,6 @@ class Roundtable{
 
     startDrag( event ){
 
-        this.count++
-        // this.console.log( this.count )
         this.dragBool = true
         this.mousePos = event.screenX
         this.camX = camera.position.x
@@ -580,12 +536,9 @@ class Roundtable{
 
             this.mouseX = ( event.screenX - this.mousePos )
 
-            // console.log( "camX: " + this.camX + ", camZ: " + this.camZ + ", mouseX: " + this.mouseX )
-
             camera.position.x = this.camX * Math.cos( ( 3 * this.mouseX ) / window.innerWidth ) - this.camZ * Math.sin( ( 3 * this.mouseX ) / window.innerWidth )
             camera.position.z = this.camX * Math.sin( ( 3 * this.mouseX ) / window.innerWidth ) + this.camZ * Math.cos( ( 3 * this.mouseX ) / window.innerWidth )
 
-            // camera.lookAt( 0, 0, 0 )
             this.update
 
         }
@@ -692,8 +645,6 @@ class FirstPerson{
 
         this.keyMove = function( event ){
 
-            // console.log( "before keyMove: " + this.moveForward )
-
             switch( event.key ){
     
                 case 'w':
@@ -712,7 +663,6 @@ class FirstPerson{
                     this.moveRight = true
                     break
             }
-            // console.log( "after keyMove: " + this.moveForward )
         }
 
         this.keyStop = function( event ){
@@ -737,7 +687,6 @@ class FirstPerson{
                     this.moveRight = false
                     break
             }
-            // console.log( "after keyStop: " + this.moveForward )
         }
 
 // I would've narrowed the update function down, especially the clamp process but javascript won't let me call a this.function of the own object
@@ -920,12 +869,10 @@ scene.add( target1 )
 
 const lightCone = new THREE.Mesh ( cone, spotLightMaterial1 )
 lightCone.position.set( .45, height/2, 0 )
-// lightCone.rotation.z = - ( Math.PI / 4 )
 spotLight.parent = lightCone
 lightCone.userData.name = "Light 1"
 lightCone.userData.drag = true
 lightCone.userData.rot = true
-// lightCone.userData.light = true
 lightCone.userData.topLight = true
 lightCone.userData.child = spotLight
 lightCone.userData.target = target1
@@ -943,12 +890,10 @@ spotLightMaterial1.emissiveIntensity = 1.0
 
 const lightCone2 = new THREE.Mesh ( cone2, spotLightMaterial2 )
 lightCone2.position.set( 0, .2, .45 )
-// lightCone2.rotation.z = - ( Math.PI / 4 )
 spotLight2.parent = lightCone2
 lightCone2.userData.name = "Light 2"
 lightCone2.userData.drag = true
 lightCone2.userData.rot = true
-lightCone2.userData.light = true
 lightCone2.userData.topLight = true
 lightCone2.userData.target = target2
 lightCone2.userData.child = spotLight2
@@ -970,6 +915,50 @@ window.addEventListener('resize', () =>
     renderer.setSize(sizes.width, sizes.height)
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 })
+
+// Export essential elements of scene as JSON file
+
+const m = new THREE.Matrix4()
+
+m.compose( cube.mesh.position, cube.mesh.quaternion, cube.mesh.scale )
+
+console.log( JSON.stringify( m ) )
+
+m.compose( spotLight.position, spotLight.quaternion, spotLight.scale )
+
+console.log( JSON.stringify( m ) )
+
+function exportScene( lightArray, camera, wallArray, glbArray ){
+
+    const matrix = new THREE.Matrix4()
+    const mArray = []
+
+    var json = "{ Lamp:{["
+
+    for( let i = 0; i < lightArray.length; i++ ){
+
+        matrix.compose( lightArray[ i ].position, lightArray[ i ].quaternion, lightArray[ i ].scale )
+        mArray = matrix.elements
+
+        for( let j = 0; j < mArray.length; j++ ){
+
+            if( ( j + 1 ) % 4 ){
+
+                json += mArray[ j ] + "]["
+            }
+
+            else if( ( j + 1 ) == mArray.length ){
+
+                json += mArray[ j ] + "]"
+            }
+
+            else{
+
+                json += mArray[ j ] + ","
+            }
+        }
+    }
+}
 
 /**
  * Animate

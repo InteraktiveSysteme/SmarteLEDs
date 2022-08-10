@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Index{% endblock %}
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static',filename='/css/index_style.css') }}">
+{% endblock %}
+{% block content %}
+<h1 style="margin-bottom:30px; font-family:Monospace; hyphens: auto; color:#000000;text-align: center">You would like to
+    Simulate your lamp?<br></h1>
+<h2 style="margin-bottom:30px; font-family:Monospace; hyphens: auto; color:#000000;text-align: center">First we need
+    some informations about your room!<br></h2>
+<div class="container-md">
+    <div class="row justify-content-center">
+        <div class="col-5">
+            <form action="#" method="POST" enctype="multipart/form-data">
+                {{form.hidden_tag()}}
+                <div style="margin-bottom: 30px" class="input-group mb-3">
+                    <span class="input-group-text">Width</span>
+                    {{form.width(class="form-control",id="width", onkeyup="dun1();")}}
+                    <span class="input-group-text">Meter</span>
+                </div>
+                <div style="margin-bottom: 30px" class="input-group mb-3">
+                    <span class="input-group-text">Height</span>
+                    {{form.height(class="form-control",id="height", onkeyup="dun1();")}}
+                    <span class="input-group-text">Meter</span>
+                </div>
+
+                <div style="margin-bottom: 30px" class="input-group mb-3">
+                    <span class="input-group-text">Depth</span>
+                    {{form.depth(class="form-control",id="depth", onkeyup="dun1();")}}
+                    <span class="input-group-text">Meter</span>
+                </div>
+                <div style="margin-top: 30 px">
+                    <div class="d-grid gap-2">
+                        {{form.submit(class="btn btn-outline-primary")}}
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}

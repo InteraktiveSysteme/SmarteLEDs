@@ -14,18 +14,20 @@
                 Register<br></h1>
 
             <form action="register" method="POST" enctype="multipart/form-data">
-
-                <div class="input-group mb-3">
-                    <span class="input-group-text">Username</span>
-                    {{form.name(type="text", class="form-control", id="text")}}
+                {{form.hidden_tag()}}
+                <div class="form-floating mb-3">
+                    {{form.name(type="text", class="form-control", id="adress", placeholder="Adress")}}
+                    <label for="adress">Username</label>
                 </div>
-                <div class="input-group mb-3">
-                    <span class="input-group-text">Password</span>
-                    {{form.password(type="text", class="form-control", id="text")}}
+                <div class="form-floating mb-3">
+                    {{form.password(type="text", class="form-control", id="adress", placeholder="Adress")}}
+                    <label for="adress">Password</label>
                 </div>
-                <div class="d-grid gap-2">
-                    {{form.submit(class="btn btn-outline-primary")}}
-
+                
+                <div style="margin-top: 30 px">
+                    <div class="d-grid gap-2">
+                        {{form.submit(class="btn btn-outline-primary")}}
+                    </div>
                 </div>
 
             </form>

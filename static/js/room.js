@@ -78,6 +78,7 @@ spotLight.castShadow = true
 // //  solves the shadow artifacts of the spotLight
 spotLight.shadow.bias = .001
 spotLight.shadow.normalBias = .01
+spotLight.userData.type = "top light"
 scene.add( spotLight )
 
 // Spotlight 2
@@ -85,13 +86,14 @@ const spotColor2 = 0x10efe4;
 const spotLight2 = new THREE.SpotLight( spotColor2, 0.7, 8 )
 spotLight2.penumbra = .3
 spotLight2.decay = .2
-spotLight2.position.set( 0,0,0 )
+spotLight2.position.set( - .3,0,0 )
 spotLight2.castShadow = true
 // spotLight2.shadowMapWidth = 1024
 // spotLight2.shadowMapHeight = 1024
 // //  solves the shadow artifacts of the spotlight 2
 spotLight2.shadow.bias = .001
 spotLight2.shadow.normalBias = .01
+spotLight2.userData.type = "top light"
 scene.add( spotLight2 )
 
 /**
@@ -753,6 +755,8 @@ class FirstPerson{
         this.activate()
     }
 }
+// Array for testing export function
+var wallArray = []
 
 function WallSetup( type, geo, material ){
 
@@ -789,7 +793,7 @@ function WallSetup( type, geo, material ){
     }
     else if( type.localeCompare( "bottom" ) == 0 ){
 
-        this.type = type
+        // this.type = type
         plane.rotation.x = - ( Math.PI / 2 )
         plane.position.y = - ( height / 2 )
         plane.userData.bottom = true
@@ -798,11 +802,7 @@ function WallSetup( type, geo, material ){
     plane.receiveShadow = true
     plane.userData.drag = false
     room.add( plane )
-}
-
-function exportJSON( width, height, depth, objects, camera ){
-
-    
+    wallArray.push( plane )
 }
 
 // instantiating the state and drag controls
@@ -820,8 +820,6 @@ WallSetup( "top", topBottomGeo, materialOneSide )
 const bottomPlane = WallSetup( "bottom", topBottomGeo, materialOneSide )
 
 scene.add( room )
-
-// Mesh creator class --> ToDo
 
 class MeshCreator{
 
@@ -870,6 +868,7 @@ scene.add( target1 )
 const lightCone = new THREE.Mesh ( cone, spotLightMaterial1 )
 lightCone.position.set( .45, height/2, 0 )
 spotLight.parent = lightCone
+spotLight.userData.object = lightCone
 lightCone.userData.name = "Light 1"
 lightCone.userData.drag = true
 lightCone.userData.rot = true
@@ -889,8 +888,9 @@ scene.add( target2 )
 spotLightMaterial1.emissiveIntensity = 1.0
 
 const lightCone2 = new THREE.Mesh ( cone2, spotLightMaterial2 )
-lightCone2.position.set( 0, .2, .45 )
+lightCone2.position.set( 0, height/2, .45 )
 spotLight2.parent = lightCone2
+spotLight2.userData.object = lightCone2
 lightCone2.userData.name = "Light 2"
 lightCone2.userData.drag = true
 lightCone2.userData.rot = true
@@ -916,49 +916,367 @@ window.addEventListener('resize', () =>
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 })
 
-// Export essential elements of scene as JSON file
+// Export essential elements of scene as JSON file, Version 1 uses for each object a different name
 
-const m = new THREE.Matrix4()
+// function exportScene( lightArray , camera, wallArray, glbArray ){
 
-m.compose( cube.mesh.position, cube.mesh.quaternion, cube.mesh.scale )
+//     const matrix = new THREE.Matrix4()
 
-console.log( JSON.stringify( m ) )
+//     // for loop for lightArray
+//     var json = "{LAMP0:{"
 
-m.compose( spotLight.position, spotLight.quaternion, spotLight.scale )
+//     for( let i = 0; i < lightArray.length; i++ ){
 
-console.log( JSON.stringify( m ) )
+//         lightArray[ i ].position.set( lightArray[ i ].userData.object.position.x, lightArray[ i ].userData.object.position.y, lightArray[ i ].userData.object.position.z )
 
-function exportScene( lightArray, camera, wallArray, glbArray ){
+//         matrix.compose( lightArray[ i ].position, lightArray[ i ].quaternion, lightArray[ i ].scale )
+//         let mArray = matrix.elements
+
+//         json += "type:" + lightArray[ i ].userData.type + ","
+//         json+= "angle:" + lightArray[ i ].angle + ",matrix:[["
+
+//         for( let j = 0; j < mArray.length; j++ ){
+
+//             if( ( ( i + 1 ) == lightArray.length ) && ( ( j + 1 ) % 16 == 0 ) ){
+
+//                 json += mArray[ j ] + "]]},"
+//             }
+
+//             else if( ( j + 1 ) % 16 == 0 ){
+
+//                 json += mArray[ j ] + "]]},LAMP" + ( i + 1 ) + ":{"
+//             }
+
+//             else if( ( ( j + 1 ) % 4 ) == 0 ){
+
+//                 if( ( j + 1 ) == mArray.length ){
+
+//                     json += mArray[ j ] + "]"
+//                 }
+
+//                 else{
+
+//                     json += mArray[ j ] + "],["
+//                 }
+//             }
+//             else{
+
+//                 json += mArray[ j ] + ","
+//             }
+//         }        
+//     }
+
+//     // for loop for camera matrix
+
+//     matrix.compose( camera.position, camera.quaternion, camera.scale )
+//     let cMatrix = matrix.elements    
+
+//     json += "CAMERA:{matrix:[["
+
+//     for( let i = 0; i < cMatrix.length; i++ ){
+
+//         if( ( i + 1 ) % 16 == 0 ){
+
+//             json += cMatrix[ i ] + "]]},"
+//         }
+
+//         else if( ( ( i + 1 ) % 4 ) == 0 ){
+
+//             if( ( i + 1 ) == cMatrix.length ){
+
+//                 json += cMatrix[ i ] + "]"
+//             }
+
+//             else{
+
+//                 json += cMatrix[ i ] + "],["
+//             }
+//         }
+//         else{
+
+//             json += cMatrix[ i ] + ","
+//         }
+//     }
+
+//     // for loop for wallArray
+
+//     json += "WALL0:{matrix:[["
+
+//     for( let i = 0; i < wallArray.length; i++ ){
+
+//         matrix.compose( wallArray[ i ].position, wallArray[ i ].quaternion, wallArray[ i ].scale )
+//         let mArray = matrix.elements
+
+//         for( let j = 0; j < mArray.length; j++ ){
+
+//             if( ( ( i + 1 ) == wallArray.length ) && ( ( j + 1 ) % 16 == 0 ) ){
+
+//                 json += mArray[ j ] + "]]},"
+//             }
+
+//             else if( ( j + 1 ) % 16 == 0 ){
+
+//                 json += mArray[ j ] + "]]},WALL" + ( i + 1 ) +  ":{matrix:[["
+//             }
+
+//             else if( ( ( j + 1 ) % 4 ) == 0 ){
+
+//                 if( ( j + 1 ) == mArray.length ){
+
+//                     json += mArray[ j ] + "]"
+//                 }
+
+//                 else{
+
+//                     json += mArray[ j ] + "],["
+//                 }
+//             }
+//             else{
+
+//                 json += mArray[ j ] + ","
+//             }
+//         }        
+//     }
+
+//     // for loop for glbArray
+
+//     for( let i = 0; i < glbArray.length; i++ ){
+
+//         matrix.compose( glbArray[ i ].position, glbArray[ i ].quaternion, glbArray[ i ].scale )
+//         let mArray = matrix.elements
+
+//         json += "GLB" + i + ":{matrix:[["
+
+//         for( let j = 0; j < mArray.length; j++ ){
+
+//             if( ( j + 1 ) % 16 == 0 ){
+
+//                 json += mArray[ j ] + "]],"
+//             }
+
+//             else if( ( ( j + 1 ) % 4 ) == 0 ){
+
+//                 if( ( j + 1 ) == mArray.length ){
+
+//                     json += mArray[ j ] + "]"
+//                 }
+
+//                 else{
+
+//                     json += mArray[ j ] + "],["
+//                 }
+//             }
+//             else{
+
+//                 json += mArray[ j ] + ","
+//             }
+
+//             console.log( json )
+//         }        
+
+//         if( ( i + 1 ) == glbArray.length ){
+
+//             json += "path:" + glbArray[ i ].userData.path + "}}"
+//         }
+//         else{
+
+//             json += "path:" + glbArray[ i ].userData.path + "},"
+//         }
+//     }
+
+//     return json
+// }
+
+// Export essential elements of scene as JSON file, Version 2 uses lists with objects inside
+
+function exportScene( lightArray , camera, wallArray, glbArray ){
 
     const matrix = new THREE.Matrix4()
-    const mArray = []
 
-    var json = "{ Lamp:{["
+    // for loop for lightArray
+    var json = "{\"Lamp\":[{"
 
     for( let i = 0; i < lightArray.length; i++ ){
 
+        lightArray[ i ].position.set( lightArray[ i ].userData.object.position.x, lightArray[ i ].userData.object.position.y, lightArray[ i ].userData.object.position.z )
+
         matrix.compose( lightArray[ i ].position, lightArray[ i ].quaternion, lightArray[ i ].scale )
-        mArray = matrix.elements
+        let mArray = matrix.elements
+
+        json += "\"type\":" + "\"" + lightArray[ i ].userData.type + "\","
+        json+= "\"angle\":" + lightArray[ i ].angle + ",\"matrix\":[["
 
         for( let j = 0; j < mArray.length; j++ ){
 
-            if( ( j + 1 ) % 4 ){
+            if( ( ( i + 1 ) == lightArray.length ) && ( ( j + 1 ) % 16 == 0 ) ){
 
-                json += mArray[ j ] + "]["
+                json += mArray[ j ] + "]]}],"
             }
 
-            else if( ( j + 1 ) == mArray.length ){
+            else if( ( j + 1 ) % 16 == 0 ){
 
-                json += mArray[ j ] + "]"
+                json += mArray[ j ] + "]]},{"
             }
 
+            else if( ( ( j + 1 ) % 4 ) == 0 ){
+
+                if( ( j + 1 ) == mArray.length ){
+
+                    json += mArray[ j ] + "]"
+                }
+
+                else{
+
+                    json += mArray[ j ] + "],["
+                }
+            }
             else{
 
                 json += mArray[ j ] + ","
             }
+        }        
+    }
+
+    // for loop for camera matrix
+
+    matrix.compose( camera.position, camera.quaternion, camera.scale )
+    let cMatrix = matrix.elements    
+
+    json += "\"CAMERA\":{\"matrix\":[["
+
+    for( let i = 0; i < cMatrix.length; i++ ){
+
+        if( ( i + 1 ) % 16 == 0 ){
+
+            json += cMatrix[ i ] + "]]},"
+        }
+
+        else if( ( ( i + 1 ) % 4 ) == 0 ){
+
+            if( ( i + 1 ) == cMatrix.length ){
+
+                json += cMatrix[ i ] + "]"
+            }
+
+            else{
+
+                json += cMatrix[ i ] + "],["
+            }
+        }
+        else{
+
+            json += cMatrix[ i ] + ","
         }
     }
+
+    // for loop for wallArray
+
+    json += "\"WALL\":[{\"matrix\":[["
+
+    for( let i = 0; i < wallArray.length; i++ ){
+
+        matrix.compose( wallArray[ i ].position, wallArray[ i ].quaternion, wallArray[ i ].scale )
+        let mArray = matrix.elements
+
+        for( let j = 0; j < mArray.length; j++ ){
+
+            if( ( ( i + 1 ) == wallArray.length ) && ( ( j + 1 ) % 16 == 0 ) ){
+
+                json += mArray[ j ] + "]]}],"
+            }
+
+            else if( ( j + 1 ) % 16 == 0 ){
+
+                json += mArray[ j ] + "]]},{\"matrix\":[["
+            }
+
+            else if( ( ( j + 1 ) % 4 ) == 0 ){
+
+                if( ( j + 1 ) == mArray.length ){
+
+                    json += mArray[ j ] + "]"
+                }
+
+                else{
+
+                    json += mArray[ j ] + "],["
+                }
+            }
+            else{
+
+                json += mArray[ j ] + ","
+            }
+        }        
+    }
+
+    // for loop for glbArray
+
+    json += "\"GLB\":["
+
+    for( let i = 0; i < glbArray.length; i++ ){
+
+        matrix.compose( glbArray[ i ].position, glbArray[ i ].quaternion, glbArray[ i ].scale )
+        let mArray = matrix.elements
+
+        json += "{\"matrix\":[["
+
+        for( let j = 0; j < mArray.length; j++ ){
+
+            if( ( j + 1 ) % 16 == 0 ){
+
+                json += mArray[ j ] + "]],"
+            }
+
+            else if( ( ( j + 1 ) % 4 ) == 0 ){
+
+                if( ( j + 1 ) == mArray.length ){
+
+                    json += mArray[ j ] + "]"
+                }
+
+                else{
+
+                    json += mArray[ j ] + "],["
+                }
+            }
+            else{
+
+                json += mArray[ j ] + ","
+            }
+        }        
+
+        if( ( i + 1 ) == glbArray.length ){
+
+            json += "\"path\":" + "\"" + glbArray[ i ].userData.path + "\"" + "}]}"
+        }
+        else{
+
+            json += "\"path\":" + "\"" + glbArray[ i ].userData.path + "\"" + "},"
+        }
+    }
+
+    return json
 }
+
+const cube3 = new MeshCreator( cubeGeo, material2, "Cube3", true, true )
+cube3.mesh.userData.path = "/PathToGLB1"
+cube3.mesh.position.set( 0, 2, 1 )
+const cube4 = new MeshCreator( cubeGeo2, material3, "Cube 4", true, true )
+cube4.mesh.userData.path = "/PathToGLB2"
+cube4.mesh.position.set( 0, 1, 1 )
+
+// spotLight.position.set( lightCone.position.x, lightCone.position.y, lightCone.position.z )
+// spotLight2.position.set( lightCone2.position.x, lightCone2.position.y, lightCone2.position.z )
+
+const lightRay = [ spotLight, spotLight2 ]
+const glbRay = [ cube3.mesh, cube4.mesh ]
+const jString = exportScene( lightRay, camera, wallArray, glbRay )
+console.log( jString )
+
+const jasonTheObject = JSON.parse( jString )
+
+console.log( spotLight2.position )
+console.log( jasonTheObject )
 
 /**
  * Animate

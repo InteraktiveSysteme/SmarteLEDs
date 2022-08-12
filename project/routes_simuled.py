@@ -1,5 +1,5 @@
 import re
-from app import *
+from project import *
 from flask import Flask, render_template, request, flash, url_for, redirect, make_response, send_from_directory
 from flask import render_template
 from werkzeug.security import generate_password_hash, check_password_hash

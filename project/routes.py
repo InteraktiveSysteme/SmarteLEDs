@@ -1,5 +1,4 @@
-from app import app
-from routes_simuled import *
+from project.routes_simuled import *
 
 app.route("/child", methods=['GET'])(child)
 app.route("/", methods=['GET'])(index)
@@ -22,4 +21,3 @@ app.route("/addLamp", methods=['GET','POST'])(addLamp)
 app.route("/lamp/<id>/delete", methods=['GET'])(loeschen)
 app.route("/User/<id>/delete", methods=['GET'])(userLoeschen)
 app.route("/shopLamp/<id>", methods=['GET','POST'])(shopLamp)
-

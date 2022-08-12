@@ -86,4 +86,5 @@ if __name__ == '__main__':
     print(__name__)
     print("*******************************************+")
     app.run()
-import routes
+
+import project.routes

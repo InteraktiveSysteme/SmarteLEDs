@@ -11,6 +11,7 @@ Don't push the temporary merge branch upstream and delete on your local machine 
 ## Has to be deleted before merge
 services/simuled/manage.py: keep version of main (Delete on temporary merge branch)
 services/simuled/project/migrations
+services/simuled/project/SQLTerror.db
 
 ## Easy merge (independent from docker container / db configuration)
 services/simuled/requirements.txt: Don't delete psycopg and gunicorn (needed in docker)

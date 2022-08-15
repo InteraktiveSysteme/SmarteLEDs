@@ -18,10 +18,10 @@
         "drag": "{{ url_for('static', filename='/js/DragControls.js' ) }}"
       }
     </script -->
-    <!-- <script type="module" src="/js/three.module.js"></script> -->
-    <!-- <script type="module" src="/js/GLTFLoader.js"></script> -->
-    <!-- <script type="module" src="/js/DragControls.js"></script> -->
-    <!-- <script type="module" src="https://cdn.jsdelivr.net/npm/lil-gui@0.16"></script> -->
+    <script src="{{ url_for('static', filename='/js/three.js' ) }}"></script>
+    <script src="{{ url_for('static', filename='/js/GLTFLoader.js' ) }}"></script>
+    <script src="{{ url_for('static', filename='/js/DragControls.js' ) }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lil-gui@0.16"></script>
     <!--script>
       var GUI = lil.GUI;
     </script-->
@@ -60,5 +60,5 @@
   </center>
 
     <!--p id="screen-log" style="color:white"></p-->
-    <script type="module" src="/js/room.js"></script>
+    <script src="{{ url_for('static', filename='/js/room.js' ) }}"></script>
 {% endblock %}

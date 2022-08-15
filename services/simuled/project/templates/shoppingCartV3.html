@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+{% block title %}Index{% endblock %}
+{% block head %}
+{{ super() }}
+
+
+{% endblock %}
+{% block content %}
+
+<body>
+
+
+  <div class="container">
+    <div class="row">
+
+      <div class="col-9">
+        <section class="h-100, bg-light">
+          <div class="container h-100 py-5">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+              <div class="col-10">
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                  <h1 style="font-family:Monospace; hyphens: auto; color:#D06ED4;text-align: center">Shopping Card<br>
+                  </h1>
+                </div>
+                {% for lamp in lamps %}
+                <div class="card rounded-3 mb-4 border-primary">
+                  <div class="card-body p-4">
+                    <div class="row d-flex justify-content-between align-items-center">
+                      <div class="col-md-2 col-lg-2 col-xl-2">
+                        <img src="/static/lamps/{{ lamp.imgName }}" class="img-fluid rounded-start" alt="...">
+                      </div>
+                      <div class="col-md-3 col-lg-3 col-xl-3">
+                        <p class="lead fw-normal mb-2">{{lamp.lampName}}</p>
+                        <p><span class="text-muted">{{lamp.lampText}}</p>
+                      </div>
+                      <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
+
+
+                      </div>
+                      <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                        <h5 onload="preis(5)" class="mb-0">{{lamp.lampPrice}} $</h5>
+                      </div>
+                      <div class="col-md-1 col-lg-1 col-xl-1 text-end">
+                        <a href="#!" class="text-danger"><i class="fas fa-trash fa-lg"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {% endfor %}
+
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+      <div class="col-2 ">
+        <div class="card border-primary " style="width: 18rem;">
+          <div class="card-body ">
+            <h5 class="card-title">Shopping Cart</h5>
+
+            {% for lamp in lamps %}
+            <div class="d-flex justify-content-between">
+              <div>
+                <big id="amount{{ lamp.lampName }}" style="color: #359DA3"></bigstyle> </big>
+                <big style="color: #359DA3"></bigstyle> {{ lamp.lampName }}:</big>
+              </div>
+              <div>
+                <big> {{ lamp.lampPrice }} $</big><br />
+              </div>
+            </div>
+
+
+            {% endfor %}
+            <br />
+            <div class="d-flex justify-content-between">
+              <div>
+
+                <big style="color: #359DA3"></bigstyle> Summe</big>
+              </div>
+              <div>
+                <big> {{ summe }} $</big><br />
+              </div>
+            </div>
+            <div class="d-grid gap-2">
+              {% if current_user.is_authenticated %}
+              <button class="btn  btn-outline-warning" type="button" data-bs-toggle="modal"
+                data-bs-target="#exampleModal">Check-out</button>
+              {% endif %}
+              {% if not current_user.is_authenticated %}
+              <button type="button" class="btn  btn-outline-warning" disabled>Log-in to Check-out</button>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Check-out</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+          <form action="#" method="POST" enctype="multipart/form-data">
+            {{form.hidden_tag()}}
+            <div class="row">
+              <div class="col">
+                
+                <div class="form-floating mb-3">
+                  {{form.firstName(type="text", class="form-control", id="firstName",  placeholder="firstName")}}
+                  <label for="firstName">First Name</label>
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-floating mb-3">
+                  {{form.lastName(type="text", class="form-control", id="firstName", placeholder="lastName")}}
+                  <label for="firstName">Last Name</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-floating mb-3">
+              {{form.country(type="text", class="form-control", id="country", placeholder="lastName")}}
+              <label for="country">County</label>
+            </div>
+            <div class="col">
+              <div class="form-floating mb-3">
+                {{form.adress(type="text", class="form-control", id="adress", placeholder="Adress")}}
+                <label for="adress">Adress</label>
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-floating mb-3">
+                {{form.postalCode(type="text", class="form-control", id="postalCode", placeholder="Postal Code")}}
+                <label for="postalCode">Postal Code</label>
+              </div>
+            </div>
+            <div id="smart-button-container">
+              <div style="text-align: center;">
+                <div id="paypal-button-container"></div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              
+              <div style="margin-top: 30 px">
+                <div class="d-grid gap-2">
+                  {{form.submit(class="btn btn-outline-primary")}}
+                </div>
+
+              </div>
+            </div>
+
+          </form>
+          <script src="https://www.paypal.com/sdk/js?client-id=sb&enable-funding=venmo&currency=EUR"
+            data-sdk-integration-source="button-factory"></script>
+          <script>
+            function initPayPalButton() {
+              paypal.Buttons({
+                style: {
+                  shape: 'rect',
+                  color: 'silver',
+                  layout: 'vertical',
+                  label: 'buynow',
+
+                },
+
+                createOrder: function (data, actions) {
+                  return actions.order.create({
+                    purchase_units: [{ "amount": { "currency_code": "EUR", "value": 1 } }]
+                  });
+                },
+
+                onApprove: function (data, actions) {
+                  return actions.order.capture().then(function (orderData) {
+
+                    // Full available details
+                    console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+
+                    // Show a success message within this page, e.g.
+                    const element = document.getElementById('paypal-button-container');
+                    element.innerHTML = '';
+                    element.innerHTML = '<h3>Thank you for your payment!</h3>';
+
+                    // Or go to another URL:  actions.redirect('thank_you.html');
+
+                  });
+                },
+
+                onError: function (err) {
+                  console.log(err);
+                }
+              }).render('#paypal-button-container');
+            }
+            initPayPalButton();
+          </script>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+</body>
+
+{% endblock %}

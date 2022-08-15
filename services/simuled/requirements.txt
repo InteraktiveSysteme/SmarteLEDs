@@ -1,7 +1,9 @@
 Flask
-Flask-Bootstrap
 Flask-SQLAlchemy
+psycopg2-binary
+Flask-Bootstrap
 Flask-Markdown
 Flask-Migrate
 Flask-Login
+gunicorn
 Flask-Wtf

@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% block title %}Index{% endblock %}
+{% block head %}
+{{ super() }}
+
+{% endblock %}
+{% block content %}
+
+<div class="container-md">
+
+    <div class="row justify-content-center">
+        <div class="col-6  ">
+            <h1 style="margin-bottom:30px; font-family:Monospace; hyphens: auto; color:#D06ED4;text-align: center">Add a new Lamp!<br></h1>
+
+            <form action="#" method="POST" enctype="multipart/form-data">
+                <div style="margin-bottom: 30px" class="form-group">
+                    <input name="name" type="text" class="form-control" id="name" aria-describedby="emailHelp"
+                           placeholder="Input Lamp Name">
+                </div>
+                <div style="margin-bottom: 30px" class="input-group">
+
+                    <span class="input-group-text">Short Description</span>
+
+                    <input name="shorttext" id="text" class="textarea form-control" aria-label="With textarea"></input>
+                </div>
+                <div style="margin-bottom: 30px" class="input-group">
+
+                    <span class="input-group-text">Long Description</span>
+
+                    <input name="longtext" id="text" class="textarea form-control" aria-label="With textarea"></input>
+                </div>
+                <div style="margin-bottom: 30px" class="input-group mb-3">
+                    <span class="input-group-text">Price</span>
+                    <input name="price" type="text" id="price" class="form-control">
+                    <span class="input-group-text">$</span>
+                </div>
+                
+
+                <div style="margin-bottom: 30px" class="form-group" style="padding = 10px">
+                    <label for="exampleFormControlFile1">Upload an Image</label>
+                    <input name="img" type="file" class="form-control-file" id="exampleFormControlFile1">
+                </div>
+                <div style="margin-bottom: 30px" class="form-group" style="padding = 10px">
+                    <label for="exampleFormControlFile1">Upload an GLTF (optional)</label>
+                    <input name="gltf" type="file" class="form-control-file" id="gltf">
+                </div>
+                <div style="margin-top: 30 px">
+                    <button type="submit" class="btn btn-outline-primary btn-block">Submit
+                    </button>
+                </div>
+        </div>
+        </form>
+        <div class="col-2  ">
+            <div class="col-12 col-md-6 col-lg-3 g-2">
+                <div class="card mb-4 p-3  border-danger" style="width: 18rem;">
+                    <img id="imgOut" class="card-img-top" src="/static/lamps/"
+                         onerror="/static/images/inApp/8974589526046.jpg" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title" id="nameOut">#TODO</h5>
+                        <p class="card-text" id="textout">#TODO<br/></p>
+
+                    </div>
+                    <div class="card-footer">
+                        <big id="priceOut" style="color:#359DA3" class="text-mut">#TODO </big>  <big style="color:#359DA3" class="text-mut">$</big>
+                    </div>
+                </div>
+            </div>
+            <button id="showbtn"
+                    class="btn btn-outline-primary btn-block">Show
+            </button>
+            <script>
+                const title = document.getElementById('name');
+                const text = document.getElementById('text');
+                const price = document.getElementById('price');
+                const img = document.getElementById('exampleFormControlFile1');
+                const btn = document.getElementById('showbtn');
+                const titleout = document.getElementById('nameOut');
+                const textout = document.getElementById('textout');
+                const priceout = document.getElementById('priceOut');
+                const imgout = document.getElementById('imgOut');
+
+                function dun1(){
+                    titleout.innerHTML = title.value;
+                    textout.innerHTML = text.value;
+                    priceout.innerHTML = price.value;
+
+                }
+                btn.addEventListener('click',dun1);
+                btn.addEventListener('click',function(){
+                    const file =img.files[0];
+                    if(file){
+                        const reader = new FileReader();
+                        reader.onload = function(){
+                            const result = reader.result;
+                            imgout.src = result;
+                        }
+                        reader.readAsDataURL(file);
+                    }
+                });
+            </script>
+        </div>
+    </div>
+</div>
+
+</div>
+{% endblock %}

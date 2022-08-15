@@ -148,25 +148,26 @@ def lamp(id):
     # funktion erstellt dirliste mit allen lampennamen
     lamp = Lamp.query.get_or_404(id)
 
-    entries = os.listdir('static/lamps')
+    #entries = os.listdir(app.config['UPLOAD_FOLDER'])
     lamplist = []
-    for e in entries:
-        if re.match(".*\.md", e):
-            lamplist.append(re.sub("\..*", "", e))
+    #for e in entries:
+        #if re.match(".*\.md", e):
+            #lamplist.append(re.sub("\..*", "", e))
 
     # funktion extrahiert lampe mit id {id} aus list
-    print(lamplist[int(id)])
+    #print(lamplist[int(id)])
     # funktion erstellt liste mit bildern zugehoerig zu lampe {id}
-    pat = "^{a1}.*\.jpg".format(a1=lamplist[int(id)])
-    imglist = []
-    for e in entries:
-        if re.match(pat, e):
-            imglist.append(e)
+    #pat = "^{a1}.*\.jpg".format(a1=lamplist[int(id)])
+    #imglist = []
+    #for e in entries:
+        #if re.match(pat, e):
+            #imglist.append(e)
 
-    print(imglist)
+    #print(imglist)
 
     # funktion laedt lampenbeschreibung
-    return render_template('lamp.html', description="{a1}.md".format(a1=lamplist[int(id)]), imglist=imglist, lamp=lamp,
+    #return render_template('lamp.html', description="{a1}.md".format(a1=lamplist[int(id)]), imglist=imglist, lamp=lamp,
+    return render_template('lamp.html', description="", imglist="", lamp=lamp,
                            name=lamp.lampName, text=lamp.lampText, price=lamp.lampPrice, img=lamp.imgName,
                            longText=lamp.lampLongText)
 

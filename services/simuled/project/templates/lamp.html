@@ -36,7 +36,7 @@
 
                 <div class="carousel-inner">
                     <div class="carousel-item active">
-                        <img class="d-block w-100" src="/static/lamps/{{ lamp.imgName }}" alt="First slide">
+                        <img class="d-block w-100" src="{{ url_for('static', filename='lamps/' + lamp.imgName) }}" alt="First slide">
 
                     </div>
                     {% for img in imglist %}

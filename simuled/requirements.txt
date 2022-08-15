@@ -1,6 +1,7 @@
-Flask===2.1.2
+Flask
 Flask-Bootstrap
 Flask-SQLAlchemy
 Flask-Markdown
 Flask-Migrate
 Flask-Login
+Flask-Wtf

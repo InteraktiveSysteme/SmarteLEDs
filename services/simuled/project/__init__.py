@@ -9,12 +9,7 @@ import os
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.urandom(12)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///SQLTerror.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-app.config['SQLALCHEMY_ECHO'] = True
-UPLOAD_FOLDER = 'static/lamps'
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config.from_object("project.config.Config")
 Bootstrap(app)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)

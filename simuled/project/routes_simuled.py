@@ -1,5 +1,5 @@
 import re
-from app import *
+from project import *
 from flask import Flask, render_template, request, flash, url_for, redirect, make_response, send_from_directory
 from flask import render_template
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -8,14 +8,13 @@ import uuid as uuid
 import os
 import json
 from flask_login import *
-import forms
+from project import forms
 
 ##
 # @brief This function creates an Cart element for a specific lamp you want to shop
 # @param id is the lampID
 # ...
 # @return the HTML template
-
 
 def shopLamp(id):  # put application's code here
     if current_user.is_authenticated:

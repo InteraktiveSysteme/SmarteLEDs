@@ -1,4 +1,3 @@
-
 from ctypes import addressof
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
@@ -25,15 +24,11 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "index"
 
-
 @login_manager.user_loader
 def load_user(userID):
     return User.query.get(int(userID))
 
-
-
 db.create_all()
-
 
 class Cart(db.Model):
     cartID = db.Column(db.Integer(), primary_key=True)
@@ -107,4 +102,5 @@ if __name__ == '__main__':
     print(__name__)
     print("*******************************************+")
     app.run()
-import routes
+
+import project.routes

@@ -92,10 +92,9 @@ class Lamp(db.Model):
     def __repr__(self):
         return "<User'{}'>".format(self.lampName)
 
+import project.routes
 
 if __name__ == '__main__':
     print(__name__)
     print("*******************************************+")
     app.run()
-
-import project.routes

@@ -10,6 +10,7 @@ from werkzeug.middleware.proxy_fix import ProxyFix
 app = Flask(__name__)
 app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_host=1)
 app.config.from_object("project.config.Config")
+app.config['UPLOAD_FOLDER'] = os.path.join(app.root_path, 'static/lamps/')
 Bootstrap(app)
 db = SQLAlchemy(app)
 

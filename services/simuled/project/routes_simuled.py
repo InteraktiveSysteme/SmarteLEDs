@@ -203,7 +203,7 @@ def lamp(id):
     # funktion erstellt dirliste mit allen lampennamen
     lamp = Lamp.query.get_or_404(id)
 
-    entries = os.listdir('static/lamps')
+    entries = os.listdir(app.config['UPLOAD_FOLDER'])
     lamplist = []
     for e in entries:
         if re.match(".*\.md", e):

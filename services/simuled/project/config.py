@@ -7,4 +7,4 @@ class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     SQLALCHEMY_ECHO = True
     SECRET_KEY = os.urandom(12)
-    UPLOAD_FOLDER = 'static/lamps'
+    UPLOAD_FOLDER = 'project/static/lamps'

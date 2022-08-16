@@ -29,15 +29,16 @@
                 </div>
 
                 
-                <div class="form-floating mb-3">
-                    {{form.longText(type="textarea", class="form-control",placeholder="Leave a comment here", id="floatingTextarea2" )}}
+                <div class="form-floating">
+                    {{form.longText(type="textarea", class="form-control",placeholder="Leave a comment here", id="floatingTextarea2", )}}
                     <label for="floatingTextarea2">Long Description</label>
                   </div>
 
 
-                <div style="margin-bottom: 30px; " class="form-floating mb-3">
-                    {{form.price(class="form-control",id="price", placeholder="Leave a comment here", id="floatingTextarea2")}}
-                    <label for="floatingTextarea2">Price ($)</label>
+                <div style="margin-bottom: 30px" class="input-group mb-3">
+                    <span class="input-group-text">Price</span>
+                    {{form.price(class="form-control",id="price", onkeyup="dun1();")}}
+                    <span class="input-group-text">$</span>
                 </div>
 
                 <div class="row g-2">

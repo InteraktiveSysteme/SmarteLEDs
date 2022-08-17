@@ -56,7 +56,7 @@ def preSim():
         height = request.form["height"]
         depth = request.form["depth"]
 
-        return render_template('Simuled.html', width=width, height=height, depth=depth)
+        return render_template('simuled.html', width=width, height=height, depth=depth)
 
 ##
 # @brief This function handles the Shopping Cart logic

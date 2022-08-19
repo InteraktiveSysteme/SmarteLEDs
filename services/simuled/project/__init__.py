@@ -10,7 +10,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 app.config.from_object("project.config.Config")
-app.config['UPLOAD_FOLDER'] = os.path.join(app.root_path, '/static/lamps')
 Bootstrap(app)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)

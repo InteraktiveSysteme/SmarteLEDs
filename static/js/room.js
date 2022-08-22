@@ -78,7 +78,7 @@ spotLight.castShadow = true
 // //  solves the shadow artifacts of the spotLight
 spotLight.shadow.bias = .001
 spotLight.shadow.normalBias = .01
-spotLight.userData.type = "top light"
+spotLight.userData.type = "SPOT"
 scene.add( spotLight )
 
 // Spotlight 2
@@ -93,7 +93,7 @@ spotLight2.castShadow = true
 // //  solves the shadow artifacts of the spotlight 2
 spotLight2.shadow.bias = .001
 spotLight2.shadow.normalBias = .01
-spotLight2.userData.type = "top light"
+spotLight2.userData.type = "SPOT"
 scene.add( spotLight2 )
 
 /**
@@ -108,8 +108,16 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 renderer.shadowMap.enabled = true
 renderer.shadowMap.type = THREE.VSMShadowMap
 
+/**
+ * State class
+ * @brief object to instantiate camera mode and switching controls.
+ */
 class State{
 
+    /**
+     * creates a State object.
+     * @param {*} state 
+     */
     constructor( state ){
 
         this.controls = state
@@ -138,6 +146,9 @@ class State{
         controls.activate()
     }
 
+    /**
+     * @brief function is used for switching between rotation or dragging an object
+     */
     switchControls(){
 
         if( this.name.localeCompare( "drag" ) == 0 ){
@@ -162,6 +173,9 @@ class State{
         }
     }
 
+    /**
+     * @brief function is used for switching between ego-perspective and roundtable view and controls for camera
+     */
     switchPerspective(){
 
         if( this.perspective.name.localeCompare( "round" ) == 0 ){
@@ -189,15 +203,17 @@ class State{
             console.log( "Roundtable" )
         }
     }
-
-    get current(){
-
-        return this.controls
-    }
 }
 
+/**
+ * DragControls class
+ * @brief object to instantiate controls for dragging.
+ */
 class DragControls{
 
+    /**
+     * @brief creates an DragControls object.
+     */
     constructor(){
 
         this.mouseX = 0
@@ -206,6 +222,9 @@ class DragControls{
         this.name = "drag"
     }
 
+    /**
+     * @brief activates all EventListeners for DragControls.
+     */
     activate(){
 
         window.addEventListener( 'click', this.onClick )
@@ -214,6 +233,9 @@ class DragControls{
         window.addEventListener( 'mousemove', this.hoverObject )
     }
 
+    /**
+     * @brief removes all EventListeners for DragControls.
+     */
     deactivate(){
 
         window.removeEventListener( 'click', this.onClick )
@@ -222,6 +244,11 @@ class DragControls{
         window.removeEventListener( 'mousemove', this.hoverObject )
     }
 
+    /**
+     * @brief selects an object via raycasting and writes it in this.draggable.
+     * @param {click} event 
+     * @returns 
+     */
     onClick( event ){
 
         const raycaster = new THREE.Raycaster()
@@ -244,6 +271,10 @@ class DragControls{
         }
     }
     
+    /**
+     * @brief the x- and y-coordinates for the mouse are written  into this.mouseX and this.mouseY.
+     * @param {mousemove} event
+     */
     onMouseMove( event ){
 
         const sizes = {
@@ -257,6 +288,10 @@ class DragControls{
 
     // only functions when called in an event
 
+    /**
+     * @brief uses raycasting place selected object while the mouse moves.
+     * @param {mousemove} event 
+     */
     dragObject( event ){
     
         const raycaster = new THREE.Raycaster()
@@ -293,6 +328,10 @@ class DragControls{
         }   
     }
 
+    /**
+     * @brief hovering over an object with the cursor turns the object translucent.
+     * @param {mousemove} event 
+     */
     hoverObject( event ){
 
         let raycaster = new THREE.Raycaster()
@@ -334,8 +373,15 @@ class DragControls{
     }
 }
 
+/**
+ * RotationControls class
+ * @brief object to instantiate controls to rotate a mesh.
+ */
 class RotationControls{
 
+    /**
+     * @brief creates a RotationControls object.
+     */
     constructor(){
 
         this.mouseX = 0
@@ -346,6 +392,9 @@ class RotationControls{
         this.rotatable = new THREE.Object3D()
     }
 
+    /**
+     * @brief activates all EventListeners for RotationControls.
+     */
     activate(){
 
         window.addEventListener( 'click', this.onClick )
@@ -354,6 +403,9 @@ class RotationControls{
         window.addEventListener( 'mousemove', this.hoverObject )
     }
 
+    /**
+     * @brief removes all EventListeners for RotationControls.
+     */
     deactivate(){
 
         window.removeEventListener( 'click', this.onClick )
@@ -362,6 +414,11 @@ class RotationControls{
         window.removeEventListener( 'mousemove', this.hoverObject )
     }
     
+    /**
+     * @brief uses raycasting to select an object for rotation.
+     * @param {click} event 
+     * @returns 
+     */
     onClick( event ){
 
         const raycaster = new THREE.Raycaster()
@@ -387,6 +444,10 @@ class RotationControls{
         }
     }
     
+    /**
+     * @brief updates the x- and y-coordinates of the mouse.
+     * @param {mousemove} event 
+     */
     onMouseMove( event ){
 
         const sizes = {
@@ -398,6 +459,10 @@ class RotationControls{
         this.mouseY = - ( ( event.clientY - canvas.getBoundingClientRect().top ) / sizes.height ) * 2 + 1
     }
 
+    /**
+     * @brief if an object is selected, it can be rotated with moving the mouse in a horizontal motion.
+     * @param {mousemove} event 
+     */
     rotateObject( event ){
 
         if( this.rotatable != null ){
@@ -413,6 +478,10 @@ class RotationControls{
         }
     }
 
+    /**
+     * @brief hovering over an object with the cursor turns the object translucent.
+     * @param {mousemove} event 
+     */
     hoverObject( event ){
 
         let raycaster = new THREE.Raycaster()
@@ -454,25 +523,43 @@ class RotationControls{
     }
 }
 
+/**
+ * Controls class
+ * @brief object is used to switch between different control types.
+ */
 class Controls{
 
+    /**
+     * @brief creates a Controls object.
+     * @param {*} state 
+     */
     constructor( state ){
 
         this.state = state
     }
 
+    /**
+     * @brief adds all EventListeners for the Control class.
+     */
     activate(){
 
         window.addEventListener( 'keydown', this.switchControls )
         window.addEventListener( 'keydown', this.switchPerspective )
     }
 
+    /**
+     * @brief removes all EventListeners for the Control class.
+     */
     deactivate(){
 
         window.removeEventListener( 'keydown', this.switchControls )
         window.removeEventListener( 'keydown', this.switchPerspective )
     }
 
+    /**
+     * @brief switches between the rotation or dragging of an object.
+     * @param {keydown}
+     */
     switchControls( event ){
 
         if( event.key === 'c'){
@@ -481,6 +568,10 @@ class Controls{
         }
     }
     
+    /**
+     * @brief switches between Egoperspective- and Roundtable-mode.
+     * @param {keydown} event 
+     */
     switchPerspective( event ){
 
         if( event.key === 'q' ){
@@ -488,16 +579,17 @@ class Controls{
             this.state.switchPerspective()
         }
     }
-
-    moveMouse( event ){
-
-        let mouseX = event.pageX - ( window.innerWidth / 2 )
-        let mouseY = event.pageY - ( window.innerHeight / 2 )
-    }
 }
 
+/**
+ * Roundtable class
+ * @brief object to rotate camera around the room, with dragging options.
+ */
 class Roundtable{
 
+    /**
+     * @brief creates a Roundtable object.
+     */
     constructor(){
 
         this.name = "round"
@@ -505,11 +597,13 @@ class Roundtable{
         camera.lookAt( 0, 0, 0 )
         this.dragBool = false
         this.mousePos = .0
-        this.camAngle = .0
         this.camX = .0
         this.camZ = .0
     }
 
+    /**
+     * @brief adds all EventListeners for the Roundtable class.
+     */
     activate(){
 
         window.addEventListener( 'mousedown', this.startDrag )
@@ -517,13 +611,20 @@ class Roundtable{
         window.addEventListener( 'mouseup', this.cancelDrag )
     }
 
+    /**
+     * @brief removes all EventListeners for the Roundtable class.
+     */
     deactivate(){
 
-        window.removeEventListener( 'mousedwon', this.startDrag )
+        window.removeEventListener( 'mousedown', this.startDrag )
         window.removeEventListener( 'mousemove', this.drag )
         window.removeEventListener( 'mouseup', this.cancelDrag )
     }
 
+    /**
+     * @brief sets the Boolean for dragging to true and saves camera x- and y-coordinates.
+     * @param {mousedown} event 
+     */
     startDrag( event ){
 
         this.dragBool = true
@@ -532,6 +633,10 @@ class Roundtable{
         this.camZ = camera.position.z
     }
 
+    /**
+     * @brief rotates the camera around the room when user drags mouse in a horizontal motion.
+     * @param {mousemove} event 
+     */
     drag( event ){
 
         if( this.dragBool ){
@@ -546,21 +651,36 @@ class Roundtable{
         }
     }
 
+    /**
+     * @brief sets the Boolean for dragging to false.
+     * @param {mouseup} event 
+     */
     cancelDrag( event ){
 
         this.dragBool = false
-        this.camAngle = 0
     }
 
+    /**
+     * @brief updates the camera, so it always looks to the center of the room.
+     */
     update(){
 
         camera.lookAt( 0, 0, 0 )
     } 
 }
 
-
+/**
+ * FirstPerson class
+ * @brief object to move camera in FirstPerson perspective.
+ */
 class FirstPerson{
 
+    /**
+     * @brief creates a FirstPerson object.
+     * @param {float} width 
+     * @param {float} height 
+     * @param {float} depth 
+     */
     constructor( width, height, depth ){
 
         this.name = "ego"
@@ -580,6 +700,9 @@ class FirstPerson{
 
         this.vec = new THREE.Vector3()
 
+        /**
+         * @brief adds all EventListeners for the FirstPerson class.
+         */
         this.activate = function(){
 
             window.addEventListener( 'mousedown', this.startDrag )
@@ -590,6 +713,9 @@ class FirstPerson{
             window.addEventListener( 'keydown', this.update )
         }
     
+        /**
+         * @brief removes all EventListeners for the FirstPerson class.
+         */
         this.deactivate = function(){
     
             window.removeEventListener( 'mousedown', this.startDrag )
@@ -600,6 +726,10 @@ class FirstPerson{
             window.removeEventListener( 'keydown', this.update )
         }
 
+        /**
+         * @brief sets the Boolean for dragging to true.
+         * @param {mousedown} event 
+         */
         this.startDrag = function( event ){
 
             this.dragBool = true
@@ -608,6 +738,10 @@ class FirstPerson{
     
         }
 
+        /**
+         * @brief rotates a selected object depending on the horizontal movement of the mouse.
+         * @param {mousemove} event 
+         */
         this.drag = function( event ){
 
             if( this.dragBool ){
@@ -640,11 +774,19 @@ class FirstPerson{
             }
         }
 
+        /**
+         * @brief sets the Boolean for dragging to false.
+         * @param {mouseup} event 
+         */
         this.cancelDrag = function( event ){
 
             this.dragBool = false
         }
 
+        /**
+         * @brief sets the Boolean for the pressed key for movement to true.
+         * @param {keydown} event 
+         */
         this.keyMove = function( event ){
 
             switch( event.key ){
@@ -667,6 +809,10 @@ class FirstPerson{
             }
         }
 
+        /**
+         * @brief cancels the movement of the camera by setting the move Boolean to false.
+         * @param {keyup} event 
+         */
         this.keyStop = function( event ){
 
             // console.log( "before keyStop: " + this.moveForward ) 
@@ -693,6 +839,10 @@ class FirstPerson{
 
 // I would've narrowed the update function down, especially the clamp process but javascript won't let me call a this.function of the own object
 
+        /**
+         * @brief updates the position of the camera depending on the Boolean variables of each direction.
+         * @param {keydown} event 
+         */
         this.update = function( event ){
 
             if( this.moveForward ){
@@ -758,6 +908,12 @@ class FirstPerson{
 // Array for testing export function
 var wallArray = []
 
+/**
+ * @brief creates a wall for the room, with correct orientation and sizing, depending on the type.
+ * @param {String} type 
+ * @param {PlaneGeometry} geo 
+ * @param {Material} material 
+ */
 function WallSetup( type, geo, material ){
 
     const plane = new THREE.Mesh( geo, material )
@@ -821,8 +977,20 @@ const bottomPlane = WallSetup( "bottom", topBottomGeo, materialOneSide )
 
 scene.add( room )
 
+/**
+ * MeshCreator class
+ * @brief object to create a meshbased object and sets its bounding box.
+ */
 class MeshCreator{
 
+    /**
+     * @brief creates a MeshCreator object.
+     * @param {*} geo 
+     * @param {*} material 
+     * @param {String} name 
+     * @param {Boolean} draggable 
+     * @param {Boolean} rotatable 
+     */
     constructor( geo, material, name, draggable, rotatable ){
 
         this.geo = geo
@@ -850,8 +1018,10 @@ class MeshCreator{
 }
 
 const cube = new MeshCreator( cubeGeo, material2, "Cube", true, true )
+scene.remove( cube.mesh )
 const cube2 = new MeshCreator( cubeGeo2, material3, "Cube 2", true, true )
 cube2.mesh.position.x = .3
+scene.remove( cube2.mesh )
 
 // cones are a substitute for actual lamp GLBs
 
@@ -901,6 +1071,9 @@ scene.add( lightCone2 )
 
 // dynamic canvas size according to window size
 
+/**
+ * @brief sizes the canvas dynamically to browser size.
+ */
 window.addEventListener('resize', () =>
 {
     // Update sizes
@@ -916,14 +1089,76 @@ window.addEventListener('resize', () =>
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 })
 
-// Export essential elements of scene as JSON file, Version 1 uses for each object a different name
+// Export essential elements of scene as JSON file, Version 2 uses lists with objects inside
+
+/**
+ * @brief exports all lights, objects, cameras and walls as a JSON-String.
+ * @param {Object3D} lightArray 
+ * @param {PerspectiveCamera} camera 
+ * @param {Object3D} wallArray 
+ * @param {Object3D} glbArray 
+ * @returns JSON-String
+ */
+function exportScene( lightArray , camera, wallArray, glbArray ){
+
+    const dict = {}
+
+    // for loop for lightArray
+
+    for( let i = 0; i < lightArray.length; i++ ){
+
+        let lMatrix = new THREE.Matrix4()
+
+        lightArray[ i ].position.set( lightArray[ i ].userData.object.position.x, lightArray[ i ].userData.object.position.y, lightArray[ i ].userData.object.position.z )
+
+        lMatrix.compose( lightArray[ i ].position, lightArray[ i ].quaternion, lightArray[ i ].scale )
+
+        dict['LAMP' + i] = { 'angle' : lightArray[ i ].angle, 'matrix' : lMatrix.elements, 'objectType' : 'LAMP', 'type' : lightArray[ i ].userData.type }
+    }
+
+    // camera matrix
+
+    let cMatrix = new THREE.Matrix4()
+
+    cMatrix.compose( camera.position, camera.quaternion, camera.scale )   
+
+    dict[ 'CAMERA' ] = { 'matrix' : cMatrix.elements, 'objectType' : 'CAMERA', 'aspect' : camera.aspect, 'fov' : camera.fov }
+
+    // for loop for wallArray
+
+    for( let i = 0; i < wallArray.length; i++ ){
+
+        let wMatrix = new THREE.Matrix4()
+
+        wMatrix.compose( wallArray[ i ].position, wallArray[ i ].quaternion, wallArray[ i ].scale )
+
+        dict[ 'WALL' + i ] = { 'matrix' : wMatrix.elements, 'objectType' : 'WALL' }        
+    }
+
+    // // for loop for glbArray
+
+    for( let i = 0; i < glbArray.length; i++ ){
+
+        let gMatrix = new THREE.Matrix4()
+
+        gMatrix.compose( glbArray[ i ].position, glbArray[ i ].quaternion, glbArray[ i ].scale )
+
+        dict[ 'GLB' + i ] = { 'matrix' : gMatrix.elements, 'objectType' : 'GLB', 'path' : glbArray[ i ].userData.path }
+    }
+
+    const json = JSON.stringify( dict )
+
+    return json
+}
+
+// Export essential elements of scene as JSON file, Version 2 uses lists with objects inside
 
 // function exportScene( lightArray , camera, wallArray, glbArray ){
 
 //     const matrix = new THREE.Matrix4()
 
 //     // for loop for lightArray
-//     var json = "{LAMP0:{"
+//     var json = "{\"Lamp\":[{"
 
 //     for( let i = 0; i < lightArray.length; i++ ){
 
@@ -932,19 +1167,19 @@ window.addEventListener('resize', () =>
 //         matrix.compose( lightArray[ i ].position, lightArray[ i ].quaternion, lightArray[ i ].scale )
 //         let mArray = matrix.elements
 
-//         json += "type:" + lightArray[ i ].userData.type + ","
-//         json+= "angle:" + lightArray[ i ].angle + ",matrix:[["
+//         json += "\"type\":" + "\"" + lightArray[ i ].userData.type + "\","
+//         json+= "\"angle\":" + lightArray[ i ].angle + ",\"matrix\":[["
 
 //         for( let j = 0; j < mArray.length; j++ ){
 
 //             if( ( ( i + 1 ) == lightArray.length ) && ( ( j + 1 ) % 16 == 0 ) ){
 
-//                 json += mArray[ j ] + "]]},"
+//                 json += mArray[ j ] + "]]}],"
 //             }
 
 //             else if( ( j + 1 ) % 16 == 0 ){
 
-//                 json += mArray[ j ] + "]]},LAMP" + ( i + 1 ) + ":{"
+//                 json += mArray[ j ] + "]]},{"
 //             }
 
 //             else if( ( ( j + 1 ) % 4 ) == 0 ){
@@ -971,7 +1206,7 @@ window.addEventListener('resize', () =>
 //     matrix.compose( camera.position, camera.quaternion, camera.scale )
 //     let cMatrix = matrix.elements    
 
-//     json += "CAMERA:{matrix:[["
+//     json += "\"CAMERA\":{\"matrix\":[["
 
 //     for( let i = 0; i < cMatrix.length; i++ ){
 
@@ -1000,7 +1235,7 @@ window.addEventListener('resize', () =>
 
 //     // for loop for wallArray
 
-//     json += "WALL0:{matrix:[["
+//     json += "\"WALL\":[{\"matrix\":[["
 
 //     for( let i = 0; i < wallArray.length; i++ ){
 
@@ -1011,12 +1246,12 @@ window.addEventListener('resize', () =>
 
 //             if( ( ( i + 1 ) == wallArray.length ) && ( ( j + 1 ) % 16 == 0 ) ){
 
-//                 json += mArray[ j ] + "]]},"
+//                 json += mArray[ j ] + "]]}],"
 //             }
 
 //             else if( ( j + 1 ) % 16 == 0 ){
 
-//                 json += mArray[ j ] + "]]},WALL" + ( i + 1 ) +  ":{matrix:[["
+//                 json += mArray[ j ] + "]]},{\"matrix\":[["
 //             }
 
 //             else if( ( ( j + 1 ) % 4 ) == 0 ){
@@ -1040,12 +1275,16 @@ window.addEventListener('resize', () =>
 
 //     // for loop for glbArray
 
+//     json += "\"GLB\":["
+
 //     for( let i = 0; i < glbArray.length; i++ ){
+
+//         console.log( glbArray[ i ].position )
 
 //         matrix.compose( glbArray[ i ].position, glbArray[ i ].quaternion, glbArray[ i ].scale )
 //         let mArray = matrix.elements
 
-//         json += "GLB" + i + ":{matrix:[["
+//         json += "{\"matrix\":[["
 
 //         for( let j = 0; j < mArray.length; j++ ){
 
@@ -1070,213 +1309,41 @@ window.addEventListener('resize', () =>
 
 //                 json += mArray[ j ] + ","
 //             }
-
-//             console.log( json )
 //         }        
 
 //         if( ( i + 1 ) == glbArray.length ){
 
-//             json += "path:" + glbArray[ i ].userData.path + "}}"
+//             json += "\"path\":" + "\"" + glbArray[ i ].userData.path + "\"" + "}]}"
 //         }
 //         else{
 
-//             json += "path:" + glbArray[ i ].userData.path + "},"
+//             json += "\"path\":" + "\"" + glbArray[ i ].userData.path + "\"" + "},"
 //         }
 //     }
 
 //     return json
 // }
 
-// Export essential elements of scene as JSON file, Version 2 uses lists with objects inside
-
-function exportScene( lightArray , camera, wallArray, glbArray ){
-
-    const matrix = new THREE.Matrix4()
-
-    // for loop for lightArray
-    var json = "{\"Lamp\":[{"
-
-    for( let i = 0; i < lightArray.length; i++ ){
-
-        lightArray[ i ].position.set( lightArray[ i ].userData.object.position.x, lightArray[ i ].userData.object.position.y, lightArray[ i ].userData.object.position.z )
-
-        matrix.compose( lightArray[ i ].position, lightArray[ i ].quaternion, lightArray[ i ].scale )
-        let mArray = matrix.elements
-
-        json += "\"type\":" + "\"" + lightArray[ i ].userData.type + "\","
-        json+= "\"angle\":" + lightArray[ i ].angle + ",\"matrix\":[["
-
-        for( let j = 0; j < mArray.length; j++ ){
-
-            if( ( ( i + 1 ) == lightArray.length ) && ( ( j + 1 ) % 16 == 0 ) ){
-
-                json += mArray[ j ] + "]]}],"
-            }
-
-            else if( ( j + 1 ) % 16 == 0 ){
-
-                json += mArray[ j ] + "]]},{"
-            }
-
-            else if( ( ( j + 1 ) % 4 ) == 0 ){
-
-                if( ( j + 1 ) == mArray.length ){
-
-                    json += mArray[ j ] + "]"
-                }
-
-                else{
-
-                    json += mArray[ j ] + "],["
-                }
-            }
-            else{
-
-                json += mArray[ j ] + ","
-            }
-        }        
-    }
-
-    // for loop for camera matrix
-
-    matrix.compose( camera.position, camera.quaternion, camera.scale )
-    let cMatrix = matrix.elements    
-
-    json += "\"CAMERA\":{\"matrix\":[["
-
-    for( let i = 0; i < cMatrix.length; i++ ){
-
-        if( ( i + 1 ) % 16 == 0 ){
-
-            json += cMatrix[ i ] + "]]},"
-        }
-
-        else if( ( ( i + 1 ) % 4 ) == 0 ){
-
-            if( ( i + 1 ) == cMatrix.length ){
-
-                json += cMatrix[ i ] + "]"
-            }
-
-            else{
-
-                json += cMatrix[ i ] + "],["
-            }
-        }
-        else{
-
-            json += cMatrix[ i ] + ","
-        }
-    }
-
-    // for loop for wallArray
-
-    json += "\"WALL\":[{\"matrix\":[["
-
-    for( let i = 0; i < wallArray.length; i++ ){
-
-        matrix.compose( wallArray[ i ].position, wallArray[ i ].quaternion, wallArray[ i ].scale )
-        let mArray = matrix.elements
-
-        for( let j = 0; j < mArray.length; j++ ){
-
-            if( ( ( i + 1 ) == wallArray.length ) && ( ( j + 1 ) % 16 == 0 ) ){
-
-                json += mArray[ j ] + "]]}],"
-            }
-
-            else if( ( j + 1 ) % 16 == 0 ){
-
-                json += mArray[ j ] + "]]},{\"matrix\":[["
-            }
-
-            else if( ( ( j + 1 ) % 4 ) == 0 ){
-
-                if( ( j + 1 ) == mArray.length ){
-
-                    json += mArray[ j ] + "]"
-                }
-
-                else{
-
-                    json += mArray[ j ] + "],["
-                }
-            }
-            else{
-
-                json += mArray[ j ] + ","
-            }
-        }        
-    }
-
-    // for loop for glbArray
-
-    json += "\"GLB\":["
-
-    for( let i = 0; i < glbArray.length; i++ ){
-
-        matrix.compose( glbArray[ i ].position, glbArray[ i ].quaternion, glbArray[ i ].scale )
-        let mArray = matrix.elements
-
-        json += "{\"matrix\":[["
-
-        for( let j = 0; j < mArray.length; j++ ){
-
-            if( ( j + 1 ) % 16 == 0 ){
-
-                json += mArray[ j ] + "]],"
-            }
-
-            else if( ( ( j + 1 ) % 4 ) == 0 ){
-
-                if( ( j + 1 ) == mArray.length ){
-
-                    json += mArray[ j ] + "]"
-                }
-
-                else{
-
-                    json += mArray[ j ] + "],["
-                }
-            }
-            else{
-
-                json += mArray[ j ] + ","
-            }
-        }        
-
-        if( ( i + 1 ) == glbArray.length ){
-
-            json += "\"path\":" + "\"" + glbArray[ i ].userData.path + "\"" + "}]}"
-        }
-        else{
-
-            json += "\"path\":" + "\"" + glbArray[ i ].userData.path + "\"" + "},"
-        }
-    }
-
-    return json
-}
-
 const cube3 = new MeshCreator( cubeGeo, material2, "Cube3", true, true )
-cube3.mesh.userData.path = "/PathToGLB1"
-cube3.mesh.position.set( 0, 2, 1 )
-const cube4 = new MeshCreator( cubeGeo2, material3, "Cube 4", true, true )
-cube4.mesh.userData.path = "/PathToGLB2"
-cube4.mesh.position.set( 0, 1, 1 )
+cube3.mesh.userData.path = "/home/samuel/TEMP/Simuled_temp/cube.glb"
+cube3.mesh.position.set( 0, -.125, -.5 )
+cube3.mesh.rotation.set( 0, Math.PI / 2, 0 )
+// const cube4 = new MeshCreator( cubeGeo2, material3, "Cube 4", true, true )
+// cube4.mesh.userData.path = "/home/samuel/TEMP/Simuled_temp/cube.glb"
+// cube4.mesh.position.set( .3, -.125, 0 )
 
 // spotLight.position.set( lightCone.position.x, lightCone.position.y, lightCone.position.z )
 // spotLight2.position.set( lightCone2.position.x, lightCone2.position.y, lightCone2.position.z )
 
 const lightRay = [ spotLight, spotLight2 ]
-const glbRay = [ cube3.mesh, cube4.mesh ]
+const glbRay = [ cube3.mesh ]
 const jString = exportScene( lightRay, camera, wallArray, glbRay )
 console.log( jString )
 
-const jasonTheObject = JSON.parse( jString )
+// const jasonTheObject = JSON.stringify( jString )
 
 console.log( spotLight2.position )
-console.log( jasonTheObject )
+// console.log( jasonTheObject )
 
 /**
  * Animate
@@ -1285,6 +1352,9 @@ console.log( jasonTheObject )
 var clock = new THREE.Clock()
 var time = .0
 
+/**
+ * @brief is used as animate function to render the scene each frame.
+ */
 const tick = () =>
 {
     // const elapsedTime = clock.getElapsedTime()

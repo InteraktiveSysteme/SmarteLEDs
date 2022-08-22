@@ -15,7 +15,6 @@ from project import forms
 # @param id is the lampID
 # ...
 # @return the HTML template
-
 def shopLamp(id):  # put application's code here
     if current_user.is_authenticated:
         # create a cart obj in the Database
@@ -256,7 +255,11 @@ def register():
 
     return render_template('index.html')
 
-
+##
+# @brief This function gets the information from a form and uses the login_user function to sign in the user
+# @param 
+# ...
+# @return the HTML template of the landing page
 def login():
     username = request.form['username']
     password = request.form["password"]
@@ -272,14 +275,22 @@ def login():
         flash("User does not Exist")
     return render_template('index.html')
 
-
+##
+# @brief This function logs out the current user
+# @param 
+# ...
+# @return the HTML template of the landing page
 @login_required
 def logout():
     logout_user()
     flash("You are not logged in anymore!")
     return render_template('index.html')
 
-
+##
+# @brief This function deletes the Lamp  in the Database with the given ID
+# @param id of the lamp to delete
+# ...
+# @return the HTML template of the Shop page
 def loeschen(id):
     deletable = Lamp.query.get_or_404(id)
     users = User.query.order_by(User.timeStamp)
@@ -300,7 +311,11 @@ def loeschen(id):
     lamps = Lamp.query.order_by(Lamp.timeStamp)
     return render_template("shop.html", lamps=lampsv)
 
-
+##
+# @brief This function deletes the User  in the Database with the given ID
+# @param id of the user to delete
+# ...
+# @return the HTML template of the admin page
 @login_required
 def userLoeschen(id):
     deletable = User.query.get_or_404(id)
@@ -320,7 +335,11 @@ def userLoeschen(id):
     users = User.query.order_by(User.timeStamp)
     return render_template("admin.html", users=users, lamps=lamps)
 
-
+##
+# @brief This function serves an Error Page
+# @param 
+# ...
+# @return the error Page
 @app.errorhandler(404)
 def page_not_found(e):
     # note that we set the 404 status explicitly

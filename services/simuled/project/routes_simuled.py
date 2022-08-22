@@ -145,6 +145,7 @@ def addLamp():
         form = forms.AddLampForm()
         return render_template('addLamp.html', form=form)
     if request.method == "POST":
+        #we first get the information about the Lamp we are about to safe through the form
         name = request.form["name"]
         img = request.files["img"]
         gltf = request.files["gltf"]
@@ -159,6 +160,7 @@ def addLamp():
         saveName = str(uuid.uuid1()) + "_" + imgName
         imgName = saveName
         img.save(os.path.join(app.config['UPLOAD_FOLDER'], saveName))
+        #now we add the lamp to the database
         lamp = Lamp(lampName=name, imgName=imgName, gltfName=gltfName, lampPrice=price, lampText=text,
                     lampLongText=longtext)
         db.session.add(lamp)
@@ -173,7 +175,6 @@ def addLamp():
 
 def shop():
     lamps = Lamp.query.order_by(Lamp.timeStamp)
-
     return render_template("shop.html", lamps=lamps), 200
 
 ##

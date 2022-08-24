@@ -17,6 +17,10 @@ scene.background = new THREE.Color(0x111111)
 //Measures of the room
 // only use the ratio of the user input so the measures are between 0 and 1.5
 
+// const width = 5
+// const height = 2.5
+// const depth = 5
+
 const width = 1
 const height = .5
 const depth = 1.3
@@ -42,7 +46,7 @@ const geometry = new THREE.SphereBufferGeometry(0.5, 64, 64);
 const frontBackGeo = new THREE.PlaneGeometry( width, height );
 const SideGeo = new THREE.PlaneGeometry( depth, height )
 const topBottomGeo = new THREE.PlaneGeometry( width, depth )
-const cubeGeo = new THREE.BoxGeometry( .25, 0.25, .25)
+const cubeGeo = new THREE.BoxGeometry( 0.25, 0.25, .125)
 const cubeGeo2 = new THREE.BoxGeometry( .25, 0.25, .25)
 const lightGeo = new THREE.BoxGeometry( .1, .1, .1 )
 
@@ -59,6 +63,8 @@ material3.roughness = 0.3
 material3.color = new THREE.Color(0x808080)
 
 const materialOneSide = new THREE.MeshPhongMaterial(  )
+materialOneSide.shadowSide = THREE.FrontSide
+materialOneSide.side = THREE.FrontSide
 
 //Lights
 
@@ -68,15 +74,18 @@ scene.add( ambient )
 
 // Spotlight 1
 const spotColor1 = 0xfa05e1;
-const spotLight = new THREE.SpotLight( spotColor1, 0.7, 8 )
+const spotLight = new THREE.SpotLight( spotColor1, 1, 8 )
 spotLight.penumbra = .3
+spotLight.angle = 1
 spotLight.decay = 2
-spotLight.position.set( 0, height / 2, 0 )
+spotLight.position.set( .45, height/2 - .1, 0 )
 spotLight.castShadow = true
 // spotLight.shadowMapWidth = 1024
 // spotLight.shadowMapHeight = 1024
 // //  solves the shadow artifacts of the spotLight
-spotLight.shadow.bias = .001
+// spotLight.shadow.bias = .001
+spotLight.shadow.bias = - .004
+
 spotLight.shadow.normalBias = .01
 spotLight.userData.type = "SPOT"
 scene.add( spotLight )
@@ -86,12 +95,15 @@ const spotColor2 = 0x10efe4;
 const spotLight2 = new THREE.SpotLight( spotColor2, 0.7, 8 )
 spotLight2.penumbra = .3
 spotLight2.decay = .2
-spotLight2.position.set( - .3,0,0 )
+spotLight2.angle = 1
+spotLight2.position.set( 0, height/2 - .1, .45 )
 spotLight2.castShadow = true
 // spotLight2.shadowMapWidth = 1024
 // spotLight2.shadowMapHeight = 1024
 // //  solves the shadow artifacts of the spotlight 2
-spotLight2.shadow.bias = .001
+// spotLight2.shadow.bias = .001
+spotLight2.shadow.bias = - .004
+
 spotLight2.shadow.normalBias = .01
 spotLight2.userData.type = "SPOT"
 scene.add( spotLight2 )
@@ -125,7 +137,8 @@ class State{
         this.camera = camera
         camera.position.set( Math.max( width, height, depth ), 0, 0 )
         camera.lookAt( 0, 0, 0 )
-        this.perspective = new FirstPerson( width, height, depth )
+        // this.perspective = new FirstPerson( width, height, depth )
+        this.perspective = new Roundtable()
         this.perspective.activate()
 
         if( this.perspective.name.localeCompare( "ego" ) != 0 ){
@@ -315,6 +328,7 @@ class DragControls{
 
                             this.draggable.userData.target.position.x = this.draggable.position.x
                             this.draggable.userData.target.position.z = this.draggable.position.z
+                            this.draggable.userData.target.position.y = - height
                         }
                     }
     
@@ -1031,13 +1045,16 @@ const spotLightMaterial1 = new THREE.MeshPhongMaterial( { color: 0xff0000, side:
 spotLightMaterial1.emissiveIntensity = 1.0
 
 const target1 = new THREE.Object3D()
-target1.position.set( .45, -1, 0 )
+target1.position.set( 0, -1, 0 )
 spotLight.target = target1
 scene.add( target1 )
 
 const lightCone = new THREE.Mesh ( cone, spotLightMaterial1 )
-lightCone.position.set( .45, height/2, 0 )
+// lightCone.position.set( .45, height/2 - .1, 0 )
+lightCone.position.set( 0, 0, 0 )
 spotLight.parent = lightCone
+lightCone.position.set( 0, height/2 - .1, 0 )
+spotLight.position.set( lightCone.position )
 spotLight.userData.object = lightCone
 lightCone.userData.name = "Light 1"
 lightCone.userData.drag = true
@@ -1051,15 +1068,16 @@ const cone2 = new THREE.ConeGeometry( .05, .1, 32 )
 const spotLightMaterial2 = new THREE.MeshPhongMaterial( { color: 0xff0000, side: THREE.DoubleSide } )
 
 const target2 = new THREE.Object3D()
-target2.position.set( 0, -1, .45 )
+target2.position.set( 0, -1, 0 )
 spotLight2.target = target2
 scene.add( target2 )
 
 spotLightMaterial1.emissiveIntensity = 1.0
 
 const lightCone2 = new THREE.Mesh ( cone2, spotLightMaterial2 )
-lightCone2.position.set( 0, height/2, .45 )
+lightCone2.position.set( 0, 0, 0 )
 spotLight2.parent = lightCone2
+lightCone2.position.set( 0, height/2 - .1, 0 )
 spotLight2.userData.object = lightCone2
 lightCone2.userData.name = "Light 2"
 lightCone2.userData.drag = true
@@ -1108,12 +1126,13 @@ function exportScene( lightArray , camera, wallArray, glbArray ){
     for( let i = 0; i < lightArray.length; i++ ){
 
         let lMatrix = new THREE.Matrix4()
+        let rgb = new THREE.Vector3( lightArray[ i ].color.r, lightArray[ i ].color.g, lightArray[ i ].color.b )
 
         lightArray[ i ].position.set( lightArray[ i ].userData.object.position.x, lightArray[ i ].userData.object.position.y, lightArray[ i ].userData.object.position.z )
 
         lMatrix.compose( lightArray[ i ].position, lightArray[ i ].quaternion, lightArray[ i ].scale )
 
-        dict['LAMP' + i] = { 'angle' : lightArray[ i ].angle, 'matrix' : lMatrix.elements, 'objectType' : 'LAMP', 'type' : lightArray[ i ].userData.type }
+        dict['LAMP' + i] = { 'angle' : lightArray[ i ].angle, 'matrix' : lMatrix.elements, 'objectType' : 'LAMP', 'type' : lightArray[ i ].userData.type, 'intensity' : lightArray[ i ].intensity, 'color' : rgb }
     }
 
     // camera matrix
@@ -1122,7 +1141,7 @@ function exportScene( lightArray , camera, wallArray, glbArray ){
 
     cMatrix.compose( camera.position, camera.quaternion, camera.scale )   
 
-    dict[ 'CAMERA' ] = { 'matrix' : cMatrix.elements, 'objectType' : 'CAMERA', 'aspect' : camera.aspect, 'fov' : camera.fov }
+    dict[ 'CAMERA' ] = { 'matrix' : cMatrix.elements, 'objectType' : 'CAMERA', 'aspect' : camera.aspect, 'focal_length' : camera.getFocalLength() }
 
     // for loop for wallArray
 
@@ -1326,24 +1345,21 @@ function exportScene( lightArray , camera, wallArray, glbArray ){
 
 const cube3 = new MeshCreator( cubeGeo, material2, "Cube3", true, true )
 cube3.mesh.userData.path = "/home/samuel/TEMP/Simuled_temp/cube.glb"
-cube3.mesh.position.set( 0, -.125, -.5 )
-cube3.mesh.rotation.set( 0, Math.PI / 2, 0 )
-// const cube4 = new MeshCreator( cubeGeo2, material3, "Cube 4", true, true )
-// cube4.mesh.userData.path = "/home/samuel/TEMP/Simuled_temp/cube.glb"
-// cube4.mesh.position.set( .3, -.125, 0 )
+const box = new THREE.Box3( new THREE.Vector3(), new THREE.Vector3() )
+cubeGeo.computeBoundingBox()
+box.setFromObject( cube3.mesh )
 
-// spotLight.position.set( lightCone.position.x, lightCone.position.y, lightCone.position.z )
-// spotLight2.position.set( lightCone2.position.x, lightCone2.position.y, lightCone2.position.z )
+let vec = new THREE.Vector3()
+box.getSize( vec )
+cube3.mesh.position.set( 0, - ( height / 2 ) + ( vec.y / 2 ), -.5 )
+// cube3.mesh.rotation.set( 0, Math.PI / 2, 0 )
 
 const lightRay = [ spotLight, spotLight2 ]
 const glbRay = [ cube3.mesh ]
 const jString = exportScene( lightRay, camera, wallArray, glbRay )
 console.log( jString )
 
-// const jasonTheObject = JSON.stringify( jString )
-
 console.log( spotLight2.position )
-// console.log( jasonTheObject )
 
 /**
  * Animate

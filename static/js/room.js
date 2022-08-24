@@ -138,7 +138,7 @@ class State{
         camera.position.set( Math.max( width, height, depth ), 0, 0 )
         camera.lookAt( 0, 0, 0 )
         // this.perspective = new FirstPerson( width, height, depth )
-        this.perspective = new Roundtable()
+        this.perspective = new Turntable()
         this.perspective.activate()
 
         if( this.perspective.name.localeCompare( "ego" ) != 0 ){
@@ -187,7 +187,7 @@ class State{
     }
 
     /**
-     * @brief function is used for switching between ego-perspective and roundtable view and controls for camera
+     * @brief function is used for switching between ego-perspective and Turntable view and controls for camera
      */
     switchPerspective(){
 
@@ -208,12 +208,12 @@ class State{
         else{
 
             this.perspective.deactivate()
-            this.perspective = new Roundtable()
+            this.perspective = new Turntable()
             this.perspective.activate()
 
             this.controls.activate()
 
-            console.log( "Roundtable" )
+            console.log( "Turntable" )
         }
     }
 }
@@ -583,7 +583,7 @@ class Controls{
     }
     
     /**
-     * @brief switches between Egoperspective- and Roundtable-mode.
+     * @brief switches between Egoperspective- and Turntable-mode.
      * @param {keydown} event 
      */
     switchPerspective( event ){
@@ -596,13 +596,13 @@ class Controls{
 }
 
 /**
- * Roundtable class
+ * Turntable class
  * @brief object to rotate camera around the room, with dragging options.
  */
-class Roundtable{
+class Turntable{
 
     /**
-     * @brief creates a Roundtable object.
+     * @brief creates a Turntable object.
      */
     constructor(){
 
@@ -616,7 +616,7 @@ class Roundtable{
     }
 
     /**
-     * @brief adds all EventListeners for the Roundtable class.
+     * @brief adds all EventListeners for the Turntable class.
      */
     activate(){
 
@@ -626,7 +626,7 @@ class Roundtable{
     }
 
     /**
-     * @brief removes all EventListeners for the Roundtable class.
+     * @brief removes all EventListeners for the Turntable class.
      */
     deactivate(){
 

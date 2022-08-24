@@ -1,44 +1,46 @@
 /**
- * DragControls class
- * @brief object to instantiate controls for dragging.
+ * RotationControls class
+ * @brief object to instantiate controls to rotate a mesh.
  */
- export class DragControls{
+ export class RotationControls{
 
     /**
-     * @brief creates an DragControls object.
+     * @brief creates a RotationControls object.
      */
     constructor(){
 
         this.mouseX = 0
         this.mouseY = 0
-        this.draggable = new THREE.Object3D()
-        this.name = "drag"
+        this.tmpX = 0
+        this.tmpY = 0
+        this.name = "rotate"
+        this.rotatable = new THREE.Object3D()
     }
 
     /**
-     * @brief activates all EventListeners for DragControls.
+     * @brief activates all EventListeners for RotationControls.
      */
     activate(){
 
         window.addEventListener( 'click', this.onClick )
         window.addEventListener( 'mousemove', this.onMouseMove )
-        window.addEventListener( 'mousemove', this.dragObject )
+        window.addEventListener( 'mousemove', this.rotateObject )
         window.addEventListener( 'mousemove', this.hoverObject )
     }
 
     /**
-     * @brief removes all EventListeners for DragControls.
+     * @brief removes all EventListeners for RotationControls.
      */
     deactivate(){
 
         window.removeEventListener( 'click', this.onClick )
         window.removeEventListener( 'mousemove', this.onMouseMove )
-        window.removeEventListener( 'mousemove', this.dragObject )
+        window.removeEventListener( 'mousemove', this.rotateObject )
         window.removeEventListener( 'mousemove', this.hoverObject )
     }
-
+    
     /**
-     * @brief selects an object via raycasting and writes it in this.draggable.
+     * @brief uses raycasting to select an object for rotation.
      * @param {click} event 
      * @returns 
      */
@@ -46,9 +48,11 @@
 
         const raycaster = new THREE.Raycaster()
 
-        if( this.draggable ){
+        this.tmpX = this.mouseX
+
+        if( this.rotatable ){
     
-            this.draggable = null
+            this.rotatable = null
             return
         }
     
@@ -56,17 +60,18 @@
         let intersects = raycaster.intersectObjects( scene.children )
     
     
-        if( ( intersects.length ) > 0 && ( intersects[ 0 ].object.userData.drag )){
-            intersects[ 0 ].object.draggable = true
+        if( ( intersects.length ) > 0 && ( intersects[ 0 ].object.userData.rot ) ){
+
+            intersects[ 0 ].object.rotatable = true
     
-            this.draggable = intersects[ 0 ].object
-            console.log( this.draggable.userData.name )
+            this.rotatable = intersects[ 0 ].object
+            console.log( this.rotatable.userData.name )
         }
     }
     
     /**
-     * @brief the x- and y-coordinates for the mouse are written  into this.mouseX and this.mouseY.
-     * @param {mousemove} event
+     * @brief updates the x- and y-coordinates of the mouse.
+     * @param {mousemove} event 
      */
     onMouseMove( event ){
 
@@ -79,47 +84,23 @@
         this.mouseY = - ( ( event.clientY - canvas.getBoundingClientRect().top ) / sizes.height ) * 2 + 1
     }
 
-    // only functions when called in an event
-
     /**
-     * @brief uses raycasting place selected object while the mouse moves.
+     * @brief if an object is selected, it can be rotated with moving the mouse in a horizontal motion.
      * @param {mousemove} event 
      */
-    dragObject( event ){
+    rotateObject( event ){
+
+        if( this.rotatable != null ){
     
-        const raycaster = new THREE.Raycaster()
-        
-        if( this.draggable != null ){
-
-            raycaster.setFromCamera( new THREE.Vector2( this.mouseX, this.mouseY ), camera )
-            
-            const intersections = raycaster.intersectObjects( scene.children )
-            
-            if( intersections.length > 0 ){
+            this.mouseX = ( event.screenX - tmpX )
     
-                for( let i = 0; i < intersections.length; i++ ){
+            this.rotatable.rotation.y = this.mouseX / ( window.innerWidth / 10 )
 
-                    if( this.draggable.userData.topLight ){
+            if( this.rotatable.userData.child != null ){
 
-                        if( intersections[ i ].object.userData.top ){ // for topLight
-
-                            this.draggable.position.x = intersections[ i ].point.x
-                            this.draggable.position.z = intersections[ i ].point.z
-
-                            this.draggable.userData.target.position.x = this.draggable.position.x
-                            this.draggable.userData.target.position.z = this.draggable.position.z
-                            this.draggable.userData.target.position.y = - height
-                        }
-                    }
-    
-                    if( intersections[ i ].object.userData.bottom ){
-
-                        this.draggable.position.x = intersections[ i ].point.x
-                        this.draggable.position.z = intersections[ i ].point.z
-                    }
-                }
+                this.rotatable.userData.child.rotation.x = this.mouseX / ( window.innerWidth / 10 )
             }
-        }   
+        }
     }
 
     /**

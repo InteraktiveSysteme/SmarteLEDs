@@ -62,6 +62,7 @@ def preSim():
 # @return the HTML template
 def shoppingCart():
     form = forms.OrderForm()
+    lamps = []
     if current_user.is_authenticated:
         if request.method == "POST":
             #The following Shipping Informations are useful if you want to deploy this Software

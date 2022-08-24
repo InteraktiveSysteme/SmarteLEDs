@@ -16,7 +16,7 @@
         camera.position.set( Math.max( width, height, depth ), 0, 0 )
         camera.lookAt( 0, 0, 0 )
         // this.perspective = new FirstPerson( width, height, depth )
-        this.perspective = new Roundtable()
+        this.perspective = new Turntable()
         this.perspective.activate()
 
         if( this.perspective.name.localeCompare( "ego" ) != 0 ){
@@ -65,7 +65,7 @@
     }
 
     /**
-     * @brief function is used for switching between ego-perspective and roundtable view and controls for camera
+     * @brief function is used for switching between ego-perspective and Turntable view and controls for camera
      */
     switchPerspective(){
 
@@ -86,12 +86,12 @@
         else{
 
             this.perspective.deactivate()
-            this.perspective = new Roundtable()
+            this.perspective = new Turntable()
             this.perspective.activate()
 
             this.controls.activate()
 
-            console.log( "Roundtable" )
+            console.log( "Turntable" )
         }
     }
 }

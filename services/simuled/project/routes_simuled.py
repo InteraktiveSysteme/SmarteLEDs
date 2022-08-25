@@ -22,7 +22,7 @@ def renders():
 
 def safeRender(path):
     render = Render(userID=current_user.userID, imgName=imgName)
-    db.session.add(lamp)
+    db.session.add(render)
     db.session.commit()
 
 def shopLamp(id):  # put application's code here

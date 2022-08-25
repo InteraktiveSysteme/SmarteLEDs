@@ -9,83 +9,6 @@
 <meta charset="UTF-8" />
 <title>Three.js 101</title>
 
-<!--  Three.js CDN  -->
-<!--script type="importmap">
-      "imports:" 
-      {
-        "three": "{{ url_for('static', filename='/js/three.js' ) }}",
-        "GLTF": "{{ url_for('static', filename='/js/GLTFLoader.js' ) }}",
-        "drag": "{{ url_for('static', filename='/js/DragControls.js' ) }}"
-      }
-    </script -->
-<script src="{{ url_for('static', filename='/js/three.js' ) }}"></script>
-<script src="{{ url_for('static', filename='/js/GLTFLoader.js' ) }}"></script>
-<script src="{{ url_for('static', filename='/js/DragControls.js' ) }}"></script>
-<script src="https://cdn.jsdelivr.net/npm/lil-gui@0.16"></script>
-<!--script>
-      var GUI = lil.GUI;
-    </script-->
-
-<style>
-    .lil-gui {
-        margin-top: 7%;
-        margin-right: 3%;
-        --background-color: #f2f2f2;
-        --text-color: #595959;
-        --padding: 15px;
-        --title-background-color: #86D3D9;
-        --title-text-color: #595959;
-        --hover-color: #86D3D9;
-        --widget-color: #595959;
-        --number-color: #f2f2f2;
-        border-radius: 10px;
-        --font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-    }
-
-    @media (max-width: 767px) {
-        .carousel-inner .carousel-item>div {
-            display: none
-        }
-
-        .carousel-inner .carousel-item>div:first-child {
-            display: block
-        }
-    }
-
-    .carousel-inner .carousel-item.active,
-    .carousel-inner .carousel-item-next,
-    .carousel-inner .carousel-item-prev {
-        display: flex
-    }
-
-    @media (min-width: 768px) {
-
-        .carousel-inner .carousel-item-end.active,
-        .carousel-inner .carousel-item-next {
-            transform: translateX(25%)
-        }
-
-        .carousel-inner .carousel-item-start.active,
-        .carousel-inner .carousel-item-prev {
-            transform: translateX(-25%)
-        }
-    }
-
-    .carousel-inner .carousel-item-end,
-    .carousel-inner .carousel-item-start {
-        transform: translateX(0)
-    }
-
-    .lil-gui input {
-        color: #f2f2f2;
-    }
-
-    .lil-gui.root>.title {
-
-        border-radius: 10px;
-    }
-</style>
-
 <!--  Our code  -->
 <h1> {{depth}}</h1>
 <center>
@@ -95,7 +18,7 @@
 </center>
 
 <!--p id="screen-log" style="color:white"></p-->
-<script src="{{ url_for('static', filename='/js/room.js' ) }}"></script>
+<script type="module" src="/js/room.js"></script>
 <script>
     let items = document.querySelectorAll('.carousel .carousel-item')
 

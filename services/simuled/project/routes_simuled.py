@@ -21,9 +21,13 @@ def renders():
     return render_template('renders.html', renders = renders)
 
 def safeRender(path):
-    render = Render(userID=current_user.userID, imgName=imgName)
-    db.session.add(render)
-    db.session.commit()
+        secureName = secure_filename(current_user.userName)
+        saveName = str(uuid.uuid1()) + "_" + imgName
+        imgName = saveName
+        img.save(os.path.join(app.config['UPLOAD_FOLDER'], saveName))    
+        db.session.add(render)
+        db.session.commit()
+        return app.config['UPLOAD_FOLDER'], saveName
 
 def shopLamp(id):  # put application's code here
     if current_user.is_authenticated:

@@ -25,6 +25,8 @@ def safeRender(path):
         saveName = str(uuid.uuid1()) + "_" + imgName
         imgName = saveName
         img.save(os.path.join(app.config['UPLOAD_FOLDER'], saveName))    
+        render = Render(userID=current_user.userID, imgName=app.config['UPLOAD_FOLDER'], saveName)
+
         db.session.add(render)
         db.session.commit()
         return app.config['UPLOAD_FOLDER'], saveName

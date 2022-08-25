@@ -97,7 +97,7 @@
                     </li>
                     {% if current_user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link " href="#">{{ current_user.userName }}</a>
+                        <a class="nav-link " href="{{url_for('renders')}}">{{ current_user.userName }}</a>
                     </li>
 
                 </ul>

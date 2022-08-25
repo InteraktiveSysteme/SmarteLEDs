@@ -15,6 +15,16 @@ from project import forms
 # @param id is the lampID
 # ...
 # @return the HTML template
+@login_required
+def renders():
+    renders = Render.query.filter_by(userID=current_user.userID)
+    return render_template('renders.html', renders = renders)
+
+def safeRender(path):
+    render = Render(userID=current_user.userID, imgName=imgName)
+    db.session.add(lamp)
+    db.session.commit()
+
 def shopLamp(id):  # put application's code here
     if current_user.is_authenticated:
         # create a cart obj in the Database

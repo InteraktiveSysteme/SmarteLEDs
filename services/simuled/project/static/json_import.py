@@ -308,19 +308,18 @@ with open(pathlib.Path(inputJson), 'r') as jsonInput2:
     #example=json.load(jsonInput2)
     example = json.loads(json.dumps(json.load(jsonInput2)))
     pprint.pprint(jsonInput2)
-    print(example)
     #example = json.loads(jsonInput2)
     #pprint.pprint(example)
     #pprint.pprint(example["LAMP"]["matrix"])
     print("Json Loaded")
 
-#delete_all()
-#generateScene(example)
+delete_all()
+generateScene(example)
 
-#start = time.time()
-#renderScene(outputPng)
-#end = time.time()
-#print(end-start)
+start = time.time()
+renderScene(outputPng)
+end = time.time()
+print(end-start)
 
 
 #print(type(jsonToMatrix(data)))

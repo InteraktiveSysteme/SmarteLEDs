@@ -18,6 +18,23 @@ from project import forms
 # @param id is the lampID
 # ...
 # @return the HTML template
+@login_required
+def renders():
+    renders = Render.query.filter_by(userID=current_user.userID)
+    return render_template('renders.html', renders = renders)
+
+def safeRender(path):
+        secureName = secure_filename(current_user.userName)
+        saveName = str(uuid.uuid1()) + "_" + imgName
+        imgName = saveName
+        img.save(os.path.join(app.config['UPLOAD_FOLDER'], saveName))    
+        img = app.config['UPLOAD_FOLDER'], saveName
+        render = Render(userID=current_user.userID, imgName=img)
+
+        db.session.add(render)
+        db.session.commit()
+        return app.config['UPLOAD_FOLDER'], saveName
+
 def shopLamp(id):  # put application's code here
     if current_user.is_authenticated:
         # create a cart obj in the Database
@@ -65,6 +82,7 @@ def preSim():
 # @return the HTML template
 def shoppingCart():
     form = forms.OrderForm()
+    lamps = []
     if current_user.is_authenticated:
         if request.method == "POST":
             #The following Shipping Informations are useful if you want to deploy this Software

@@ -138,7 +138,7 @@ def test():  # put application's code here
 
 
 def expose_gltf(file):
-    return send_from_directory(os.path.join(app.root_path, 'static/Gltf'), file)
+    return send_from_directory(os.path.join(app.root_path, 'static/Gltf/Lampen/'), file)
 
 
 def testglb():

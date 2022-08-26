@@ -25,7 +25,9 @@
 <!--script>
       var GUI = lil.GUI;
     </script-->
-
+    <p type="hidden" id="width" value="{{ width }}"></p>
+    <p type="hidden" id="height" value="{{ height }}"></p>
+    <p type="hidden" id="depth" value="{{ depth }}"></p>
 <style>
     .lil-gui {
         margin-top: 7%;
@@ -87,7 +89,7 @@
 </style>
 
 <!--  Our code  -->
-<h1> {{depth}}</h1>
+
 <center>
     <div id="gl" style="width: auto; height: auto;">
         <canvas id="myCanvas" width="auto" height="auto" style="position: relativ; border-radius: 15px;"></canvas>

@@ -10,9 +10,6 @@ import json
 from flask_login import *
 from project import forms
 
-
-
-
 ##
 # @brief This function creates an Cart element for a specific lamp you want to shop
 # @param id is the lampID

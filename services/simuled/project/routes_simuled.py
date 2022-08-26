@@ -28,7 +28,7 @@ def safeRender():
         render = Render(userID=current_user.userID, imgName=img)
         db.session.add(render)
         db.session.commit()
-        os.system("blender -b --python static/json_imports.py " + json  + " " + saveName)
+        os.system("blender -b --python static/json_imports.py -- " + json  + " " + saveName)
         return "success"
         #return app.config['UPLOAD_FOLDER'], saveName
 

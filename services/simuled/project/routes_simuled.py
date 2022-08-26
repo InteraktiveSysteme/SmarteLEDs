@@ -10,6 +10,9 @@ import json
 from flask_login import *
 from project import forms
 
+
+
+
 ##
 # @brief This function creates an Cart element for a specific lamp you want to shop
 # @param id is the lampID
@@ -152,14 +155,19 @@ def addLamp():
         text = request.form["shortText"]
         longtext = request.form["longText"]
         price = request.form["price"]
-        gltfName = secure_filename(img.filename)
-        savegltfName = str(uuid.uuid1()) + "_" + gltfName
-        gltfName = savegltfName
-        gltf.save(os.path.join(app.config['UPLOAD_FOLDER'], savegltfName))
+
+        
+
         imgName = secure_filename(img.filename)
         saveName = str(uuid.uuid1()) + "_" + imgName
         imgName = saveName
         img.save(os.path.join(app.config['UPLOAD_FOLDER'], saveName))
+
+        gltfName = secure_filename(gltf.filename)
+        savegltfName = str(uuid.uuid1()) + "_" + gltfName
+        gltfName = savegltfName
+        gltf.save(os.path.join(app.root_path +"/static/Gltf/Lampen/", savegltfName))
+
         #now we add the lamp to the database
         lamp = Lamp(lampName=name, imgName=imgName, gltfName=gltfName, lampPrice=price, lampText=text,
                     lampLongText=longtext)

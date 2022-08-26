@@ -251,7 +251,7 @@ def generateScene(importedJson):
             print("GLB matrix")
             print(matrix)
             deselect_all
-            bpy.ops.import_scene.gltf(filepath=str(glbPath + "/" + importedJson[key]["path"]))
+            bpy.ops.import_scene.gltf(filepath=str(glbPath) + "/" + importedJson[key]["path"])
             loc,rot,sca = rotateMatrix(matrix).decompose()
             
             current_name = bpy.context.selected_objects[0].name
@@ -292,7 +292,7 @@ def renderScene(filepath):
     bpy.context.scene.cycles.samples = 100
     bpy.context.scene.cycles.use_denoising = True
     
-    bpy.data.scenes[0].render.filepath = filepath
+    bpy.data.scenes[0].render.filepath = str(filepath)
     
     bpy.ops.render.render(write_still=True)
 

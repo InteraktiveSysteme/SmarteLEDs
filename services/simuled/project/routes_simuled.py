@@ -19,17 +19,18 @@ def renders():
     renders = Render.query.filter_by(userID=current_user.userID)
     return render_template('renders.html', renders = renders)
 
-def safeRender(path):
+def safeRender(jsonData):
         secureName = secure_filename(current_user.userName)
-        saveName = str(uuid.uuid1()) + "_" + imgName
-        imgName = saveName
-        img.save(os.path.join(app.config['UPLOAD_FOLDER'], saveName))    
-        img = app.config['UPLOAD_FOLDER'], saveName
+        saveName = str(uuid.uuid1()) + ".jpg" 
+        
+        img.save(os.path.join(app.config['RENDER_FOLDER'], saveName))    
+        img = app.config['RENDER_FOLDER'], saveName
         render = Render(userID=current_user.userID, imgName=img)
-
         db.session.add(render)
         db.session.commit()
-        return app.config['UPLOAD_FOLDER'], saveName
+        os.system("blender -b --python static/json_imports.py " + saveName)
+        return "success"
+        #return app.config['UPLOAD_FOLDER'], saveName
 
 def shopLamp(id):  # put application's code here
     if current_user.is_authenticated:

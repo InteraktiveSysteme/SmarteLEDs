@@ -19,16 +19,16 @@ def renders():
     renders = Render.query.filter_by(userID=current_user.userID)
     return render_template('renders.html', renders = renders)
 
-def safeRender(jsonData):
+def safeRender():
+	jsonString = request.get_json()
         secureName = secure_filename(current_user.userName)
         saveName = str(uuid.uuid1()) + ".jpg" 
-        
         img.save(os.path.join(app.config['RENDER_FOLDER'], saveName))    
         img = app.config['RENDER_FOLDER'], saveName
         render = Render(userID=current_user.userID, imgName=img)
         db.session.add(render)
         db.session.commit()
-        os.system("blender -b --python static/json_imports.py " + saveName)
+        os.system("blender -b --python static/json_imports.py " + json  + " " + saveName)
         return "success"
         #return app.config['UPLOAD_FOLDER'], saveName
 

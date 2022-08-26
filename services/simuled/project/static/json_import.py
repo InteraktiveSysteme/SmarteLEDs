@@ -213,7 +213,7 @@ def generateScene(importedJson):
             #loc, rot, sca = matrixWall.decompose()
             
             #bpy.ops.mesh.primitive_plane_add(size = 0.5, align="WORLD", location = loc, rotation = rot.to_euler(), scale = sca)
-            bpy.ops.mesh.primitive_plane_add(size = 3, align="WORLD")
+            bpy.ops.mesh.primitive_plane_add(size = 1, align="WORLD")
             
             eulerAngle = rot.to_euler()[0]
             
@@ -240,6 +240,7 @@ def generateScene(importedJson):
             #plane.rotation_mode = "QUATERNION"
             #plane.rotation_quaternion = rot
             plane.location = loc
+            
             plane.scale = sca
             
             plane.matrix_world = matrixWall

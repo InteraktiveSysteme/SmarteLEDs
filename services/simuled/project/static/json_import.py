@@ -11,18 +11,17 @@ import pathlib
 
 load_external_materials = True
 
-inputJson = "JsonExample5"
 
 if load_external_materials:
     blendpath = pathlib.Path("./empty_materials.blend")
     bpy.ops.wm.open_mainfile(filepath=str(blendpath))
 
-inputJson = inputJson + "Mat.json"
+inputJson = sys.argv[5]
 
-glbPath = pathlib.Path("./Gltf/")
+glbPath = str(pathlib.Path("./Gltf/"))
 
+outputPng = str(pathlib.Path("./renders")) + "/" + sys.argv[6]
 
-outputPng = pathlib.Path("./renders")
 
 vert_res = 720
 
@@ -299,31 +298,24 @@ def renderScene(filepath):
     bpy.ops.render.render(write_still=True)
 
     
-#with open('json_data.json', 'r') as jsonInput:
-#    data = json.loads(json.load(jsonInput))
-#    print(data)
-#    print(data[0])
+# load json from string
+jsonData = json.loads(inputJson)
 
 #load json from file
 
-with open(pathlib.Path(inputJson), 'r') as jsonInput2:
+#with open(pathlib.Path(inputJson), 'r') as jsonInput2:
     #example=json.load(jsonInput2)
-    example = json.loads(json.dumps(json.load(jsonInput2)))
-    pprint.pprint(jsonInput2)
+ #   example = json.loads(json.dumps(json.load(jsonInput2)))
+  #  pprint.pprint(jsonInput2)
     #example = json.loads(jsonInput2)
     #pprint.pprint(example)
     #pprint.pprint(example["LAMP"]["matrix"])
-    print("Json Loaded")
+   # print("Json Loaded")
 
 delete_all()
-generateScene(example)
+generateScene(jsonData)
 
 start = time.time()
 renderScene(outputPng)
 end = time.time()
 print(end-start)
-
-
-#print(type(jsonToMatrix(data)))
-#print(jsonToMatrix(data))
-#print(type(data))

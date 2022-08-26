@@ -9,4 +9,4 @@ class Config(object):
     SQLALCHEMY_ECHO = True
     SECRET_KEY = os.urandom(12)
     UPLOAD_FOLDER = app.root_path + "/static/lamps"
-    
+    RENDER_FOLDER = app.root_path + "/static/renders"

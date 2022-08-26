@@ -7,21 +7,22 @@ import math
 import random
 import sys
 import time
+import pathlib
 
 load_external_materials = True
 
-
-inputJson = "./JsonExample5"
+inputJson = "JsonExample5"
 
 if load_external_materials:
-    bpy.ops.wm.open_mainfile(filepath="./empty_materials.blend")
-    inputJson = inputJson + "Mat.json"
-else:
-    inputJson = inputJson + "Mat.json"
-    
+    blendpath = pathlib.Path("./empty_materials.blend")
+    bpy.ops.wm.open_mainfile(filepath=str(blendpath))
+
+inputJson = inputJson + "Mat.json"
+
+glbPath = pathlib.Path("./Gltf/")
 
 
-outputPng = "./renders"
+outputPng = pathlib.Path("./renders")
 
 vert_res = 720
 
@@ -250,7 +251,7 @@ def generateScene(importedJson):
             print("GLB matrix")
             print(matrix)
             deselect_all
-            bpy.ops.import_scene.gltf(filepath=importedJson[key]["path"])
+            bpy.ops.import_scene.gltf(filepath=str(glbPath + "/" + importedJson[key]["path"]))
             loc,rot,sca = rotateMatrix(matrix).decompose()
             
             current_name = bpy.context.selected_objects[0].name
@@ -303,27 +304,23 @@ def renderScene(filepath):
 
 #load json from file
 
-with open(inputJson, 'r') as jsonInput2:
+with open(pathlib.Path(inputJson), 'r') as jsonInput2:
     #example=json.load(jsonInput2)
     example = json.loads(json.dumps(json.load(jsonInput2)))
     pprint.pprint(jsonInput2)
+    print(example)
     #example = json.loads(jsonInput2)
-    pprint.pprint(example)
+    #pprint.pprint(example)
     #pprint.pprint(example["LAMP"]["matrix"])
     print("Json Loaded")
 
+#delete_all()
+#generateScene(example)
 
-delete_all()
-
-generateScene(example)
-
-start = time.time()
-renderScene(outputPng)
-end = time.time()
-print(end-start)
-
-
-
+#start = time.time()
+#renderScene(outputPng)
+#end = time.time()
+#print(end-start)
 
 
 #print(type(jsonToMatrix(data)))

@@ -29,6 +29,7 @@ def safeRender(path):
 
         db.session.add(render)
         db.session.commit()
+        os.system("blender -b --python static/json_imports.py " + secure_filename)
         return app.config['UPLOAD_FOLDER'], saveName
 
 def shopLamp(id):  # put application's code here

@@ -9,7 +9,6 @@ import os
 import json
 from flask_login import *
 from project import forms
-
 ##
 # @brief This function creates an Cart element for a specific lamp you want to shop
 # @param id is the lampID
@@ -71,8 +70,15 @@ def preSim():
         width = request.form["width"]
         height = request.form["height"]
         depth = request.form["depth"]
-
-        return render_template('simuled.html', width=width, height=height, depth=depth)
+        lamps = Lamp.query.order_by(Lamp.timeStamp)
+        gltf =[]
+        try:
+            for lamp in lamps:
+                gltf.append(lamp.gltfName)
+        except:
+            print("nicht alle GLTFs konnten geladen werden. Dies liegt moeglicherweise daran, dass eione Lampe kein GLTF hat... [ERROR]")
+        lamps = json.dumps(gltf)
+        return render_template('simuled.html', width=width, height=height, depth=depth, gltf = gltf)
 
 ##
 # @brief This function handles the Shopping Cart logic

@@ -239,7 +239,8 @@ def generateScene(importedJson):
             
             #plane.rotation_mode = "QUATERNION"
             #plane.rotation_quaternion = rot
-            plane.location = loc;
+            plane.location = loc
+            plane.scale = sca
             
             plane.matrix_world = matrixWall
 
@@ -289,7 +290,7 @@ def renderScene(filepath):
         bpy.context.scene.render.resolution_x = 1920 
         bpy.context.scene.render.resolution_y = 1080
         
-    bpy.context.scene.cycles.samples = 100
+    bpy.context.scene.cycles.samples = 20
     bpy.context.scene.cycles.use_denoising = True
     
     bpy.data.scenes[0].render.filepath = str(filepath)

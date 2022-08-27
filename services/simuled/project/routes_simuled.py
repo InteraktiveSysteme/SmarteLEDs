@@ -20,6 +20,12 @@ def renders():
     renders = Render.query.filter_by(userID=current_user.userID)
     return render_template('renders.html', renders = renders)
 
+def deleteCart(id):
+    cart = Cart.query.get_or_404(id)
+    db.session.delete(cart)
+    return shoppingCart()
+
+
 def safeRender(path):
         secureName = secure_filename(current_user.userName)
         saveName = str(uuid.uuid1()) + "_" + imgName
@@ -27,7 +33,6 @@ def safeRender(path):
         img.save(os.path.join(app.config['UPLOAD_FOLDER'], saveName))    
         img = app.config['UPLOAD_FOLDER'], saveName
         render = Render(userID=current_user.userID, imgName=img)
-
         db.session.add(render)
         db.session.commit()
         return app.config['UPLOAD_FOLDER'], saveName

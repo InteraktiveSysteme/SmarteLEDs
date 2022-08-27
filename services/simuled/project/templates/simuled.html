@@ -25,6 +25,10 @@
 <!--script>
       var GUI = lil.GUI;
     </script-->
+    <p type="hidden" id="width" value="{{ width }}"></p>
+    <p type="hidden" id="height" value="{{ height }}"></p>
+    <p hidden id="depth" value="{{ depth }}">{{ depth }}</p>
+    <p type="hidden" id="gltf" value="{{ gltf }}"></p>
 
 <style>
     .lil-gui {
@@ -42,39 +46,7 @@
         --font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     }
 
-    @media (max-width: 767px) {
-        .carousel-inner .carousel-item>div {
-            display: none
-        }
-
-        .carousel-inner .carousel-item>div:first-child {
-            display: block
-        }
-    }
-
-    .carousel-inner .carousel-item.active,
-    .carousel-inner .carousel-item-next,
-    .carousel-inner .carousel-item-prev {
-        display: flex
-    }
-
-    @media (min-width: 768px) {
-
-        .carousel-inner .carousel-item-end.active,
-        .carousel-inner .carousel-item-next {
-            transform: translateX(25%)
-        }
-
-        .carousel-inner .carousel-item-start.active,
-        .carousel-inner .carousel-item-prev {
-            transform: translateX(-25%)
-        }
-    }
-
-    .carousel-inner .carousel-item-end,
-    .carousel-inner .carousel-item-start {
-        transform: translateX(0)
-    }
+    
 
     .lil-gui input {
         color: #f2f2f2;
@@ -87,7 +59,7 @@
 </style>
 
 <!--  Our code  -->
-<h1> {{depth}}</h1>
+
 <center>
     <div id="gl" style="width: auto; height: auto;">
         <canvas id="myCanvas" width="auto" height="auto" style="position: relativ; border-radius: 15px;"></canvas>

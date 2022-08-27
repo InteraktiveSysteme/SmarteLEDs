@@ -9,7 +9,6 @@ import os
 import json
 from flask_login import *
 from project import forms
-
 ##
 # @brief This function creates an Cart element for a specific lamp you want to shop
 # @param id is the lampID
@@ -21,21 +20,26 @@ def renders():
     return render_template('renders.html', renders = renders)
 
 def deleteCart(id):
-    cart = Cart.query.get_or_404(id)
-    db.session.delete(cart)
+    carts = Cart.query.filter_by(userID=current_user.userID)
+    for cart in carts:
+        if int(id) == int(cart.lampID):
+            db.session.delete(cart)
+            db.session.commit()
+            break
     return shoppingCart()
 
 
-def safeRender(path):
-        secureName = secure_filename(current_user.userName)
-        saveName = str(uuid.uuid1()) + "_" + imgName
-        imgName = saveName
-        img.save(os.path.join(app.config['UPLOAD_FOLDER'], saveName))    
-        img = app.config['UPLOAD_FOLDER'], saveName
-        render = Render(userID=current_user.userID, imgName=img)
-        db.session.add(render)
-        db.session.commit()
-        return app.config['UPLOAD_FOLDER'], saveName
+def safeRender():
+    jsonString = request.get_json()
+    saveName = str(uuid.uuid1()) + ".jpg" 
+    img.save(os.path.join(app.config['RENDER_FOLDER'], saveName))    
+    img = app.config['RENDER_FOLDER'], saveName
+    render = Render(userID=current_user.userID, imgName=img)
+    db.session.add(render)
+    db.session.commit()
+    os.system("blender -b --python static/json_imports.py -- " + json  + " " + saveName)
+    return "success"
+    return app.config['UPLOAD_FOLDER'], saveName
 
 def shopLamp(id):  # put application's code here
     if current_user.is_authenticated:
@@ -76,8 +80,15 @@ def preSim():
         width = request.form["width"]
         height = request.form["height"]
         depth = request.form["depth"]
-
-        return render_template('simuled.html', width=width, height=height, depth=depth)
+        lamps = Lamp.query.order_by(Lamp.timeStamp)
+        gltf =[]
+        try:
+            for lamp in lamps:
+                gltf.append(lamp.gltfName)
+        except:
+            print("nicht alle GLTFs konnten geladen werden. Dies liegt moeglicherweise daran, dass eione Lampe kein GLTF hat... [ERROR]")
+        lamps = json.dumps(gltf)
+        return render_template('simuled.html', width=width, height=height, depth=depth, gltf = gltf)
 
 ##
 # @brief This function handles the Shopping Cart logic
@@ -137,7 +148,7 @@ def test():  # put application's code here
 
 
 def expose_gltf(file):
-    return send_from_directory(os.path.join(app.root_path, 'static/Gltf'), file)
+    return send_from_directory(os.path.join(app.root_path, 'static/Gltf/Lampen/'), file)
 
 
 def testglb():
@@ -175,14 +186,19 @@ def addLamp():
         text = request.form["shortText"]
         longtext = request.form["longText"]
         price = request.form["price"]
-        gltfName = secure_filename(img.filename)
-        savegltfName = str(uuid.uuid1()) + "_" + gltfName
-        gltfName = savegltfName
-        gltf.save(os.path.join(app.config['UPLOAD_FOLDER'], savegltfName))
+
+        
+
         imgName = secure_filename(img.filename)
         saveName = str(uuid.uuid1()) + "_" + imgName
         imgName = saveName
         img.save(os.path.join(app.config['UPLOAD_FOLDER'], saveName))
+
+        gltfName = secure_filename(gltf.filename)
+        savegltfName = str(uuid.uuid1()) + "_" + gltfName
+        gltfName = savegltfName
+        gltf.save(os.path.join(app.root_path +"/static/Gltf/Lampen/", savegltfName))
+
         #now we add the lamp to the database
         lamp = Lamp(lampName=name, imgName=imgName, gltfName=gltfName, lampPrice=price, lampText=text,
                     lampLongText=longtext)

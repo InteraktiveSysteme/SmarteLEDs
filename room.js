@@ -18,16 +18,8 @@ const GUIObjects = new ObjectGUI(glbs)
 // only use the ratio of the user input so the measures are between 0 and 1.5
 
 const width = 4
-const height = 2.5
+const height = 3
 const depth = 5
-
-// const width = 1
-// const height = .5
-// const depth = 1.3
-
-// const width = 3
-// const height = .5
-// const depth = 5
 
 /**
  * Sizes
@@ -90,9 +82,13 @@ function glbImporter( path ){
 
         root = glb.scene
 
-        if( path.localeCompare( './Ceiling_lamp_small.glb' ) == 0 ){
+        const box = new THREE.Box3().setFromObject( root )
+        const sizes = box.getSize( new THREE.Vector3() )
 
-            // const spotColor1 = 0xfa05e1;
+        console.log( sizes )
+
+        if( path.localeCompare( './Ceiling_lamp.glb' ) == 0 ){
+
             const spotColor1 = 0xffffff;
 
             const spotLight = new THREE.SpotLight( spotColor1, 1, 8 )
@@ -104,7 +100,7 @@ function glbImporter( path ){
 
             spotLight.shadow.normalBias = .01
             spotLight.userData.type = "SPOT"
-            scene.add( spotLight )
+            // scene.add( spotLight )
 
             lightRay.push( spotLight )
 
@@ -113,46 +109,33 @@ function glbImporter( path ){
             spotLight.target = target1
             scene.add( target1 )
 
-            // root.position.set( 0, .8, 0 )
+            root.position.set( 0, height / 2 - sizes.y, 0 )
 
-            root.position.set( 0, ( height / 2 ) - .45, 0 )
-
-            // spotLight.position.set( root.position )
             spotLight.position.set( root.position.x, -.005, root.position.z )
 
             console.log( glb )
 
             root.userData.path = path
 
-            var child
+            var child = root.children[ root.children.length - 1 ]
 
-            root.traverse( function( node ) {
-
-                if( node.isMesh ){
-
-                    console.log( node )
-
-                    node.castShadow = true
-                    node.receiveShadow = true
-                    node.userData.draggable = true
-                    node.userData.drag = true
-                    node.userData.rot = true
-                    node.userData.glb = true
-                    node.castShadow = true
-                    node.receiveShadow = true
-                    node.userData.root = root
-                    node.userData.target = target1
-
-                    child = node
-                }
-            } )
+            child.castShadow = true
+            child.receiveShadow = true
+            child.userData.draggable = true
+            child.userData.drag = true
+            child.userData.rot = true
+            child.userData.glb = true
+            child.castShadow = true
+            child.receiveShadow = true
+            child.userData.root = root
+            child.userData.target = target1
             child.userData.child = spotLight
             spotLight.userData.object = child
             child.add( spotLight )
             child.add( target1 )
         }
     
-        if( path.localeCompare( './Standing_lamp_small.glb' ) == 0 ){
+        if( path.localeCompare( './Standing_lamp.glb' ) == 0 ){
     
             const spotColor1 = 0xffffff;
             const spotLight = new THREE.SpotLight( spotColor1, 1, 8 )
@@ -164,7 +147,7 @@ function glbImporter( path ){
 
             spotLight.shadow.normalBias = .01
             spotLight.userData.type = "SPOT"
-            scene.add( spotLight )
+            // scene.add( spotLight )
 
             lightRay.push( spotLight )
 
@@ -173,185 +156,123 @@ function glbImporter( path ){
             spotLight.target = target1
             scene.add( target1 )
 
-            // root.position.set( 0, -.19, 0 )
-            root.position.set( 0, 1.06 - ( height / 2 ), 0 )
+            root.position.set( 0, ( - height + sizes.y ) / 2, 0 )
 
             // spotLight.position.set( root.position )
             
-            spotLight.position.set( root.position.x, -.005, root.position.z )
+            spotLight.position.set( root.position.x, .5, root.position.z )
 
             console.log( glb )
 
             root.userData.path = path
 
             // root.userData.glb = true
-            var child
+            var child = root.children[ root.children.length - 1 ]
 
-            root.traverse( function( node ) {
-
-                if( node.isMesh ){
-
-                    console.log( node )
-
-                    node.castShadow = true
-                    node.receiveShadow = true
-                    node.userData.draggable = true
-                    node.userData.drag = true
-                    node.userData.rot = true
-                    node.userData.glb = true
-                    node.castShadow = true
-                    node.receiveShadow = true
-                    node.userData.root = root
-                    node.userData.top = true
-                    node.userData.target = target1
-
-                    child = node
-                }
-            } )
+            child.castShadow = true
+            child.receiveShadow = true
+            child.userData.draggable = true
+            child.userData.drag = true
+            child.userData.rot = true
+            child.userData.glb = true
+            child.castShadow = true
+            child.receiveShadow = true
+            child.userData.root = root
+            child.userData.target = target1
             child.userData.child = spotLight
             spotLight.userData.object = child
             child.add( spotLight )
             child.add( target1 )
         }
     
-        if( path.localeCompare( './table_small.glb' ) == 0 ){
+        if( path.localeCompare( './table.glb' ) == 0 ){
 
-            // root.position.set( 0, -.655, 0 )
-            root.position.set( 0, .595 - ( height / 2 ), 0 )
-
+            root.position.set( 0, ( - height + sizes.y ) / 2, 0 )
 
             console.log( glb )
 
             root.userData.path = path
 
             // root.userData.glb = true
-            var child
+            var child = root.children[ root.children.length - 1 ]
 
-            root.traverse( function( node ) {
-
-                if( node.isMesh ){
-
-                    console.log( node )
-
-                    node.castShadow = true
-                    node.receiveShadow = true
-                    node.userData.draggable = true
-                    node.userData.drag = true
-                    node.userData.rot = true
-                    node.userData.glb = true
-                    node.castShadow = true
-                    node.receiveShadow = true
-                    node.userData.root = root
-
-                    child = node
-                }
-            } )
+            child.castShadow = true
+            child.receiveShadow = true
+            child.userData.draggable = true
+            child.userData.drag = true
+            child.userData.rot = true
+            child.userData.glb = true
+            child.castShadow = true
+            child.receiveShadow = true
+            child.userData.root = root
         }
     
-        if( path.localeCompare( './chair_small.glb' ) == 0 ){
+        if( path.localeCompare( './chair.glb' ) == 0 ){
 
-            // root.position.set( 0, -.85, 0 )
-            root.position.set( 0, .4 - ( height / 2 ), 0 )
+            root.position.set( 0, ( - height + sizes.y ) / 2, 0 )
 
             console.log( glb )
 
             root.userData.path = path
 
             // root.userData.glb = true
-            var child
+            var child = root.children[ root.children.length - 1 ]
 
-            root.traverse( function( node ) {
-
-                if( node.isMesh ){
-
-                    console.log( node )
-
-                    node.castShadow = true
-                    node.receiveShadow = true
-                    node.userData.draggable = true
-                    node.userData.drag = true
-                    node.userData.rot = true
-                    node.userData.glb = true
-                    node.castShadow = true
-                    node.receiveShadow = true
-                    node.userData.root = root
-
-                    child = node
-                }
-            } )
+            child.castShadow = true
+            child.receiveShadow = true
+            child.userData.draggable = true
+            child.userData.drag = true
+            child.userData.rot = true
+            child.userData.glb = true
+            child.castShadow = true
+            child.receiveShadow = true
+            child.userData.root = root
         }
         
-        if( path.localeCompare( './shelf_small.glb' ) == 0 ){
+        if( path.localeCompare( './shelf.glb' ) == 0 ){
     
             // root.position.set( 0, -.22, 0 )
-            root.position.set( 0, 1.03 - ( height / 2 ), 0 )
+            root.position.set( 0, ( - height + sizes.y ) / 2, 0 )
 
             console.log( glb )
 
             root.userData.path = path
 
             // root.userData.glb = true
-            var child
+            var child = root.children[ root.children.length - 1 ]
 
-            root.traverse( function( node ) {
-
-                if( node.isMesh ){
-
-                    console.log( node )
-
-                    node.castShadow = true
-                    node.receiveShadow = true
-                    node.userData.draggable = true
-                    node.userData.drag = true
-                    node.userData.rot = true
-                    node.userData.glb = true
-                    node.castShadow = true
-                    node.receiveShadow = true
-                    node.userData.root = root
-
-                    child = node
-                }
-            } )
+            child.castShadow = true
+            child.receiveShadow = true
+            child.userData.draggable = true
+            child.userData.drag = true
+            child.userData.rot = true
+            child.userData.glb = true
+            child.castShadow = true
+            child.receiveShadow = true
+            child.userData.root = root
         }
     
-        if( path.localeCompare( './sofa_small.glb' ) == 0 ){
+        if( path.localeCompare( './sofa.glb' ) == 0 ){
     
-    
-            // root.position.set( 0, - 1, 0 )
-            root.position.set( 0, .25 - ( height / 2 ), 0 )
+            root.position.set( 0, ( - height + sizes.y ) / 2, 0 )
 
             console.log( glb )
 
             root.userData.path = path
 
             // root.userData.glb = true
-            var child
+            var child = root.children[ root.children.length - 1 ]
 
-            root.traverse( function( node ) {
-
-                if( node.isMesh ){
-
-                    console.log( node )
-
-                    node.castShadow = true
-                    node.receiveShadow = true
-                    node.userData.draggable = true
-                    node.userData.drag = true
-                    node.userData.rot = true
-                    node.userData.glb = true
-                    node.castShadow = true
-                    node.receiveShadow = true
-                    node.userData.root = root
-
-                    child = node
-                }
-            } )
+            child.castShadow = true
+            child.receiveShadow = true
+            child.userData.draggable = true
+            child.userData.drag = true
+            child.userData.rot = true
+            child.userData.glb = true
+            child.castShadow = true
+            child.receiveShadow = true
+            child.userData.root = root
         }
-
-        const cone = new THREE.ConeGeometry( .05, .1, 32 )
-        // const spotLightMaterial1 = new THREE.MeshPhongMaterial( { color: 0xff0000, side: THREE.DoubleSide } )
-
-        // spotLightMaterial1.emissiveIntensity = 1.0
 
         glbRay.push( root )
 
@@ -368,12 +289,12 @@ function glbImporter( path ){
     } );
 }
 
-// glbImporter( './Standing_lamp_small.glb' )
-glbImporter( './Ceiling_lamp_small.glb' )
-glbImporter( './sofa_small.glb' )
-// glbImporter( './chair_small.glb' )
-// glbImporter( './table_small.glb' )
-// glbImporter( './shelf_small.glb' )
+glbImporter( './Standing_lamp.glb' )
+glbImporter( './Ceiling_lamp.glb' )
+// glbImporter( './sofa.glb' )
+// glbImporter( './chair.glb' )
+// glbImporter( './table.glb' )
+// glbImporter( './shelf.glb' )
 
 /**
  * Camera
@@ -897,7 +818,7 @@ class Controls{
 
         if( event.key === 'q' ){
 
-            this.state.switchPerspective()
+            state.switchPerspective()
         }
     }
 }
@@ -1168,7 +1089,7 @@ class FirstPerson{
 
             if( this.moveForward ){
 
-                camera.translateZ( - .01 )
+                camera.translateZ( - .05 )
 
                 this.vec = new THREE.Vector3()
                 camera.getWorldPosition( this.vec )
@@ -1182,7 +1103,7 @@ class FirstPerson{
     
             if( this.moveLeft ){
     
-                camera.translateX( - .01 )
+                camera.translateX( - .05 )
                 
                 this.vec = new THREE.Vector3()
                 camera.getWorldPosition( this.vec )
@@ -1196,7 +1117,7 @@ class FirstPerson{
     
             if( this.moveBackward ){
     
-                camera.translateZ( .01 )
+                camera.translateZ( .05 )
 
                 this.vec = new THREE.Vector3()
                 camera.getWorldPosition( this.vec )
@@ -1210,7 +1131,7 @@ class FirstPerson{
     
             if( this.moveRight ){
     
-                camera.translateX( .01 )
+                camera.translateX( .05 )
 
                 this.vec = new THREE.Vector3()
                 camera.getWorldPosition( this.vec )

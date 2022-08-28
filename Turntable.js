@@ -10,16 +10,24 @@ export class Turntable{
     /**
      * @brief creates a Turntable object.
      */
-    constructor( camera ){
+    constructor( creator ){
 
+        this.creator = creator
         this.name = "round"
-        camera.position.set( Math.max( width, height, depth ), 0, 0 )
-        camera.lookAt( 0, 0, 0 )
-        this.camera = camera
+        this.creator.camera.position.set( Math.max( width, height, depth ), 0, 0 )
+        this.creator.camera.lookAt( 0, 0, 0 )
         this.dragBool = false
         this.mousePos = .0
         this.camX = .0
         this.camZ = .0
+
+        this.startDrag = ( event ) => {
+
+            this.dragBool = true
+            this.mousePos = event.screenX
+            this.camX = this.creator.camera.position.x
+            this.camZ = this.creator.camera.position.z
+        }
     }
 
     /**
@@ -42,17 +50,17 @@ export class Turntable{
         window.removeEventListener( 'mouseup', this.cancelDrag )
     }
 
-    /**
-     * @brief sets the Boolean for dragging to true and saves camera x- and y-coordinates.
-     * @param {mousedown} event 
-     */
-    startDrag( event ){
+    // /**
+    //  * @brief sets the Boolean for dragging to true and saves camera x- and y-coordinates.
+    //  * @param {mousedown} event 
+    //  */
+    // startDrag( event ){
 
-        this.dragBool = true
-        this.mousePos = event.screenX
-        this.camX = this.camera.position.x
-        this.camZ = this.camera.position.z
-    }
+    //     this.dragBool = true
+    //     this.mousePos = event.screenX
+    //     this.camX = this.creator.camera.position.x
+    //     this.camZ = this.creator.camera.position.z
+    // }
 
     /**
      * @brief rotates the camera around the room when user drags mouse in a horizontal motion.
@@ -64,8 +72,8 @@ export class Turntable{
 
             this.mouseX = ( event.screenX - this.mousePos )
 
-            this.camera.position.x = this.camX * Math.cos( ( 3 * this.mouseX ) / window.innerWidth ) - this.camZ * Math.sin( ( 3 * this.mouseX ) / window.innerWidth )
-            this.camera.position.z = this.camX * Math.sin( ( 3 * this.mouseX ) / window.innerWidth ) + this.camZ * Math.cos( ( 3 * this.mouseX ) / window.innerWidth )
+            this.creator.camera.position.x = this.camX * Math.cos( ( 3 * this.mouseX ) / window.innerWidth ) - this.camZ * Math.sin( ( 3 * this.mouseX ) / window.innerWidth )
+            this.creator.camera.position.z = this.camX * Math.sin( ( 3 * this.mouseX ) / window.innerWidth ) + this.camZ * Math.cos( ( 3 * this.mouseX ) / window.innerWidth )
 
             this.update
 
@@ -86,6 +94,6 @@ export class Turntable{
      */
     update(){
 
-        this.camera.lookAt( 0, 0, 0 )
+        this.creator.camera.lookAt( 0, 0, 0 )
     } 
 }

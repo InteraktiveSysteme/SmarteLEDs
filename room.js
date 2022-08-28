@@ -1,7 +1,6 @@
 import  * as THREE from './three.module.js'
 import { GLTFLoader } from './GLTFLoader.js'
 import {ObjectGUI} from './GUI_Objects.js'
-const GUIObjects = new ObjectGUI()
 
 // Canvas
 const canvas = document.getElementById('myCanvas')
@@ -12,6 +11,8 @@ const room = new THREE.Group()
 scene.background = new THREE.Color(0x111111)
 
 const glbs = JSON.parse( document.getElementById( "gltf" ).innerHTML )
+
+const GUIObjects = new ObjectGUI(glbs)
 
 //Measures of the room
 // only use the ratio of the user input so the measures are between 0 and 1.5

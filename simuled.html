@@ -9,26 +9,10 @@
 <meta charset="UTF-8" />
 <title>Three.js 101</title>
 
-<!--  Three.js CDN  -->
-<!--script type="importmap">
-      "imports:" 
-      {
-        "three": "{{ url_for('static', filename='/js/three.js' ) }}",
-        "GLTF": "{{ url_for('static', filename='/js/GLTFLoader.js' ) }}",
-        "drag": "{{ url_for('static', filename='/js/DragControls.js' ) }}"
-      }
-    </script -->
-<script src="{{ url_for('static', filename='/js/three.js' ) }}"></script>
-<script src="{{ url_for('static', filename='/js/GLTFLoader.js' ) }}"></script>
-<script src="{{ url_for('static', filename='/js/DragControls.js' ) }}"></script>
-<script src="https://cdn.jsdelivr.net/npm/lil-gui@0.16"></script>
-<!--script>
-      var GUI = lil.GUI;
-    </script-->
-    <p type="hidden" id="width" value="{{ width }}"></p>
-    <p type="hidden" id="height" value="{{ height }}"></p>
-    <p type="hidden" id="depth" value="{{ depth }}"></p>
-    <p type="hidden" id="gltf" value="{{ gltf }}"></p>
+    <p type="hidden" id="width" value="10"></p>
+    <p type="hidden" id="height" value="5"></p>
+    <p type="hidden" id="depth" value="20"></p>
+    <p type="hidden" id="gltf" value="[ 'barramundi.glb', 'Standlampe7.glb', 'Standlampe8.glb', 'Deckenlampe1.glb' ]"></p>
 
 <style>
     .lil-gui {
@@ -67,7 +51,7 @@
 </center>
 
 <!--p id="screen-log" style="color:white"></p-->
-<script src="{{ url_for('static', filename='/js/room.js' ) }}"></script>
+<script type="module" src="{{ url_for('static', filename='/js/room.js' ) }}"></script>
 <script>
     let items = document.querySelectorAll('.carousel .carousel-item')
 

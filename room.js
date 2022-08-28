@@ -289,9 +289,9 @@ function glbImporter( path ){
     } );
 }
 
-glbImporter( './Standing_lamp.glb' )
+// glbImporter( './Standing_lamp.glb' )
 glbImporter( './Ceiling_lamp.glb' )
-// glbImporter( './sofa.glb' )
+glbImporter( './sofa.glb' )
 // glbImporter( './chair.glb' )
 // glbImporter( './table.glb' )
 // glbImporter( './shelf.glb' )

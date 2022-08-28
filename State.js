@@ -3,6 +3,7 @@ import { Turntable } from './Turntable.js'
 import { Controls } from './Controls.js'
 import { RotationControls } from './RotationControls.js'
 import { Create } from './Create.js'
+import { DragControls } from './DragControls.js'
 
 /**
  * State class
@@ -14,43 +15,22 @@ import { Create } from './Create.js'
      * creates a State object.
      * @param {*} state 
      */
-    constructor( scene, state, sizes ){
+    constructor( creator ){
 
-        const camera = new THREE.PerspectiveCamera( 75, sizes.width / sizes.height, 0.05, 10 )
+        this.creator = creator
 
-        camera.position.x = Math.max( width, height, depth )
-        camera.position.y = 0
-        camera.position.z = 0
-        this.sizes = sizes
-        scene.add( camera )
+        this.controls = new DragControls( this.creator )
+        this.creator.camera.position.set( Math.max( width, height, depth ), 0, 0 )
+        this.creator.camera.lookAt( 0, 0, 0 )
 
-        this.controls = state
-        this.name = state.name
-        this.camera = camera
-        camera.position.set( Math.max( width, height, depth ), 0, 0 )
-        camera.lookAt( 0, 0, 0 )
-        // this.perspective = new FirstPerson( width, height, depth )
-        this.perspective = new Turntable( camera )
+        this.perspective = new Turntable( this.creator )
         this.perspective.activate()
-
-        if( this.perspective.name.localeCompare( "ego" ) != 0 ){
-
-            if( this.name.localeCompare( "drag" ) == 0 ){
-
-                this.controls.activate()
-            }
-
-            else if( this.name.localeCompare( "rotate" ) == 0 ){
-
-                this.controls.activate()
-            }
-        }
 
         console.log( this )
 
-        // adding eventlisteners for the controls
-        const controls = new Controls( this )
-        controls.activate()
+        // ToDo put Controls in State 
+        const inputControls = new Controls( this )
+        inputControls.activate()
     }
 
     /**
@@ -58,21 +38,19 @@ import { Create } from './Create.js'
      */
     switchControls(){
 
-        if( this.name.localeCompare( "drag" ) == 0 ){
+        if( this.controls.name.localeCompare( "drag" ) == 0 ){
 
             let oldState = this.controls
             this.controls = new RotationControls()
-            this.name = "rotate"
 
             oldState.deactivate()
 
             this.controls.activate()
         }
-        else if( this.name.localeCompare( "rotate" ) == 0 ){
+        else if( this.controls.name.localeCompare( "rotate" ) == 0 ){
 
             let oldState = this.controls
             this.controls = new DragControls()
-            this.name = "drag"
 
             oldState.deactivate()
 
@@ -109,10 +87,5 @@ import { Create } from './Create.js'
 
             console.log( "Turntable" )
         }
-    }
-
-    getCamera(){
-
-        return this.camera
     }
 }

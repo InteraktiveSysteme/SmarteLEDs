@@ -10,15 +10,13 @@ import { Create } from './Create.js'
     /**
      * @brief creates an DragControls object.
      */
-    constructor( camera, canvas ){
+    constructor( creator ){
 
+        this.creator = creator
         this.mouseX = 0
         this.mouseY = 0
         this.draggable = new THREE.Object3D()
         this.name = "drag"
-        this.canvas = canvas
-        console.log( canvas )
-        this.camera = camera
     }
 
     /**
@@ -58,8 +56,8 @@ import { Create } from './Create.js'
             return
         }
     
-        raycaster.setFromCamera( new THREE.Vector2( this.mouseX, this.mouseY ), this.camera )
-        let intersects = raycaster.intersectObjects( scene.children )
+        raycaster.setFromCamera( new THREE.Vector2( this.mouseX, this.mouseY ), this.creator.camera )
+        let intersects = raycaster.intersectObjects( this.creator.scene.children )
     
     
         if( ( intersects.length ) > 0 && ( intersects[ 0 ].object.userData.drag )){
@@ -75,14 +73,9 @@ import { Create } from './Create.js'
      * @param {mousemove} event
      */
     onMouseMove( event ){
-
-        const sizes = {
-            width: .95 * window.innerWidth,
-            height: window.innerHeight
-        }
     
-        this.mouseX = ( ( event.clientX - this.canvas.getBoundingClientRect().left ) / sizes.width ) * 2 - 1
-        this.mouseY = - ( ( event.clientY - this.canvas.getBoundingClientRect().top ) / sizes.height ) * 2 + 1
+        this.mouseX = ( ( event.clientX - this.creator.canvas.getBoundingClientRect().left ) / this.creator.sizes.width ) * 2 - 1
+        this.mouseY = - ( ( event.clientY - this.creator.canvas.getBoundingClientRect().top ) / this.creator.sizes.height ) * 2 + 1
     }
 
     // only functions when called in an event
@@ -97,9 +90,9 @@ import { Create } from './Create.js'
         
         if( this.draggable != null ){
 
-            raycaster.setFromCamera( new THREE.Vector2( this.mouseX, this.mouseY ), this.camera )
+            raycaster.setFromCamera( new THREE.Vector2( this.mouseX, this.mouseY ), this.creator.camera )
             
-            const intersections = raycaster.intersectObjects( scene.children )
+            const intersections = raycaster.intersectObjects( this.creator.scene.children )
             
             if( intersections.length > 0 ){
     
@@ -133,9 +126,9 @@ import { Create } from './Create.js'
 
         let raycaster = new THREE.Raycaster()
 
-        raycaster.setFromCamera( new THREE.Vector2( this.mouseX, this.mouseY ), this.camera )
+        raycaster.setFromCamera( new THREE.Vector2( this.mouseX, this.mouseY ), this.creator.camera )
         // hopefully only returns the surface level children and not the children of the room group
-        const intersects = raycaster.intersectObjects( scene.children )
+        const intersects = raycaster.intersectObjects( this.creator.scene.children )
 
         let hovArray = []
 
@@ -159,12 +152,12 @@ import { Create } from './Create.js'
 
         else{
 
-            for( let i = 0; i < scene.children.length; i++ ){
+            for( let i = 0; i < this.creator.scene.children.length; i++ ){
     
-                if( scene.children[ i ].material ){
+                if( this.creator.scene.children[ i ].material ){
         
                     //scene.children[ i ].material.opacity = scene.children[ i ].draggable == true ? .5 : 1.0
-                    scene.children[ i ].material.opacity = 1.0
+                    this.creator.scene.children[ i ].material.opacity = 1.0
                 }
             }
         }

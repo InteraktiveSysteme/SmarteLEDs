@@ -1,7 +1,7 @@
 import  * as THREE from './three.module.js'
 import { GLTFLoader } from './GLTFLoader.js'
 import {ObjectGUI} from './GUI_Objects.js'
-const GUIObjects = new ObjectGUI();
+const GUIObjects = new ObjectGUI()
 
 // Canvas
 const canvas = document.getElementById('myCanvas')
@@ -11,7 +11,7 @@ const scene = new THREE.Scene()
 const room = new THREE.Group()
 scene.background = new THREE.Color(0x111111)
 
-console.log( JSON.parse( document.getElementById( "gltf" ).innerHTML ) )
+const glbs = JSON.parse( document.getElementById( "gltf" ).innerHTML )
 
 //Measures of the room
 // only use the ratio of the user input so the measures are between 0 and 1.5
@@ -176,6 +176,7 @@ function glbImporter( path ){
             root.position.set( 0, 1.06 - ( height / 2 ), 0 )
 
             // spotLight.position.set( root.position )
+            
             spotLight.position.set( root.position.x, -.005, root.position.z )
 
             console.log( glb )
@@ -366,13 +367,12 @@ function glbImporter( path ){
     } );
 }
 
-glbImporter( './Standing_lamp_small.glb' )
+// glbImporter( './Standing_lamp_small.glb' )
 glbImporter( './Ceiling_lamp_small.glb' )
 glbImporter( './sofa_small.glb' )
-glbImporter( './chair_small.glb' )
-glbImporter( './table_small.glb' )
-glbImporter( './shelf_small.glb' )
-
+// glbImporter( './chair_small.glb' )
+// glbImporter( './table_small.glb' )
+// glbImporter( './shelf_small.glb' )
 
 /**
  * Camera
@@ -457,6 +457,8 @@ class State{
                 this.controls.activate()
             }
         }
+
+        console.log( this )
 
         // adding eventlisteners for the controls
         const controls = new Controls( this )
@@ -716,7 +718,7 @@ class RotationControls{
         window.addEventListener( 'click', this.onClick )
         window.addEventListener( 'mousemove', this.onMouseMove )
         window.addEventListener( 'mousemove', this.rotateObject )
-        window.addEventListener( 'mousemove', this.hoverObject )
+        // window.addEventListener( 'mousemove', this.hoverObject )
     }
 
     /**
@@ -727,7 +729,7 @@ class RotationControls{
         window.removeEventListener( 'click', this.onClick )
         window.removeEventListener( 'mousemove', this.onMouseMove )
         window.removeEventListener( 'mousemove', this.rotateObject )
-        window.removeEventListener( 'mousemove', this.hoverObject )
+        // window.removeEventListener( 'mousemove', this.hoverObject )
     }
     
     /**
@@ -852,6 +854,7 @@ class Controls{
     constructor( state ){
 
         this.state = state
+        console.log( this.state )
     }
 
     /**
@@ -880,7 +883,8 @@ class Controls{
 
         if( event.key === 'c'){
 
-            this.state.switchControls()
+            console.log( state )
+            state.switchControls()
         }
     }
     

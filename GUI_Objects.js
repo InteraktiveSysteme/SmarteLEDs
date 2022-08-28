@@ -24,7 +24,6 @@ export class ObjectGUI{
      animate() {
         window.requestAnimationFrame( () => {
             this.animate();
-            const dt = this.clock.getDelta()
 
             let index = 0;
             for (index in this.glbs) {
@@ -45,8 +44,6 @@ export class ObjectGUI{
         this.scene = this.buildScene();
         this.camera = this.buildCamera();
         this.renderer = this.buildRenderer();
-        this.clock = new THREE.Clock();
-        this.clock.start();
         this.meshes = []
         this.glbs = []
 
@@ -151,45 +148,32 @@ export class ObjectGUI{
 
         checkClicked(){
             window.addEventListener( 'mousedown', (event) => {
+                this.p = new THREE.Vector2();
+                this.p.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+                this.p.y = - ( event.clientY / 100 ) * 2 + 1;
+
+                this.pointer = this.p;
+
+                this.camera.lookAt( this.scene.position );
+
+                this.camera.updateMatrixWorld();
+
+                this.raycaster.setFromCamera( this.pointer, this.camera );
         
-        this.p = new THREE.Vector2();
-        this.p.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-        this.p.y = - ( event.clientY / 100 ) * 2 + 1;
-
-        this.pointer = this.p;
-
-        this.camera.lookAt( this.scene.position );
-
-        this.camera.updateMatrixWorld();
-
-        this.raycaster.setFromCamera( this.pointer, this.camera );
-        
-        let intersects = this.raycaster.intersectObjects(this.scene.children, true);
-
-        let INTERSECTED;
-
-        if ( intersects.length > 0 ) {
+                let intersects = this.raycaster.intersectObjects(this.scene.children, true);
 
 
-                INTERSECTED = intersects[ 0 ].object;
+                if ( intersects.length > 0 ) {
+                    let event = new CustomEvent('objectClicked', { 
+                        detail: { 
+                            glbPath: intersects[0].object.parent.userData.path 
+                        }
+                    });
 
-                let event = new CustomEvent('objectClicked', { 
-                    detail: { 
-                        glbPath: intersects[0].object.parent.userData.path 
-                    }
-                });
-
-                document.dispatchEvent(event);
-                
-                //console.log(INTERSECTED);
-
-                
-        } else {
-
-            INTERSECTED = null;
-
-        }
-            }  );
+                    document.dispatchEvent(event);
+                    //console.log(INTERSECTED);
+                } 
+            });
         }
 
 }

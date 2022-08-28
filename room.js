@@ -11,6 +11,8 @@ const scene = new THREE.Scene()
 const room = new THREE.Group()
 scene.background = new THREE.Color(0x111111)
 
+console.log( JSON.parse( document.getElementById( "gltf" ).innerHTML ) )
+
 //Measures of the room
 // only use the ratio of the user input so the measures are between 0 and 1.5
 

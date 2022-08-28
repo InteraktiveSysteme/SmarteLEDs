@@ -1,13 +1,25 @@
 import * as THREE from '//cdn.skypack.dev/three@0.129.0'
 import { GLTFLoader } from './GLTFLoader.js'
 
+
 export class ObjectGUI{
 
-    onWindowResize() {
-        this.camera.aspect = window.innerWidth / this.height
-        this.camera.updateProjectionMatrix()
-        this.renderer.setSize(0.95 * window.innerWidth, 100)
-      }
+
+    registerResize() {
+        window.addEventListener('resize', () => {
+            // Update sizes
+            let width = .95 * window.innerWidth
+            let height = 100
+
+            // Update camera
+            this.camera.aspect = width / height
+            this.camera.updateProjectionMatrix()
+
+            // Update renderer
+            this.renderer.setSize(width, height)
+            this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+        });
+    }
 
      animate() {
         window.requestAnimationFrame( () => {
@@ -38,18 +50,15 @@ export class ObjectGUI{
         this.meshes = []
         this.glbs = []
 
-        window.addEventListener('resize', this.onWindowResize(), false);
 
         this.createLights();
         this.createGLBObjects(glbPath);
 
         this.raycaster = new THREE.Raycaster();
         
-        window.addEventListener( 'mousedown', this.onPointerMove );
-
+        this.registerResize();
         this.animate();
         this.checkClicked();
-
     }
 
     buildScene(){
@@ -60,7 +69,7 @@ export class ObjectGUI{
 
     buildCamera(){
         const d = 1;
-        const aspect = window.innerWidth/this.height;
+        const aspect = 0.95 * window.innerWidth/this.height;
         const camera = new THREE.OrthographicCamera( - d * aspect, d * aspect, d, - d, 0.1, 1000 );
         //const camera = new THREE.PerspectiveCamera(475, window.innerWidth / this.height, 1, 100)
         //camera.position.set(0,0,0)
@@ -74,7 +83,7 @@ export class ObjectGUI{
 
     buildRenderer(){
         const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('gui'), antialias: true })
-        renderer.setSize(window.innerWidth, this.height)
+        renderer.setSize(0.95 * window.innerWidth, this.height)
         //document.getElementById('webgl').appendChild(renderer.domElement);
         
         return renderer;

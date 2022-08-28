@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<head>
+	<meta charset="UTF-8"/>
+	<title>Three.js 101</title>
+</head>
+<body>
+
+  <p type="hidden" id="width" value="{{ width }}"></p>
+  <p type="hidden" id="height" value="{{ height }}"></p>
+  <p hidden id="depth" value="{{ depth }}">{{ depth }}</p>
+  <p type="hidden" id="gltf" value="{{ gltf }}"></p>
+  <center>
+    <div id="gl" style="width: auto; height: auto;">
+      <canvas id="myCanvas" width="auto" height="auto" style="position: relativ; border-radius: 15px;"></canvas>
+    </div>
+  </center>
+
+    <!--p id="screen-log" style="color:white"></p-->
+    <script type="module" src="./room.js"></script>
+</body>

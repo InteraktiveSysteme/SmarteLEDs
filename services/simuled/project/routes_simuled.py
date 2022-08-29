@@ -256,16 +256,13 @@ def shoppingCart(cookie=[]):
     else:
         if request.method == "GET":
 
-            if (request.cookies.get('cart') is None):
-                return render_template('shoppingCartV3.html')
-            else:
+            if (request.cookies.get('cart') is not None):
                 cartTEMP = json.loads(request.cookies.get('cart'))
                 for i in cartTEMP:
                     lamps.append(Lamp.query.get(i))
         
                 summe = 0
                 for lamp in lamps:
-                    print(type(lamp.lampPrice))
                     if type(lamp.lampPrice) == float or type(lamp.lampPrice) == int:
                         summe += lamp.lampPrice
                     else:
@@ -298,7 +295,7 @@ def shopLamp(id):
             cartTEMP = json.loads(request.cookies.get('cart'))
             cartTEMP.append(int(id))
 
-        resp = make_response(render_template("shop.html", lamps=lamps, cartAmount = amountCartObjects()), 200)
+        resp = make_response(render_template("shop.html", lamps=lamps, cartAmount = len(cartTEMP)), 200)
         cartJSON = json.dumps(cartTEMP)
         resp.set_cookie('cart', cartJSON)
 
@@ -312,14 +309,19 @@ def deleteCart(id):
                 db.session.delete(cart)
                 db.session.commit()
                 break
-        return shoppingCart()
+        return redirect("/shopping_cart")
     else:
+        resp = make_response(redirect("/shopping_cart"))
         cartTEMP = json.loads(request.cookies.get('cart'))
         for i in range(0, len(cartTEMP)):
-            if cartTEMP[i] == id:
+            print("id " + str(cartTEMP[i]))
+            if cartTEMP[i] == int(id):
                 del cartTEMP[i]
+                cartJson = json.dumps(cartTEMP)
+                resp.set_cookie('cart', cartJson)
                 break
-        return shoppingCart(cartTEMP)
+
+        return resp
 
 def amountCartObjects():
     if current_user.is_authenticated:

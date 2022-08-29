@@ -9,26 +9,12 @@
 <meta charset="UTF-8" />
 <title>Three.js 101</title>
 
-<!--  Three.js CDN  -->
-<!--script type="importmap">
-      "imports:" 
-      {
-        "three": "{{ url_for('static', filename='/js/three.js' ) }}",
-        "GLTF": "{{ url_for('static', filename='/js/GLTFLoader.js' ) }}",
-        "drag": "{{ url_for('static', filename='/js/DragControls.js' ) }}"
-      }
-    </script -->
-<script src="{{ url_for('static', filename='/js/three.js' ) }}"></script>
-<script src="{{ url_for('static', filename='/js/GLTFLoader.js' ) }}"></script>
-<script src="{{ url_for('static', filename='/js/DragControls.js' ) }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/lil-gui@0.16"></script>
-<!--script>
-      var GUI = lil.GUI;
-    </script-->
-    <p type="hidden" id="width" value="{{ width }}"></p>
-    <p type="hidden" id="height" value="{{ height }}"></p>
-    <p type="hidden" id="depth" value="{{ depth }}"></p>
-    <p type="hidden" id="gltf" value="{{ gltf }}"></p>
+
+    <p hidden="true" id="width">{{ width }}</p>
+    <p hidden="true" id="height">{{ height }}</p>
+    <p hidden="true" id="depth">{{ depth }}</p>
+    <p hidden="true" id="gltf">{{ gltf }}</p>
 
 <style>
     .lil-gui {
@@ -59,15 +45,20 @@
 </style>
 
 <!--  Our code  -->
+<center>
+    <div id="webgl" style="width: auto; height:auto;">
+        <canvas id="gui" width="auto" height="auto" style="position: relative; border-radius: 15px;"></canvas>
+    </div>
+</center>
 
 <center>
     <div id="gl" style="width: auto; height: auto;">
-        <canvas id="myCanvas" width="auto" height="auto" style="position: relativ; border-radius: 15px;"></canvas>
+        <canvas id="myCanvas" width="auto" height="auto" style="position: relative; border-radius: 15px;"></canvas>
     </div>
 </center>
 
 <!--p id="screen-log" style="color:white"></p-->
-<script src="{{ url_for('static', filename='/js/room.js' ) }}"></script>
+<script src="{{ url_for('static', filename='/js/Run.js' ) }}"></script>
 <script>
     let items = document.querySelectorAll('.carousel .carousel-item')
 

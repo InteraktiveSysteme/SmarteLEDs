@@ -1,27 +1,20 @@
 import  * as THREE from './three.module.js'
-import { GLTFLoader } from './GLTFLoader.js'
 import {ObjectGUI} from './GUI_Objects.js'
 import { Create } from './Create.js'
 import { WallSetup } from './WallSetup.js'
 import { State } from './State.js'
 
+const glbs = JSON.parse( document.getElementById( "gltf" ).innerHTML )
+
+const GUIObjects = new ObjectGUI( glbs )
+
 // measures of the room
-const width = 4
-const height = 3
-const depth = 5
+const width = JSON.parse( document.getElementById( "width" ).innerHTML )
+const height = JSON.parse( document.getElementById( "height" ).innerHTML )
+const depth = JSON.parse( document.getElementById( "depth" ).innerHTML )
 
 // creates scene and room
 const creator = new Create( width, height, depth )
-
-// das ist nur ein Würfel
-const geometry = new THREE.BoxGeometry( 1, 1, 1 )
-const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } )
-const cube = new THREE.Mesh( geometry, material )
-cube.userData.drag = true
-cube.userData.bottom = true
-cube.userData.draggable = true
-cube.userData.rot = true
-creator.getScene().add( cube )
 
 creator.getCamera().position.z = 5
 
@@ -31,22 +24,9 @@ const state = new State( creator )
 // Array for testing export function
 var wallArray = creator.WallSetup()
 
-// Spotlight 1
-const spotColor1 = 0xfa05e1;
-const spotLight = new THREE.SpotLight( spotColor1, 1, 8 )
-spotLight.penumbra = .3
-spotLight.angle = 1
-spotLight.decay = 2
-spotLight.position.set( 0, 1, 0 )
-spotLight.castShadow = true
-spotLight.shadow.bias = - .004
-
-spotLight.shadow.normalBias = .01
-spotLight.userData.type = "SPOT"
-creator.scene.add( spotLight )
 
 // dynamically resizing canvas
-window.addEventListener('resize', () =>
+window.addEventListener( 'resize', () =>
 {
     // Update sizes
     creator.getSizes().width = .95 * window.innerWidth
@@ -59,7 +39,20 @@ window.addEventListener('resize', () =>
     // Update renderer
     creator.getRenderer().setSize( creator.getSizes().width, creator.getSizes().height )
     creator.getRenderer().setPixelRatio( Math.min( window.devicePixelRatio, 2 ) )
-})
+} )
+
+document.addEventListener( 'objectClicked', ( event ) => {
+
+    // console.log( "Hallo Fremder." )
+    console.log( event.detail.glbPath )
+
+    creator.glbImporter( event.detail.glbPath )
+} )
+
+document.addEventListener( 'keydown', ( event ) => {
+
+    console.log( creator.exportScene() )
+} )
 
 /**
  * @brief is used as animate function to render the scene each frame.

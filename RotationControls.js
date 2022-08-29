@@ -14,20 +14,35 @@ export class RotationControls{
 
         this.creator = creator
         this.mouseX = 0
-        this.mouseY = 0
         this.tmpX = 0
         this.name = "rotate"
-        this.rotatable = new THREE.Object3D()
+        this.selected = null
+
+        this.deleteEvent = ( event ) => {
+
+            if( event.key == 'x' ){
+
+                if( this.selected ){
+
+                    this.creator.scene.remove( this.selected.parent )
+                }
+            }
+        }
 
         this.onClick = ( event ) => {
 
             const raycaster = new THREE.Raycaster()
 
+            // this.mouseX = ( ( event.clientX - this.creator.canvas.getBoundingClientRect().left ) / this.creator.sizes.width ) * 2 - 1
+
+            this.mouseY = - ( ( event.clientY - this.creator.canvas.getBoundingClientRect().top ) / this.creator.sizes.height ) * 2 + 1
+            this.mouseX = ( ( event.clientX - this.creator.canvas.getBoundingClientRect().left ) / this.creator.sizes.width ) * 2 - 1
+
             this.tmpX = this.mouseX
     
-            if( this.rotatable ){
+            if( this.selected ){
         
-                this.rotatable = null
+                this.selected = null
                 return
             }
         
@@ -39,29 +54,24 @@ export class RotationControls{
     
                 intersects[ 0 ].object.rotatable = true
         
-                this.rotatable = intersects[ 0 ].object
-                console.log( this.rotatable.userData.name )
+                this.selected = intersects[ 0 ].object
+                console.log( this.selected.userData.name )
             }
         }
 
-        this.onMouseMove = ( event ) => {
+        // this.onMouseMove = ( event ) => {
         
-            this.mouseX = ( ( event.clientX - this.creator.canvas.getBoundingClientRect().left ) / this.creator.sizes.width ) * 2 - 1
-            this.mouseY = - ( ( event.clientY - this.creator.canvas.getBoundingClientRect().top ) / this.creator.sizes.height ) * 2 + 1
-        }
+        //     this.mouseX = ( ( event.clientX - this.creator.canvas.getBoundingClientRect().left ) / this.creator.sizes.width ) * 2 - 1
+        //     this.mouseY = - ( ( event.clientY - this.creator.canvas.getBoundingClientRect().top ) / this.creator.sizes.height ) * 2 + 1
+        // }
 
         this.rotateObject = ( event ) => {
 
-            if( this.rotatable != null ){
+            if( this.selected != null ){
     
                 this.mouseX = ( event.screenX - this.tmpX )
         
-                this.rotatable.rotation.y = this.mouseX / ( window.innerWidth / 10 )
-    
-                if( this.rotatable.userData.child != null ){
-    
-                    this.rotatable.userData.child.rotation.x = this.mouseX / ( window.innerWidth / 10 )
-                }
+                this.selected.parent.rotation.y = 10 * this.mouseX / ( window.innerWidth )
             }
         }
 
@@ -98,7 +108,6 @@ export class RotationControls{
         
                     if( this.creator.scene.children[ i ].material ){
             
-                        //scene.children[ i ].material.opacity = scene.children[ i ].draggable == true ? .5 : 1.0
                         this.creator.scene.children[ i ].material.opacity = 1.0
                     }
                 }
@@ -114,6 +123,7 @@ export class RotationControls{
         window.addEventListener( 'click', this.onClick )
         window.addEventListener( 'mousemove', this.onMouseMove )
         window.addEventListener( 'mousemove', this.rotateObject )
+        window.addEventListener( 'keydown', this.deleteEvent )
         // window.addEventListener( 'mousemove', this.hoverObject )
     }
 
@@ -125,6 +135,7 @@ export class RotationControls{
         window.removeEventListener( 'click', this.onClick )
         window.removeEventListener( 'mousemove', this.onMouseMove )
         window.removeEventListener( 'mousemove', this.rotateObject )
+        window.removeEventListener( 'keydown', this.deleteEvent )
         // window.removeEventListener( 'mousemove', this.hoverObject )
     }
     
@@ -139,9 +150,9 @@ export class RotationControls{
 
     //     this.tmpX = this.mouseX
 
-    //     if( this.rotatable ){
+    //     if( this.selected ){
     
-    //         this.rotatable = null
+    //         this.selected = null
     //         return
     //     }
     
@@ -153,8 +164,8 @@ export class RotationControls{
 
     //         intersects[ 0 ].object.rotatable = true
     
-    //         this.rotatable = intersects[ 0 ].object
-    //         console.log( this.rotatable.userData.name )
+    //         this.selected = intersects[ 0 ].object
+    //         console.log( this.selected.userData.name )
     //     }
     // }
     
@@ -179,15 +190,15 @@ export class RotationControls{
     //  */
     // rotateObject( event ){
 
-    //     if( this.rotatable != null ){
+    //     if( this.selected != null ){
     
     //         this.mouseX = ( event.screenX - tmpX )
     
-    //         this.rotatable.rotation.y = this.mouseX / ( window.innerWidth / 10 )
+    //         this.selected.rotation.y = this.mouseX / ( window.innerWidth / 10 )
 
-    //         if( this.rotatable.userData.child != null ){
+    //         if( this.selected.userData.child != null ){
 
-    //             this.rotatable.userData.child.rotation.x = this.mouseX / ( window.innerWidth / 10 )
+    //             this.selected.userData.child.rotation.x = this.mouseX / ( window.innerWidth / 10 )
     //         }
     //     }
     // }

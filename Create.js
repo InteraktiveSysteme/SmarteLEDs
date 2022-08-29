@@ -1,4 +1,5 @@
 import  * as THREE from './three.module.js'
+import { GLTFLoader } from './GLTFLoader.js'
 
 export class Create{
 
@@ -13,9 +14,13 @@ export class Create{
         }  
 
         this.scene = new THREE.Scene()
-        this.scene.background = new THREE.Color( 0xff0000 )
+        this.scene.background = new THREE.Color( 0xd8dce4 )
         this.camera = new THREE.PerspectiveCamera( 75, this.sizes.width / this.sizes.height, 0.05, 10000 );
         this.canvas = document.getElementById('myCanvas')
+
+        // Ambient Light
+        const ambient = new THREE.AmbientLight( 0xffffff, .1 )
+        this.scene.add( ambient )
 
         this.width = width
         this.height = height
@@ -32,6 +37,8 @@ export class Create{
         this.renderer.shadowMap.type = THREE.VSMShadowMap
 
         this.wallArray = []
+        this.glbArray = []
+        this.lightArray = []
     }
     
     getCanvas(){
@@ -91,6 +98,7 @@ export class Create{
 
         // front
         plane = new THREE.Mesh( geo, material )
+        plane.name = "front"
 
         plane.scale.x = this.width
         plane.scale.y = this.height
@@ -104,6 +112,7 @@ export class Create{
 
         // back
         plane = new THREE.Mesh( geo, material )
+        plane.name = "back"
 
         plane.scale.x = this.width
         plane.scale.y = this.height
@@ -116,6 +125,7 @@ export class Create{
 
         // left
         plane = new THREE.Mesh( geo, material )
+        plane.name = "left"
 
         plane.scale.x = this.depth
         plane.scale.y = this.height
@@ -128,6 +138,7 @@ export class Create{
 
         // right
         plane = new THREE.Mesh( geo, material )
+        plane.name = "right"
 
         plane.scale.x = this.depth
         plane.scale.y = this.height
@@ -140,6 +151,7 @@ export class Create{
 
         // top
         plane = new THREE.Mesh( geo, material )
+        plane.name = "top"
 
         plane.scale.x = this.width
         plane.scale.y = this.depth
@@ -152,6 +164,7 @@ export class Create{
 
         // bottom
         plane = new THREE.Mesh( geo, material )
+        plane.name = "bottom"
 
         plane.scale.x = this.width
         plane.scale.y = this.depth
@@ -172,4 +185,294 @@ export class Create{
 
         return this.wallArray
     }
+
+    glbImporter( path ){
+
+        let height = this.height
+        let glbArray = this.glbArray
+        let lightArray = this.lightArray
+        let scene = this.scene
+
+        const loader = new GLTFLoader()
+    
+        loader.load( path, function ( glb ) {
+
+            console.log( path )
+    
+            let root = glb.scene
+    
+            const box = new THREE.Box3().setFromObject( root )
+            const sizes = box.getSize( new THREE.Vector3() )
+    
+            if( path.localeCompare( 'Ceiling_lamp.glb' ) == 0 ){
+    
+                const spotColor1 = 0xffffff;
+    
+                const spotLight = new THREE.SpotLight( spotColor1, 1, 8 )
+                spotLight.penumbra = .1
+                spotLight.angle = 1
+                spotLight.decay = 2
+                spotLight.castShadow = true
+                spotLight.shadow.bias = - .004
+    
+                spotLight.shadow.normalBias = .01
+                spotLight.userData.type = "SPOT"
+    
+                lightArray.push( spotLight )
+    
+                const target1 = new THREE.Object3D()
+                target1.position.set( 0, -1, 0 )
+                spotLight.target = target1
+                scene.add( target1 )
+    
+                root.position.set( 0, height / 2 - sizes.y, 0 )
+    
+                root.userData.path = path
+    
+                var mesh = root.children[ root.children.length - 1 ]
+    
+                mesh.castShadow = true
+                mesh.receiveShadow = true
+                mesh.userData.draggable = true
+                mesh.userData.drag = true
+                mesh.userData.rot = true
+                mesh.castShadow = true
+                mesh.receiveShadow = true
+                root.add( spotLight )
+                root.add( target1 )
+
+                // places light relative to origin of parent
+                // spotLight.position.set( 0, -.05, 0 )
+                spotLight.position.set( 0, -.2, 0 )
+            }
+        
+            else if( path.localeCompare( 'Standing_lamp.glb' ) == 0 ){
+        
+                const spotColor1 = 0xffffff;
+                const spotLight = new THREE.SpotLight( spotColor1, 1, 8 )
+                spotLight.penumbra = .1
+                spotLight.angle = 1
+                spotLight.decay = 2
+                spotLight.castShadow = true
+                spotLight.shadow.bias = - .004
+    
+                spotLight.shadow.normalBias = .01
+                spotLight.userData.type = "SPOT"
+    
+                lightArray.push( spotLight )
+    
+                const target1 = new THREE.Object3D()
+                target1.position.set( 0, -1, 0 )
+                spotLight.target = target1
+                scene.add( target1 )
+    
+                root.position.set( 0, ( - height + sizes.y ) / 2, 0 )
+    
+                root.userData.path = path
+    
+                var mesh = root.children[ root.children.length - 1 ]
+    
+                mesh.castShadow = true
+                mesh.receiveShadow = true
+                mesh.userData.drag = true
+                mesh.userData.rot = true
+                mesh.castShadow = true
+                mesh.receiveShadow = true
+
+                root.add( spotLight )
+                root.add( target1 )
+
+                spotLight.position.set( .01, .5, 0 )
+                console.log( spotLight.parent.position )
+            }
+
+            else{
+    
+                root.position.set( 0, ( - height + sizes.y ) / 2, 0 )
+    
+                root.userData.path = path
+    
+                // root.userData.glb = true
+                var mesh = root.children[ root.children.length - 1 ]
+    
+                mesh.castShadow = true
+                mesh.receiveShadow = true
+                mesh.userData.drag = true
+                mesh.userData.rot = true
+                mesh.castShadow = true
+                mesh.receiveShadow = true
+            }
+        
+            // if( path.localeCompare( 'table.glb' ) == 0 ){
+    
+            //     root.position.set( 0, ( - height + sizes.y ) / 2, 0 )
+    
+            //     console.log( glb )
+    
+            //     root.userData.path = path
+    
+            //     // root.userData.glb = true
+            //     var child = root.children[ root.children.length - 1 ]
+    
+            //     child.castShadow = true
+            //     child.receiveShadow = true
+            //     child.userData.draggable = true
+            //     child.userData.drag = true
+            //     child.userData.rot = true
+            //     child.userData.glb = true
+            //     child.castShadow = true
+            //     child.receiveShadow = true
+            //     child.userData.root = root
+            // }
+        
+            // if( path.localeCompare( 'chair.glb' ) == 0 ){
+    
+            //     root.position.set( 0, ( - height + sizes.y ) / 2, 0 )
+    
+            //     console.log( glb )
+    
+            //     root.userData.path = path
+    
+            //     // root.userData.glb = true
+            //     var child = root.children[ root.children.length - 1 ]
+    
+            //     child.castShadow = true
+            //     child.receiveShadow = true
+            //     child.userData.draggable = true
+            //     child.userData.drag = true
+            //     child.userData.rot = true
+            //     child.userData.glb = true
+            //     child.castShadow = true
+            //     child.receiveShadow = true
+            //     child.userData.root = root
+            // }
+            
+            // if( path.localeCompare( 'shelf.glb' ) == 0 ){
+        
+            //     // root.position.set( 0, -.22, 0 )
+            //     root.position.set( 0, ( - height + sizes.y ) / 2, 0 )
+    
+            //     console.log( glb )
+    
+            //     root.userData.path = path
+    
+            //     // root.userData.glb = true
+            //     var child = root.children[ root.children.length - 1 ]
+    
+            //     child.castShadow = true
+            //     child.receiveShadow = true
+            //     child.userData.draggable = true
+            //     child.userData.drag = true
+            //     child.userData.rot = true
+            //     child.userData.glb = true
+            //     child.castShadow = true
+            //     child.receiveShadow = true
+            //     child.userData.root = root
+            // }
+        
+            // if( path.localeCompare( 'sofa.glb' ) == 0 ){
+        
+            //     root.position.set( 0, ( - height + sizes.y ) / 2, 0 )
+    
+            //     console.log( glb )
+    
+            //     root.userData.path = path
+    
+            //     // root.userData.glb = true
+            //     var child = root.children[ root.children.length - 1 ]
+    
+            //     child.castShadow = true
+            //     child.receiveShadow = true
+            //     child.userData.draggable = true
+            //     child.userData.drag = true
+            //     child.userData.rot = true
+            //     child.userData.glb = true
+            //     child.castShadow = true
+            //     child.receiveShadow = true
+            //     child.userData.root = root
+            // }
+    
+            // console.log( root.position )
+
+            root.name = path
+
+            glbArray.push( root )
+    
+            scene.add( root )
+    
+        }, function ( xhr ){
+    
+            console.log( ( xhr.loaded/xhr.total * 100 ) + "% loaded" ) 
+    
+        }, function ( error ) {
+    
+            console.error( error );
+    
+        } );
+    }
+
+    /**
+     * @brief exports all lights, objects, cameras and walls as a JSON-String.
+     * @param {Object3D} lightArray 
+     * @param {PerspectiveCamera} camera 
+     * @param {Object3D} wallArray 
+     * @param {Object3D} glbArray 
+     * @returns JSON-String
+     */
+    exportScene(){
+
+        const dict = {}
+
+        // for loop for lightArray
+
+        for( let i = 0; i < this.lightArray.length; i++ ){
+
+            let lMatrix = new THREE.Matrix4()
+            let rgb = new THREE.Vector3( this.lightArray[ i ].color.r, this.lightArray[ i ].color.g, this.lightArray[ i ].color.b )
+
+            let pos = new THREE.Vector3()
+            this.lightArray[ i ].getWorldPosition( pos )
+
+            // this.lightArray[ i ].position.set( this.lightArray[ i ].userData.object.position.x, this.lightArray[ i ].userData.object.position.y, this.lightArray[ i ].userData.object.position.z )
+
+            lMatrix.compose( pos, this.lightArray[ i ].quaternion, this.lightArray[ i ].scale )
+
+            dict['LAMP' + i] = { 'angle' : this.lightArray[ i ].angle, 'matrix' : lMatrix.elements, 'objectType' : 'LAMP', 'type' : this.lightArray[ i ].userData.type, 'intensity' : this.lightArray[ i ].intensity, 'color' : rgb }
+        }
+
+        // camera matrix
+
+        let cMatrix = new THREE.Matrix4()
+
+        cMatrix.compose( this.camera.position, this.camera.quaternion, this.camera.scale )   
+
+        dict[ 'CAMERA' ] = { 'matrix' : cMatrix.elements, 'objectType' : 'CAMERA', 'aspect' : this.camera.aspect, 'focal_length' : this.camera.getFocalLength() }
+
+        // for loop for wallArray
+
+        for( let i = 0; i < this.wallArray.length; i++ ){
+
+            let wMatrix = new THREE.Matrix4()
+
+            wMatrix.compose( this.wallArray[ i ].position, this.wallArray[ i ].quaternion, this.wallArray[ i ].scale )
+
+            dict[ 'WALL' + i ] = { 'matrix' : wMatrix.elements, 'objectType' : 'WALL' }        
+        }
+
+        // // for loop for glbArray
+
+        for( let i = 0; i < this.glbArray.length; i++ ){
+
+            let gMatrix = new THREE.Matrix4()
+
+            gMatrix.compose( this.glbArray[ i ].position, this.glbArray[ i ].quaternion, this.glbArray[ i ].scale )
+
+            dict[ 'GLB' + i ] = { 'matrix' : gMatrix.elements, 'objectType' : 'GLB', 'path' : this.glbArray[ i ].userData.path }
+        }
+
+        const json = JSON.stringify( dict )
+
+        return json
+    }
+
 }

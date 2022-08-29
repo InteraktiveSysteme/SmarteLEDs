@@ -118,62 +118,66 @@ export class ObjectGUI{
 
 
     createGLBObjects(glbPaths) {
-	const loader = new GLTFLoader();
+        const loader = new GLTFLoader();
 
-	for (let index in glbPaths) {
-		let offset = 3
-        let root;
-        let scene = this.scene;
-        let glbs = this.glbs;
+        for (let index in glbPaths) {
+            let offset = 3
+            let root;
+            let scene = this.scene;
+            let glbs = this.glbs;
 
-		loader.load(glbPaths[index], function(glb) {
-            let position = -8 + index * offset;
-            let obj  = new THREE.Group();
-			root = glb.scene;
-            root.children[root.children.length - 1].receiveShadow = true;
-            root.children[root.children.length - 1].castShadow = true;
-            obj.add(root)
-            obj.add(new THREE.BoxHelper(root.scene))
-            obj.children[1].visible = false;
-		    obj.position.set(position, 0, -13)
-			obj.userData.path = glbPaths[index];
-			root.userData.path = glbPaths[index];
-            glbs.push(obj);
-		    scene.add(obj);
-	    });
-
-	}
-
-}
-
-        checkClicked(){
-            window.addEventListener( 'mousedown', (event) => {
-                this.p = new THREE.Vector2();
-                this.p.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-                this.p.y = - ( event.clientY / 100 ) * 2 + 1;
-
-                this.pointer = this.p;
-
-                this.camera.lookAt( this.scene.position );
-
-                this.camera.updateMatrixWorld();
-
-                this.raycaster.setFromCamera( this.pointer, this.camera );
-        
-                let intersects = this.raycaster.intersectObjects(this.scene.children, true);
-
-
-                if ( intersects.length > 0 ) {
-                    let event = new CustomEvent('objectClicked', { 
-                        detail: { 
-                            glbPath: intersects[0].object.parent.userData.path 
-                        }
-                    });
-
-                    document.dispatchEvent(event);
-                    //console.log(INTERSECTED);
-                } 
+            loader.load(glbPaths[index], function(glb) {
+                let position = -8 + index * offset;
+                let obj  = new THREE.Group();
+                root = glb.scene;
+                root.children[root.children.length - 1].receiveShadow = true;
+                root.children[root.children.length - 1].castShadow = true;
+                obj.add(root)
+                obj.add(new THREE.BoxHelper(root.scene))
+                obj.children[1].visible = false;
+                obj.position.set(position, 0, -13)
+                obj.userData.path = glbPaths[index];
+                root.userData.path = glbPaths[index];
+                glbs.push(obj);
+                scene.add(obj);
             });
+
         }
+
+    }
+
+    checkClicked(){
+
+        window.addEventListener( 'mousedown', (event) => {
+
+            this.p = new THREE.Vector2();
+            this.p.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+            this.p.y = - ( event.clientY / 100 ) * 2 + 1;
+
+            this.pointer = this.p;
+
+            this.camera.lookAt( this.scene.position );
+
+            this.camera.updateMatrixWorld();
+
+            this.raycaster.setFromCamera( this.pointer, this.camera );
+    
+            let intersects = this.raycaster.intersectObjects(this.scene.children, true);
+
+
+            if ( intersects.length > 0 ) {
+
+                let event = new CustomEvent('objectClicked', { 
+
+                    detail: { 
+                        glbPath: intersects[0].object.parent.userData.path 
+                    }
+                });
+
+                document.dispatchEvent(event);
+                //console.log(INTERSECTED);
+            } 
+        });
+    }
 
 }

@@ -24,6 +24,7 @@ import { FirstPerson } from './FirstPerson.js'
         this.controls.activate()
         this.creator.camera.position.set( Math.max( width, height, depth ), 0, 0 )
         this.creator.camera.lookAt( 0, 0, 0 )
+        this.selected = new THREE.Object3D()
 
         this.perspective = new Turntable( this.creator )
         this.perspective.activate()

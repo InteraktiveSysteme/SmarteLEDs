@@ -9,30 +9,6 @@ import json
 from flask_login import *
 from project import forms
 
-# index,
-# render,
-# test,
-# shop,
-# shoppingCart,
-# lamp,
-# register,
-# registerPage,
-# login,
-# logout,
-# preSim,
-# simuled,
-# testglb,
-# expose_gltf,
-# admin,
-# addLamp,
-# loeschen,
-# userLoeschen,
-# shopLamp,
-# login,
-# renders,
-# safeRender,
-# deleteCart
-
 # ***************************** BEGIN MAIN PAGES SECTION *****************************
 def index():
     print("index")
@@ -164,34 +140,6 @@ def lamp(id):
     return render_template('lamp.html', lamp=lamp, name=lamp.lampName, text=lamp.lampText, price=lamp.lampPrice, img=lamp.imgName,
                            longText=lamp.lampLongText,  cartAmount = amountCartObjects())
 
-##
-# @brief This function creates a Cart element for a specific lamp you want to shop
-# @param id is the lampID
-# ...
-# @return the HTML template
-def shopLamp(id):
-
-    lamps = Lamp.query.order_by(Lamp.timeStamp)
-
-    if current_user.is_authenticated:
-        # create a cart obj in the Database
-        cart = Cart(userID=current_user.userID, lampID=id, amount=1)
-        db.session.add(cart)
-        db.session.commit()
-        resp = make_response(render_template("shop.html", lamps=lamps, cartAmount = amountCartObjects()), 200)
-    else:
-        if request.cookies.get('cart') is None:
-            cartTEMP = []
-            cartTEMP.append(int(id))
-        else:
-            cartTEMP = json.loads(request.cookies.get('cart'))
-            cartTEMP.append(int(id))
-
-        resp = make_response(render_template("shop.html", lamps=lamps, cartAmount = len(cartTEMP)), 200)
-        cartJSON = json.dumps(cartTEMP)
-        resp.set_cookie('cart', cartJSON)
-
-    return resp
 
 ##
 # @brief This function handles the addLamp logic. It provides the feature of adding a new Lamp
@@ -307,24 +255,54 @@ def shoppingCart(cookie=[]):
 
     else:
         if request.method == "GET":
-            if len(cookie) != 0:
-                if (request.cookies.get('cart') is None):
-                    return render_template('shoppingCartV3.html')
-                else:
-                    cartTEMP = json.loads(request.cookies.get('cart'))
-                    for i in cartTEMP:
-                        lamps.append(Lamp.query.get(i))
-        
-                    summe = 0
-                    for lamp in lamps:
-                        print(type(lamp.lampPrice))
-                        if type(lamp.lampPrice) == float or type(lamp.lampPrice) == int:
-                            summe += lamp.lampPrice
-                        else:
-                            summe += float(lamp.lampPrice.replace(",", "."))
 
-                    return render_template('shoppingCartV3.html', lamps=lamps, summe=round(summe, 2), form=form,  cartAmount = amountCartObjects())
+            if (request.cookies.get('cart') is None):
+                return render_template('shoppingCartV3.html')
+            else:
+                cartTEMP = json.loads(request.cookies.get('cart'))
+                for i in cartTEMP:
+                    lamps.append(Lamp.query.get(i))
+        
+                summe = 0
+                for lamp in lamps:
+                    print(type(lamp.lampPrice))
+                    if type(lamp.lampPrice) == float or type(lamp.lampPrice) == int:
+                        summe += lamp.lampPrice
+                    else:
+                        summe += float(lamp.lampPrice.replace(",", "."))
+
+                return render_template('shoppingCartV3.html', lamps=lamps, summe=round(summe, 2), form=form,  cartAmount = amountCartObjects())
+
             return render_template('shoppingCartV3.html', form=form)
+
+##
+# @brief This function creates a Cart element for a specific lamp you want to shop
+# @param id is the lampID
+# ...
+# @return the HTML template
+def shopLamp(id):
+
+    lamps = Lamp.query.order_by(Lamp.timeStamp)
+
+    if current_user.is_authenticated:
+        # create a cart obj in the Database
+        cart = Cart(userID=current_user.userID, lampID=id, amount=1)
+        db.session.add(cart)
+        db.session.commit()
+        resp = make_response(render_template("shop.html", lamps=lamps, cartAmount = amountCartObjects()), 200)
+    else:
+        if request.cookies.get('cart') is None:
+            cartTEMP = []
+            cartTEMP.append(int(id))
+        else:
+            cartTEMP = json.loads(request.cookies.get('cart'))
+            cartTEMP.append(int(id))
+
+        resp = make_response(render_template("shop.html", lamps=lamps, cartAmount = amountCartObjects()), 200)
+        cartJSON = json.dumps(cartTEMP)
+        resp.set_cookie('cart', cartJSON)
+
+    return resp
 
 def deleteCart(id):
     if current_user.is_authenticated:
@@ -342,7 +320,6 @@ def deleteCart(id):
                 del cartTEMP[i]
                 break
         return shoppingCart(cartTEMP)
-
 
 def amountCartObjects():
     if current_user.is_authenticated:
@@ -421,11 +398,7 @@ def page_not_found(e):
     return render_template("404.html"), 404
 
 def expose_gltf(file):
-    return send_from_directory(os.path.join(app.root_path, 'static/Gltf/Lampen/'), file)
-
-def render():
-    exec(open("Demo.py").read())
-    return render_template('render.html')
+    return send_from_directory(os.path.join(app.root_path, 'static/Gltf/'), file)
 
 #def simuled():
 #    lamps = Lamp.query.order_by(Lamp.timeStamp)

@@ -1,14 +1,11 @@
 from project.routes_simuled import *
 
-# main path
+# main pages
 app.route("/", methods=['GET'])(index)
 app.route("/index", methods=['GET'])(index)
-
-# simuled simulation
 app.route("/simuled", methods=['GET','POST'])(simuled)
-
-# shopping page
 app.route("/shop", methods=['GET'])(shop)
+app.route("/registerPage", methods=['GET','POST'])(registerPage)
 
 # shopping cart
 app.route("/shopping_cart", methods=['GET','POST'])(shoppingCart)
@@ -22,14 +19,12 @@ app.route("/addLamp", methods=['GET','POST'])(addLamp)
 
 # user accounts
 app.route("/register", methods=['GET','POST'])(register)
-app.route("/registerPage", methods=['GET','POST'])(registerPage)
 app.route("/login", methods=['GET','POST'])(login)
 app.route("/logout", methods=['GET','POST'])(logout)
 app.route("/admin", methods=['GET'])(admin)
 app.route("/User/<id>/delete", methods=['GET'])(userLoeschen)
 
 # blender renders
-app.route("/render", methods=['GET'])(render)
 app.route("/renders/rooms", methods=['GET','POST'])(renders)
 app.route("/renders/add/<id>", methods=['POST'])(saveRender)
 

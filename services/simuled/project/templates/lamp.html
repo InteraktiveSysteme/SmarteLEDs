@@ -27,11 +27,8 @@
                 integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
                 crossorigin="anonymous"></script>
 
-
             <img class="d-block w-100" src="{{ url_for('static', filename='lamps/' + lamp.imgName) }}"
                 alt="First slide">
-
-
         </div>
 
         <div class="col ">
@@ -48,7 +45,6 @@
 
             <a href={{url_for('simuled')}} class="btn btn-outline-primary">SimuLED this lamp</a>
             <a href="{{ url_for('shopLamp',id=lamp.lampID) }}" class="btn btn-outline-primary">add to shopping cart</a>
-
 
         </div>
 

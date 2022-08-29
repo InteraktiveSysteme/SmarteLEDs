@@ -17,15 +17,33 @@ const creator = new Create( width, height, depth )
 const geometry = new THREE.BoxGeometry( 1, 1, 1 )
 const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } )
 const cube = new THREE.Mesh( geometry, material )
+cube.userData.drag = true
+cube.userData.bottom = true
+cube.userData.draggable = true
+cube.userData.rot = true
 creator.getScene().add( cube )
 
 creator.getCamera().position.z = 5
 
 // state is created
-// const state = new State( creator )
+const state = new State( creator )
 
 // Array for testing export function
 var wallArray = creator.WallSetup()
+
+// Spotlight 1
+const spotColor1 = 0xfa05e1;
+const spotLight = new THREE.SpotLight( spotColor1, 1, 8 )
+spotLight.penumbra = .3
+spotLight.angle = 1
+spotLight.decay = 2
+spotLight.position.set( 0, 1, 0 )
+spotLight.castShadow = true
+spotLight.shadow.bias = - .004
+
+spotLight.shadow.normalBias = .01
+spotLight.userData.type = "SPOT"
+creator.scene.add( spotLight )
 
 // dynamically resizing canvas
 window.addEventListener('resize', () =>

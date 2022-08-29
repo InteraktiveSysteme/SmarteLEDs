@@ -1,9 +1,10 @@
 import  * as THREE from './three.module.js'
 import { Turntable } from './Turntable.js'
-import { Controls } from './Controls.js'
 import { RotationControls } from './RotationControls.js'
 import { Create } from './Create.js'
 import { DragControls } from './DragControls.js'
+import { FirstPerson } from './FirstPerson.js'
+
 
 /**
  * State class
@@ -20,17 +21,31 @@ import { DragControls } from './DragControls.js'
         this.creator = creator
 
         this.controls = new DragControls( this.creator )
+        this.controls.activate()
         this.creator.camera.position.set( Math.max( width, height, depth ), 0, 0 )
         this.creator.camera.lookAt( 0, 0, 0 )
 
         this.perspective = new Turntable( this.creator )
         this.perspective.activate()
 
-        console.log( this )
+        this.perspectiveEvent = ( event ) => {
 
-        // ToDo put Controls in State 
-        const inputControls = new Controls( this )
-        inputControls.activate()
+            if( event.key === 'q' ){
+
+                this.switchPerspective()
+            }
+        }
+
+        this.controlsEvent = ( event ) => {
+
+            if( event.key === 'c'){
+
+                this.switchControls()
+            }
+        }
+
+        window.addEventListener( 'keydown', this.perspectiveEvent )
+        window.addEventListener( 'keydown', this.controlsEvent )
     }
 
     /**
@@ -41,7 +56,7 @@ import { DragControls } from './DragControls.js'
         if( this.controls.name.localeCompare( "drag" ) == 0 ){
 
             let oldState = this.controls
-            this.controls = new RotationControls()
+            this.controls = new RotationControls( this.creator )
 
             oldState.deactivate()
 
@@ -50,7 +65,7 @@ import { DragControls } from './DragControls.js'
         else if( this.controls.name.localeCompare( "rotate" ) == 0 ){
 
             let oldState = this.controls
-            this.controls = new DragControls()
+            this.controls = new DragControls( this.creator )
 
             oldState.deactivate()
 
@@ -69,7 +84,7 @@ import { DragControls } from './DragControls.js'
 
             old.deactivate()
 
-            this.perspective = new FirstPerson( width, height, depth )
+            this.perspective = new FirstPerson( this.creator )
 
             this.perspective.activate()
 
@@ -80,7 +95,7 @@ import { DragControls } from './DragControls.js'
         else{
 
             this.perspective.deactivate()
-            this.perspective = new Turntable()
+            this.perspective = new Turntable( this.creator )
             this.perspective.activate()
 
             this.controls.activate()

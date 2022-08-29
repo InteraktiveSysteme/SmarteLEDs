@@ -25,3 +25,5 @@ app.route("/shopLamp/login", methods=['GET','POST'])(login)
 app.route("/renders/rooms", methods=['GET','POST'])(renders)
 app.route("/renders/add/<id>", methods=['GET','POST'])(safeRender)
 app.route("/delCart/<id>", methods=['GET'])(deleteCart)
+app.route("/delCart/login", methods=['GET','POST'])(login)
+

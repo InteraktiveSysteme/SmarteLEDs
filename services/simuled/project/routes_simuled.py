@@ -17,16 +17,33 @@ from project import forms
 @login_required
 def renders():
     renders = Render.query.filter_by(userID=current_user.userID)
-    return render_template('renders.html', renders = renders)
+    return render_template('renders.html', renders = renders,  cartAmount = amountCartObjects())
 
 def deleteCart(id):
-    carts = Cart.query.filter_by(userID=current_user.userID)
-    for cart in carts:
-        if int(id) == int(cart.lampID):
-            db.session.delete(cart)
-            db.session.commit()
-            break
-    return shoppingCart()
+    if current_user.is_authenticated:
+        carts = Cart.query.filter_by(userID=current_user.userID)
+        for cart in carts:
+            if int(id) == int(cart.lampID):
+                db.session.delete(cart)
+                db.session.commit()
+                break
+        return shoppingCart()
+    return 0
+
+def amountCartObjects():
+    if current_user.is_authenticated:
+        carts = Cart.query.filter_by(userID=current_user.userID )
+        count=0
+        for cart in carts:
+            count = count + 1
+        return count
+    else:
+        if request.cookies.get('cart'):
+            cartTEMP = json.loads(request.cookies.get('cart'))
+            return len(cartTEMP)
+
+        else:
+            return 0
 
 
 def safeRender():
@@ -48,19 +65,20 @@ def shopLamp(id):  # put application's code here
         db.session.add(cart)
         db.session.commit()
         lamps = Lamp.query.order_by(Lamp.timeStamp)
-        resp = render_template("shop.html", lamps=lamps), 200
+        resp = render_template("shop.html", lamps=lamps, cartAmount = amountCartObjects()), 200
     else:
+        
         lamps = Lamp.query.order_by(Lamp.timeStamp)
         if request.cookies.get('cart') is None:
             cartTEMP = []
             cartTEMP.append(int(id))
             resp = make_response(render_template(
-                "shop.html", lamps=lamps), 200)
+                "shop.html", lamps=lamps, cartAmount = amountCartObjects()), 200)
         else:
             cartTEMP = json.loads(request.cookies.get('cart'))
             cartTEMP.append(int(id))
             resp = make_response(render_template(
-                "shop.html", lamps=lamps), 200)
+                "shop.html", lamps=lamps, cartAmount = amountCartObjects()), 200)
         cartJSON = json.dumps(cartTEMP)
         resp.set_cookie('cart', cartJSON)
 
@@ -73,7 +91,7 @@ def preSim():
     if request.method == "GET":
         # GET branch to return the Template and Form
         form = forms.RoomForm()
-        return render_template('preSim.html', form=form)
+        return render_template('preSim.html', form=form, cartAmount = amountCartObjects())
 
     if request.method == "POST":
         # POST branch to get the Room Informations
@@ -88,12 +106,12 @@ def preSim():
         except:
             print("nicht alle GLTFs konnten geladen werden. Dies liegt moeglicherweise daran, dass eione Lampe kein GLTF hat... [ERROR]")
         lamps = json.dumps(gltf)
-        return render_template('simuled.html', width=width, height=height, depth=depth, gltf = gltf)
+        return render_template('simuled.html', width=width, height=height, depth=depth, gltf = gltf,  cartAmount = amountCartObjects())
 
 ##
 # @brief This function handles the Shopping Cart logic
 # @return the HTML template
-def shoppingCart():
+def shoppingCart(cookie=[]):
     form = forms.OrderForm()
     lamps = []
     if current_user.is_authenticated:
@@ -110,7 +128,8 @@ def shoppingCart():
                 db.session.delete(cart)
             db.session.commit()
             flash(message="Thanks for ordering!")
-            return render_template('index.html')
+
+            return render_template('index.html', cartAmount = amountCartObjects())
 
         if request.method == "GET":
             carts = Cart.query.filter_by(userID=current_user.userID)
@@ -123,16 +142,17 @@ def shoppingCart():
                     summe += lamp.lampPrice
                 else:
                     summe += float(lamp.lampPrice.replace(",", "."))
-            return render_template('shoppingCartV3.html', lamps=lamps, summe=round(summe, 2), form=form)
+            return render_template('shoppingCartV3.html', lamps=lamps, summe=round(summe, 2), form=form,  cartAmount = amountCartObjects())
 
     else:
-        if (request.cookies.get('cart') is None):
-            return render_template('shoppingCart.html')
-        else:
-            cartTEMP = json.loads(request.cookies.get('cart'))
-            for i in cartTEMP:
-                lamps.append(Lamp.query.get(i))
-
+        if len(cookie) != 0:
+            if (request.cookies.get('cart') is None):
+                return render_template('shoppingCart.html')
+            else:
+                cartTEMP = json.loads(request.cookies.get('cart'))
+                for i in cartTEMP:
+                    lamps.append(Lamp.query.get(i))
+        
     summe = 0
     for lamp in lamps:
         print(type(lamp.lampPrice))
@@ -140,7 +160,7 @@ def shoppingCart():
             summe += lamp.lampPrice
         else:
             summe += float(lamp.lampPrice.replace(",", "."))
-    return render_template('shoppingCartV3.html', lamps=lamps, summe=round(summe, 2), form=form)
+    return render_template('shoppingCartV3.html', lamps=lamps, summe=round(summe, 2), form=form,  cartAmount = amountCartObjects())
 
 
 def test():  # put application's code here
@@ -157,7 +177,8 @@ def testglb():
 
 def index():  # put application's code here
     print("index")
-    return render_template('index.html')
+    
+    return render_template('index.html', cartAmount = amountCartObjects()  )
 
 
 def render():
@@ -167,7 +188,7 @@ def render():
 
 def simuled():
     lamps = Lamp.query.order_by(Lamp.timeStamp)
-    return render_template('simuled.html', lamps=lamps)
+    return render_template('simuled.html', lamps=lamps,  cartAmount = amountCartObjects())
 
 
 ##
@@ -177,7 +198,7 @@ def simuled():
 def addLamp():
     if request.method == "GET":
         form = forms.AddLampForm()
-        return render_template('addLamp.html', form=form)
+        return render_template('addLamp.html', form=form,  cartAmount = amountCartObjects())
     if request.method == "POST":
         #we first get the information about the Lamp we are about to safe through the form
         name = request.form["name"]
@@ -209,12 +230,12 @@ def addLamp():
         lamps = Lamp.query.order_by(Lamp.timeStamp)
         flash(message="Lamp added!")
         form = forms.AddLampForm()
-        return render_template("addLamp.html", form=form), 200
+        return render_template("addLamp.html", form=form,  cartAmount = amountCartObjects()), 200
 
 
 def shop():
     lamps = Lamp.query.order_by(Lamp.timeStamp)
-    return render_template("shop.html", lamps=lamps), 200
+    return render_template("shop.html", lamps=lamps,  cartAmount = amountCartObjects()), 200
 
 ##
 # @brief This function handles the adminLogic
@@ -224,14 +245,14 @@ def admin():
     if current_user and current_user.admin:
         lamps = Lamp.query.order_by(Lamp.timeStamp)
         users = User.query.order_by(User.timeStamp)
-        return render_template("admin.html", users=users, lamps=lamps), 200
+        return render_template("admin.html", users=users, lamps=lamps,  cartAmount = amountCartObjects()), 200
     flash("Admin Page is for Admins only")
     return render_template("index"), 200
 
 
 def registerPage():
     form = forms.RegisterForm()
-    return render_template('registerPage.html', form=form)
+    return render_template('registerPage.html', form=form,  cartAmount = amountCartObjects())
 
 
 ##
@@ -263,7 +284,7 @@ def lamp(id):
     #return render_template('lamp.html', description="{a1}.md".format(a1=lamplist[int(id)]), imglist=imglist, lamp=lamp,
     return render_template('lamp.html', description="", imglist="", lamp=lamp,
                            name=lamp.lampName, text=lamp.lampText, price=lamp.lampPrice, img=lamp.imgName,
-                           longText=lamp.lampLongText)
+                           longText=lamp.lampLongText,  cartAmount = amountCartObjects())
 
 ##
 # @brief This function handles the register Logic
@@ -275,7 +296,7 @@ def register():
         user = User.query.filter_by(userName=username).first()
         if user:
             flash("Username already in Usage")
-            return render_template("registerPage.html")
+            return render_template("registerPage.html",  cartAmount = amountCartObjects())
     except:
         print("Username not found")
     admin = False
@@ -293,7 +314,7 @@ def register():
     print("registered!")
     flash(message="Registered!")
 
-    return render_template('index.html')
+    return render_template('index.html',  cartAmount = amountCartObjects())
 
 ##
 # @brief This function gets the information from a form and uses the login_user function to sign in the user
@@ -313,7 +334,7 @@ def login():
             flash("Wrong Password")
     else:
         flash("User does not Exist")
-    return render_template('index.html')
+    return render_template('index.html', cartAmount = amountCartObjects())
 
 ##
 # @brief This function logs out the current user
@@ -324,7 +345,7 @@ def login():
 def logout():
     logout_user()
     flash("You are not logged in anymore!")
-    return render_template('index.html')
+    return render_template('index.html', cartAmount = amountCartObjects())
 
 ##
 # @brief This function deletes the Lamp  in the Database with the given ID
@@ -349,7 +370,7 @@ def loeschen(id):
         return render_template("shop.html", lamps=lamps, users=users)
 
     lamps = Lamp.query.order_by(Lamp.timeStamp)
-    return render_template("shop.html", lamps=lampsv)
+    return render_template("shop.html", lamps=lamps, cartAmount = amountCartObjects())
 
 ##
 # @brief This function deletes the User  in the Database with the given ID

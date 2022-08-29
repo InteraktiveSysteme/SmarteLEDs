@@ -1,5 +1,6 @@
 import  * as THREE from './three.module.js'
 import { GLTFLoader } from './GLTFLoader.js'
+import { GUI } from 'https://cdn.jsdelivr.net/npm/lil-gui@0.17/+esm'
 
 export class Create{
 
@@ -39,6 +40,9 @@ export class Create{
         this.wallArray = []
         this.glbArray = []
         this.lightArray = []
+
+        this.gui = new GUI()
+        this.createGUI()
     }
     
     getCanvas(){
@@ -192,6 +196,7 @@ export class Create{
         let glbArray = this.glbArray
         let lightArray = this.lightArray
         let scene = this.scene
+        let gui = this.gui
 
         const loader = new GLTFLoader()
     
@@ -244,6 +249,9 @@ export class Create{
                 // places light relative to origin of parent
                 // spotLight.position.set( 0, -.05, 0 )
                 spotLight.position.set( 0, -.2, 0 )
+
+                gui.addColor( spotLight, 'color').name( path + ": " + lightArray.length )
+                gui.add( spotLight, 'intensity', 0, 2 ).name( "Intensity " + lightArray.length + ":" )
             }
         
             else if( path.localeCompare( 'Standing_lamp.glb' ) == 0 ){
@@ -283,7 +291,10 @@ export class Create{
                 root.add( target1 )
 
                 spotLight.position.set( .01, .5, 0 )
-                console.log( spotLight.parent.position )
+
+                // delete lamp and gui object
+                gui.addColor( spotLight, 'color').name( path + ": " + lightArray.length )
+                gui.add( spotLight, 'intensity', 0, 2 ).name( "Intensity " + lightArray.length + ":" )
             }
 
             else{
@@ -399,7 +410,7 @@ export class Create{
             glbArray.push( root )
     
             scene.add( root )
-    
+
         }, function ( xhr ){
     
             console.log( ( xhr.loaded/xhr.total * 100 ) + "% loaded" ) 
@@ -475,4 +486,14 @@ export class Create{
         return json
     }
 
+    createGUI(){
+
+        this.gui.add( {
+            Instructions: () => { alert( 'hi' ) }
+        }, 'Instructions' )
+
+        this.gui.add( {
+            Render: () => { alert( 'Hallo Fremder' ) }
+        }, 'Render' )
+    }
 }

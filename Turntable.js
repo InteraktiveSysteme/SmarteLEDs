@@ -14,7 +14,7 @@ export class Turntable{
 
         this.creator = creator
         this.name = "round"
-        this.creator.camera.position.set( Math.max( width, height, depth ), 0, 0 )
+        this.creator.camera.position.set( Math.max( this.creator.width, this.creator.height, this.creator.depth ), 0, 0 )
         this.creator.camera.lookAt( 0, 0, 0 )
         this.dragBool = false
         this.mousePos = .0
@@ -27,6 +27,24 @@ export class Turntable{
             this.mousePos = event.screenX
             this.camX = this.creator.camera.position.x
             this.camZ = this.creator.camera.position.z
+        }
+
+        this.drag = ( event ) => {
+
+            if( this.dragBool ){
+    
+                this.mouseX = ( event.screenX - this.mousePos )
+    
+                this.creator.camera.position.x = this.camX * Math.cos( ( 3 * this.mouseX ) / window.innerWidth ) - this.camZ * Math.sin( ( 3 * this.mouseX ) / window.innerWidth )
+                this.creator.camera.position.z = this.camX * Math.sin( ( 3 * this.mouseX ) / window.innerWidth ) + this.camZ * Math.cos( ( 3 * this.mouseX ) / window.innerWidth )
+
+                this.update()
+            }
+        }
+
+        this.cancelDrag = ( event ) => {
+
+            this.dragBool = false
         }
     }
 
@@ -62,32 +80,32 @@ export class Turntable{
     //     this.camZ = this.creator.camera.position.z
     // }
 
-    /**
-     * @brief rotates the camera around the room when user drags mouse in a horizontal motion.
-     * @param {mousemove} event 
-     */
-    drag( event ){
+    // /**
+    //  * @brief rotates the camera around the room when user drags mouse in a horizontal motion.
+    //  * @param {mousemove} event 
+    //  */
+    // drag( event ){
 
-        if( this.dragBool ){
+    //     if( this.dragBool ){
 
-            this.mouseX = ( event.screenX - this.mousePos )
+    //         this.mouseX = ( event.screenX - this.mousePos )
 
-            this.creator.camera.position.x = this.camX * Math.cos( ( 3 * this.mouseX ) / window.innerWidth ) - this.camZ * Math.sin( ( 3 * this.mouseX ) / window.innerWidth )
-            this.creator.camera.position.z = this.camX * Math.sin( ( 3 * this.mouseX ) / window.innerWidth ) + this.camZ * Math.cos( ( 3 * this.mouseX ) / window.innerWidth )
+    //         this.creator.camera.position.x = this.camX * Math.cos( ( 3 * this.mouseX ) / window.innerWidth ) - this.camZ * Math.sin( ( 3 * this.mouseX ) / window.innerWidth )
+    //         this.creator.camera.position.z = this.camX * Math.sin( ( 3 * this.mouseX ) / window.innerWidth ) + this.camZ * Math.cos( ( 3 * this.mouseX ) / window.innerWidth )
 
-            this.update
+    //         this.update
 
-        }
-    }
+    //     }
+    // }
 
-    /**
-     * @brief sets the Boolean for dragging to false.
-     * @param {mouseup} event 
-     */
-    cancelDrag( event ){
+    // /**
+    //  * @brief sets the Boolean for dragging to false.
+    //  * @param {mouseup} event 
+    //  */
+    // cancelDrag( event ){
 
-        this.dragBool = false
-    }
+    //     this.dragBool = false
+    // }
 
     /**
      * @brief updates the camera, so it always looks to the center of the room.

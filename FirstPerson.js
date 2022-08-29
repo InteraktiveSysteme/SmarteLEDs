@@ -13,12 +13,13 @@ export class FirstPerson{
      * @param {float} height 
      * @param {float} depth 
      */
-    constructor( width, height, depth ){
+    constructor( creator ){
 
+        this.creator = creator
         this.name = "ego"
         this.position = new THREE.Vector3( 0, 0, 0 )
-        camera.position.set( 0, 0, 0 )
-        camera.lookAt( 0, 0, -1 )
+        this.creator.camera.position.set( 0, 0, 0 )
+        this.creator.camera.lookAt( 0, 0, -1 )
         this.dragBool = false
         this.mouseX = .0
         this.mouseY = .0
@@ -33,36 +34,10 @@ export class FirstPerson{
         this.vec = new THREE.Vector3()
 
         /**
-         * @brief adds all EventListeners for the FirstPerson class.
-         */
-        this.activate = function(){
-
-            window.addEventListener( 'mousedown', this.startDrag )
-            window.addEventListener( 'mousemove', this.drag )
-            window.addEventListener( 'mouseup', this.cancelDrag )
-            window.addEventListener( 'keydown', this.keyMove )
-            window.addEventListener( 'keyup', this.keyStop )
-            window.addEventListener( 'keydown', this.update )
-        }
-    
-        /**
-         * @brief removes all EventListeners for the FirstPerson class.
-         */
-        this.deactivate = function(){
-    
-            window.removeEventListener( 'mousedown', this.startDrag )
-            window.removeEventListener( 'mousemove', this.drag )
-            window.removeEventListener( 'mouseup', this.cancelDrag )
-            window.removeEventListener( 'keydown', this.keyMove )
-            window.removeEventListener( 'keyup', this.keyStop )
-            window.removeEventListener( 'keydown', this.update )
-        }
-
-        /**
          * @brief sets the Boolean for dragging to true.
          * @param {mousedown} event 
          */
-        this.startDrag = function( event ){
+        this.startDrag = ( event ) => {
 
             this.dragBool = true
             this.mouseX = event.screenX
@@ -74,7 +49,7 @@ export class FirstPerson{
          * @brief rotates a selected object depending on the horizontal movement of the mouse.
          * @param {mousemove} event 
          */
-        this.drag = function( event ){
+        this.drag = ( event ) => {
 
             if( this.dragBool ){
     
@@ -99,7 +74,7 @@ export class FirstPerson{
                 let quaternion = new THREE.Quaternion()
                 quaternion.multiplyQuaternions( quaternionX, quaternionY )
     
-                camera.rotation.setFromQuaternion( quaternion )
+                this.creator.camera.rotation.setFromQuaternion( quaternion )
     
                 this.mouseY = event.screenY
                 this.mouseX = event.screenX
@@ -110,7 +85,7 @@ export class FirstPerson{
          * @brief sets the Boolean for dragging to false.
          * @param {mouseup} event 
          */
-        this.cancelDrag = function( event ){
+        this.cancelDrag = ( event ) => {
 
             this.dragBool = false
         }
@@ -119,7 +94,7 @@ export class FirstPerson{
          * @brief sets the Boolean for the pressed key for movement to true.
          * @param {keydown} event 
          */
-        this.keyMove = function( event ){
+        this.keyMove = ( event ) => {
 
             switch( event.key ){
     
@@ -145,7 +120,7 @@ export class FirstPerson{
          * @brief cancels the movement of the camera by setting the move Boolean to false.
          * @param {keyup} event 
          */
-        this.keyStop = function( event ){
+        this.keyStop = ( event ) => {
 
             // console.log( "before keyStop: " + this.moveForward ) 
     
@@ -175,65 +150,87 @@ export class FirstPerson{
          * @brief updates the position of the camera depending on the Boolean variables of each direction.
          * @param {keydown} event 
          */
-        this.update = function( event ){
+        this.update = ( event ) => {
 
             if( this.moveForward ){
 
-                camera.translateZ( - .05 )
+                this.creator.camera.translateZ( - .05 )
 
-                this.vec = new THREE.Vector3()
-                camera.getWorldPosition( this.vec )
+                this.creator.camera.getWorldPosition( this.vec )
 
-                this.vec = new THREE.Vector3( THREE.MathUtils.clamp( this.vec.x, - ( width / 2 ) + .1, ( width / 2 ) - .1), 0, THREE.MathUtils.clamp( this.vec.z, - ( depth / 2 ) + .1, ( depth / 2 ) - .1 ) )
+                this.vec = new THREE.Vector3( THREE.MathUtils.clamp( this.vec.x, - ( this.creator.width / 2 ) + .1, ( this.creator.width / 2 ) - .1), 0, THREE.MathUtils.clamp( this.vec.z, - ( this.creator.depth / 2 ) + .1, ( this.creator.depth / 2 ) - .1 ) )
 
-                camera.position.x = this.vec.x
-                camera.position.y = this.vec.y
-                camera.position.z = this.vec.z
+                this.creator.camera.position.x = this.vec.x
+                this.creator.camera.position.y = this.vec.y
+                this.creator.camera.position.z = this.vec.z
             }
     
             if( this.moveLeft ){
     
-                camera.translateX( - .05 )
+                this.creator.camera.translateX( - .05 )
                 
-                this.vec = new THREE.Vector3()
-                camera.getWorldPosition( this.vec )
+                this.creator.camera.getWorldPosition( this.vec )
 
-                vec = new THREE.Vector3( THREE.MathUtils.clamp( vec.x, - ( width / 2 ) + .1, ( width / 2 ) - .1), 0, THREE.MathUtils.clamp( vec.z, - ( depth / 2 ) + .1, ( depth / 2 ) - .1 ) )
+                this.vec = new THREE.Vector3( THREE.MathUtils.clamp( this.vec.x, - ( this.creator.width / 2 ) + .1, ( this.creator.width / 2 ) - .1), 0, THREE.MathUtils.clamp( this.vec.z, - ( this.creator.depth / 2 ) + .1, ( this.creator.depth / 2 ) - .1 ) )
 
-                camera.position.x = this.vec.x
-                camera.position.y = this.vec.y
-                camera.position.z = this.vec.z
+                this.creator.camera.position.x = this.vec.x
+                this.creator.camera.position.y = this.vec.y
+                this.creator.camera.position.z = this.vec.z
             }
     
             if( this.moveBackward ){
     
-                camera.translateZ( .05 )
+                this.creator.camera.translateZ( .05 )
 
-                this.vec = new THREE.Vector3()
-                camera.getWorldPosition( this.vec )
+                this.creator.camera.getWorldPosition( this.vec )
         
-                vec = new THREE.Vector3( THREE.MathUtils.clamp( vec.x, - ( width / 2 ) + .1, ( width / 2 ) - .1), 0, THREE.MathUtils.clamp( vec.z, - ( depth / 2 ) + .1, ( depth / 2 ) - .1 ) )
+                this.vec = new THREE.Vector3( THREE.MathUtils.clamp( this.vec.x, - ( this.creator.width / 2 ) + .1, ( this.creator.width / 2 ) - .1), 0, THREE.MathUtils.clamp( this.vec.z, - ( this.creator.depth / 2 ) + .1, ( this.creator.depth / 2 ) - .1 ) )
         
-                camera.position.x = this.vec.x
-                camera.position.y = this.vec.y
-                camera.position.z = this.vec.z            
+                this.creator.camera.position.x = this.vec.x
+                this.creator.camera.position.y = this.vec.y
+                this.creator.camera.position.z = this.vec.z            
             }
     
             if( this.moveRight ){
     
-                camera.translateX( .05 )
+                this.creator.camera.translateX( .05 )
 
-                this.vec = new THREE.Vector3()
-                camera.getWorldPosition( this.vec )
+                this.creator.camera.getWorldPosition( this.vec )
         
-                vec = new THREE.Vector3( THREE.MathUtils.clamp( vec.x, - ( width / 2 ) + .1, ( width / 2 ) - .1), 0, THREE.MathUtils.clamp( vec.z, - ( depth / 2 ) + .1, ( depth / 2 ) - .1 ) )
+                this.vec = new THREE.Vector3( THREE.MathUtils.clamp( this.vec.x, - ( this.creator.width / 2 ) + .1, ( this.creator.width / 2 ) - .1), 0, THREE.MathUtils.clamp( this.vec.z, - ( this.creator.depth / 2 ) + .1, ( this.creator.depth / 2 ) - .1 ) )
         
-                camera.position.x = this.vec.x
-                camera.position.y = this.vec.y
-                camera.position.z = this.vec.z            
+                this.creator.camera.position.x = this.vec.x
+                this.creator.camera.position.y = this.vec.y
+                this.creator.camera.position.z = this.vec.z            
             }
         }
 
         this.activate()
+    }
+
+    /**
+     * @brief adds all EventListeners for the FirstPerson class.
+     */
+    activate(){
+
+        window.addEventListener( 'mousedown', this.startDrag )
+        window.addEventListener( 'mousemove', this.drag )
+        window.addEventListener( 'mouseup', this.cancelDrag )
+        window.addEventListener( 'keydown', this.keyMove )
+        window.addEventListener( 'keyup', this.keyStop )
+        window.addEventListener( 'keydown', this.update )
+    }
+
+    /**
+     * @brief removes all EventListeners for the FirstPerson class.
+     */
+    deactivate(){
+
+        window.removeEventListener( 'mousedown', this.startDrag )
+        window.removeEventListener( 'mousemove', this.drag )
+        window.removeEventListener( 'mouseup', this.cancelDrag )
+        window.removeEventListener( 'keydown', this.keyMove )
+        window.removeEventListener( 'keyup', this.keyStop )
+        window.removeEventListener( 'keydown', this.update )
     }
 }

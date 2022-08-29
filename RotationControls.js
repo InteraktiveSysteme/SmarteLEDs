@@ -10,14 +10,100 @@ export class RotationControls{
     /**
      * @brief creates a RotationControls object.
      */
-    constructor(){
+    constructor( creator ){
 
+        this.creator = creator
         this.mouseX = 0
         this.mouseY = 0
         this.tmpX = 0
-        this.tmpY = 0
         this.name = "rotate"
         this.rotatable = new THREE.Object3D()
+
+        this.onClick = ( event ) => {
+
+            const raycaster = new THREE.Raycaster()
+
+            this.tmpX = this.mouseX
+    
+            if( this.rotatable ){
+        
+                this.rotatable = null
+                return
+            }
+        
+            raycaster.setFromCamera( new THREE.Vector2( this.mouseX, this.mouseY ), this.creator.camera )
+            let intersects = raycaster.intersectObjects( this.creator.scene.children )
+        
+        
+            if( ( intersects.length ) > 0 && ( intersects[ 0 ].object.userData.rot ) ){
+    
+                intersects[ 0 ].object.rotatable = true
+        
+                this.rotatable = intersects[ 0 ].object
+                console.log( this.rotatable.userData.name )
+            }
+        }
+
+        this.onMouseMove = ( event ) => {
+        
+            this.mouseX = ( ( event.clientX - this.creator.canvas.getBoundingClientRect().left ) / this.creator.sizes.width ) * 2 - 1
+            this.mouseY = - ( ( event.clientY - this.creator.canvas.getBoundingClientRect().top ) / this.creator.sizes.height ) * 2 + 1
+        }
+
+        this.rotateObject = ( event ) => {
+
+            if( this.rotatable != null ){
+    
+                this.mouseX = ( event.screenX - this.tmpX )
+        
+                this.rotatable.rotation.y = this.mouseX / ( window.innerWidth / 10 )
+    
+                if( this.rotatable.userData.child != null ){
+    
+                    this.rotatable.userData.child.rotation.x = this.mouseX / ( window.innerWidth / 10 )
+                }
+            }
+        }
+
+        this.hoverObject = ( event ) => {
+
+            let raycaster = new THREE.Raycaster()
+
+            raycaster.setFromCamera( new THREE.Vector2( this.mouseX, this.mouseY ), this.creator.camera )
+            // hopefully only returns the surface level children and not the children of the room group
+            const intersects = raycaster.intersectObjects( this.creator.scene.children )
+    
+            let hovArray = []
+    
+            for( let i = 0; i < intersects.length; i++ ){
+        
+                if( intersects[ i ].object.userData.drag ){
+    
+                    hovArray.push( intersects[ i ] )
+                }
+            }
+        
+            if( hovArray.length > 0 ){
+    
+                for( let i = 0; i < intersects.length; i++ ){
+        
+                    intersects[ i ].object.material.transparent = true
+                    intersects[ i ].object.material.opacity = .5
+                }
+            }
+    
+            else{
+    
+                for( let i = 0; i < scene.children.length; i++ ){
+        
+                    if( this.creator.scene.children[ i ].material ){
+            
+                        //scene.children[ i ].material.opacity = scene.children[ i ].draggable == true ? .5 : 1.0
+                        this.creator.scene.children[ i ].material.opacity = 1.0
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -42,111 +128,111 @@ export class RotationControls{
         // window.removeEventListener( 'mousemove', this.hoverObject )
     }
     
-    /**
-     * @brief uses raycasting to select an object for rotation.
-     * @param {click} event 
-     * @returns 
-     */
-    onClick( event ){
+    // /**
+    //  * @brief uses raycasting to select an object for rotation.
+    //  * @param {click} event 
+    //  * @returns 
+    //  */
+    // onClick( event ){
 
-        const raycaster = new THREE.Raycaster()
+    //     const raycaster = new THREE.Raycaster()
 
-        this.tmpX = this.mouseX
+    //     this.tmpX = this.mouseX
 
-        if( this.rotatable ){
+    //     if( this.rotatable ){
     
-            this.rotatable = null
-            return
-        }
+    //         this.rotatable = null
+    //         return
+    //     }
     
-        raycaster.setFromCamera( new THREE.Vector2( this.mouseX, this.mouseY ), camera )
-        let intersects = raycaster.intersectObjects( scene.children )
+    //     raycaster.setFromCamera( new THREE.Vector2( this.mouseX, this.mouseY ), camera )
+    //     let intersects = raycaster.intersectObjects( scene.children )
     
     
-        if( ( intersects.length ) > 0 && ( intersects[ 0 ].object.userData.rot ) ){
+    //     if( ( intersects.length ) > 0 && ( intersects[ 0 ].object.userData.rot ) ){
 
-            intersects[ 0 ].object.rotatable = true
+    //         intersects[ 0 ].object.rotatable = true
     
-            this.rotatable = intersects[ 0 ].object
-            console.log( this.rotatable.userData.name )
-        }
-    }
+    //         this.rotatable = intersects[ 0 ].object
+    //         console.log( this.rotatable.userData.name )
+    //     }
+    // }
     
-    /**
-     * @brief updates the x- and y-coordinates of the mouse.
-     * @param {mousemove} event 
-     */
-    onMouseMove( event ){
+    // /**
+    //  * @brief updates the x- and y-coordinates of the mouse.
+    //  * @param {mousemove} event 
+    //  */
+    // onMouseMove( event ){
 
-        const sizes = {
-            width: .95 * window.innerWidth,
-            height: window.innerHeight
-        }
+    //     const sizes = {
+    //         width: .95 * window.innerWidth,
+    //         height: window.innerHeight
+    //     }
     
-        this.mouseX = ( ( event.clientX - canvas.getBoundingClientRect().left ) / sizes.width ) * 2 - 1
-        this.mouseY = - ( ( event.clientY - canvas.getBoundingClientRect().top ) / sizes.height ) * 2 + 1
-    }
+    //     this.mouseX = ( ( event.clientX - canvas.getBoundingClientRect().left ) / sizes.width ) * 2 - 1
+    //     this.mouseY = - ( ( event.clientY - canvas.getBoundingClientRect().top ) / sizes.height ) * 2 + 1
+    // }
 
-    /**
-     * @brief if an object is selected, it can be rotated with moving the mouse in a horizontal motion.
-     * @param {mousemove} event 
-     */
-    rotateObject( event ){
+    // /**
+    //  * @brief if an object is selected, it can be rotated with moving the mouse in a horizontal motion.
+    //  * @param {mousemove} event 
+    //  */
+    // rotateObject( event ){
 
-        if( this.rotatable != null ){
+    //     if( this.rotatable != null ){
     
-            this.mouseX = ( event.screenX - tmpX )
+    //         this.mouseX = ( event.screenX - tmpX )
     
-            this.rotatable.rotation.y = this.mouseX / ( window.innerWidth / 10 )
+    //         this.rotatable.rotation.y = this.mouseX / ( window.innerWidth / 10 )
 
-            if( this.rotatable.userData.child != null ){
+    //         if( this.rotatable.userData.child != null ){
 
-                this.rotatable.userData.child.rotation.x = this.mouseX / ( window.innerWidth / 10 )
-            }
-        }
-    }
+    //             this.rotatable.userData.child.rotation.x = this.mouseX / ( window.innerWidth / 10 )
+    //         }
+    //     }
+    // }
 
-    /**
-     * @brief hovering over an object with the cursor turns the object translucent.
-     * @param {mousemove} event 
-     */
-    hoverObject( event ){
+    // /**
+    //  * @brief hovering over an object with the cursor turns the object translucent.
+    //  * @param {mousemove} event 
+    //  */
+    // hoverObject( event ){
 
-        let raycaster = new THREE.Raycaster()
+    //     let raycaster = new THREE.Raycaster()
 
-        raycaster.setFromCamera( new THREE.Vector2( this.mouseX, this.mouseY ), camera )
-        // hopefully only returns the surface level children and not the children of the room group
-        const intersects = raycaster.intersectObjects( scene.children )
+    //     raycaster.setFromCamera( new THREE.Vector2( this.mouseX, this.mouseY ), camera )
+    //     // hopefully only returns the surface level children and not the children of the room group
+    //     const intersects = raycaster.intersectObjects( scene.children )
 
-        let hovArray = []
+    //     let hovArray = []
 
-        for( let i = 0; i < intersects.length; i++ ){
+    //     for( let i = 0; i < intersects.length; i++ ){
     
-            if( intersects[i].object.userData.drag ){
+    //         if( intersects[i].object.userData.drag ){
 
-                hovArray.push( intersects[ i ] )
-            }
-        }
+    //             hovArray.push( intersects[ i ] )
+    //         }
+    //     }
     
-        if( hovArray.length > 0 ){
+    //     if( hovArray.length > 0 ){
 
-            for( let i = 0; i < intersects.length; i++ ){
+    //         for( let i = 0; i < intersects.length; i++ ){
     
-                intersects[ i ].object.material.transparent = true
-                intersects[ i ].object.material.opacity = .5
-            }
-        }
+    //             intersects[ i ].object.material.transparent = true
+    //             intersects[ i ].object.material.opacity = .5
+    //         }
+    //     }
 
-        else{
+    //     else{
 
-            for( let i = 0; i < scene.children.length; i++ ){
+    //         for( let i = 0; i < scene.children.length; i++ ){
     
-                if( scene.children[ i ].material ){
+    //             if( scene.children[ i ].material ){
         
-                    //scene.children[ i ].material.opacity = scene.children[ i ].draggable == true ? .5 : 1.0
-                    scene.children[ i ].material.opacity = 1.0
-                }
-            }
-        }
-    }
+    //                 //scene.children[ i ].material.opacity = scene.children[ i ].draggable == true ? .5 : 1.0
+    //                 scene.children[ i ].material.opacity = 1.0
+    //             }
+    //         }
+    //     }
+    // }
 }

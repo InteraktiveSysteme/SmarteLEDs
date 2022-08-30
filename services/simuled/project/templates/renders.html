@@ -1,37 +1,32 @@
 {% extends "base.html" %}
 {% block title %}Index{% endblock %}
 {% block head %}
-{{ super() }}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static',filename='/css/index_style.css') }}">
 {% endblock %}
 {% block content %}
 
 <div class="container">
     <div class="row g-2">
-        <h1 style="margin-bottom:30px; font-family:Monospace; hyphens: auto; color:#D06ED4;text-align: center">YOUR ROOMS<br>
+        <h1 style="margin-bottom:30px; font-family:Monospace; hyphens: auto; color:#D06ED4;text-align: center">YOUR ROOMS
         </h1>
+        <br>
         <div class="card-group">
             {% for render in renders %}
-            <div class="col-12 col-md-6 col-lg-3 g-2">
-                <div class="card mb-4 p-3  border-primary" style="width: 18rem;">
-                    <img class="card-img-top" src="/static/images/renders/{{ render.imgName }}"
-                        onerror="/static/images/inApp/8974589526046.jpg" alt="Card image cap">
-                    <div class="card-body">
-                        
-                        
-                    </div>
-                    <div class="card-footer">
+                <div class="col-12 col-md-6 col-lg-3 g-2">
+                    <div class="card mb-4 p-3  border-primary" style="width: 18rem;">
+                        <img class="card-img-top" src="{{ url_for("static", filename="renders/" + render.imgName) }}"
+                             onerror="{{ url_for("static", filename="images/inApp/8974589526046.jpg") }}" alt="Card image cap">
+                        <div class="card-body">
+
+                        </div>
+                        <div class="card-footer">
+                        </div>
                     </div>
                 </div>
-            </div>
             {% endfor %}
         </div>
     </div>
 </div>
 
-<!-- Optional JavaScript; choose one of the two! -->
-
-<!-- Option 1: Bootstrap Bundle with Popper -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
-    crossorigin="anonymous"></script>
 {% endblock %}

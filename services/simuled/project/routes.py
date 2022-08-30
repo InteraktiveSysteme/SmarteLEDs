@@ -24,8 +24,8 @@ app.route("/logout", methods=['GET','POST'])(logout)
 app.route("/User/<id>/delete", methods=['GET'])(user_delete)
 
 # blender renders
+app.route("/renders", methods=['POST'])(saveRender)
 app.route("/renders/rooms", methods=['GET','POST'])(renders)
-app.route("/renders/add/<id>", methods=['POST'])(saveRender)
 
 # misc
 app.route("/get/<file>", methods=['GET'])(expose_gltf)

@@ -8,8 +8,8 @@ app.route("/shop", methods=['GET'])(shop)
 app.route("/admin", methods=['GET'])(admin)
 
 # shopping cart
-app.route("/shopping_cart", methods=['GET','POST'])(shoppingCart)
-app.route("/delCart/<id>", methods=['GET'])(deleteCart)
+app.route("/shopping_cart", methods=['GET','POST'])(cart_show)
+app.route("/delCart/<id>", methods=['GET'])(cart_deleteElement)
 
 # administer lamps
 app.route("/lamp/<id>", methods=['GET'])(lamp)

@@ -219,7 +219,7 @@ def loeschen(id):
 ##
 # @brief This function handles the Shopping Cart logic
 # @return the HTML template
-def shoppingCart(cookie=[]):
+def cart_show():
     form = forms.OrderForm()
     lamps = []
 
@@ -305,7 +305,7 @@ def shopLamp(id):
 
     return resp
 
-def deleteCart(id):
+def cart_deleteElement(id):
     if current_user.is_authenticated:
         carts = Cart.query.filter_by(userID=current_user.userID)
         for cart in carts:

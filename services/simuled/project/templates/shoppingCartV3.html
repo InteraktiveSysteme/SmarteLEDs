@@ -96,7 +96,10 @@
                 data-bs-target="#exampleModal">Check-out</button>
               {% endif %}
               {% if not current_user.is_authenticated %}
-              <button type="button" class="btn  btn-outline-warning" disabled>Log-in to Check-out</button>
+              <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#modelCookie">
+                Check-out
+              </button>
+              
               {% endif %}
             </div>
           </div>
@@ -104,7 +107,28 @@
       </div>
     </div>
   </div>
-  <!-- Modal -->
+
+
+<div class="modal fade" id="modelCookie" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Please Log-in to Check-out 
+      </div>
+      <div class="modal-footer">
+        <div class="d-grid gap-2">
+        <button type="button" class="btn btn-outline-warning" data-bs-dismiss="modal">understood!</button>
+        
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+
   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">

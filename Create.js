@@ -3,14 +3,13 @@ import { GLTFLoader } from './GLTFLoader.js'
 import { GUI } from 'https://cdn.jsdelivr.net/npm/lil-gui@0.17/+esm'
 
 
+export function basename(path) {
+    return path.split('/').reverse()[0];
+}
+
 export class Create{
 
     constructor( width, height, depth ){
-
-	/**
-	* GLTF Folder
-	*/
-	this.gltfFolder = "./gltf/"
 
         /**
          * Sizes
@@ -170,18 +169,15 @@ export class Create{
 
         const loader = new GLTFLoader()
 
-        const fullpath = this.gltfFolder + path
-    
-        loader.load( fullpath, ( glb ) => {
+        loader.load( path, ( glb ) => {
 
-            console.log( path )
     
             let root = glb.scene
     
             const box = new THREE.Box3().setFromObject( root )
             const sizes = box.getSize( new THREE.Vector3() )
     
-            if( path.localeCompare( 'Ceiling_lamp.glb' ) == 0 ){
+            if( basename(path).localeCompare( 'Ceiling_lamp.glb' ) == 0 ){
     
                 const spotColor1 = 0xffffff;
     
@@ -223,7 +219,7 @@ export class Create{
                 // spotLight.position.set( 0, -.05, 0 )
                 spotLight.position.set( 0, -.2, 0 )
 
-                const folder = this.gui.addFolder( 'Lamp ' + this.guiCount + ': ' + path.split( '.' )[ 0 ]  )
+                const folder = this.gui.addFolder( 'Lamp ' + this.guiCount + ': ' + basename(path).split( '.' )[ 0 ]  )
                 this.guiCount++
 
                 folder.addColor( spotLight, 'color').name( "Color:" )
@@ -231,7 +227,7 @@ export class Create{
                 mesh.userData.guiFolder = folder
             }
         
-            else if( path.localeCompare( 'Standing_lamp.glb' ) == 0 ){
+            else if( basename(path).localeCompare( 'Standing_lamp.glb' ) == 0 ){
         
                 const spotColor1 = 0xffffff;
                 const spotLight = new THREE.SpotLight( spotColor1, 1, 8 )
@@ -270,7 +266,7 @@ export class Create{
 
                 spotLight.position.set( .01, .5, 0 )
 
-                const folder = this.gui.addFolder( 'Lamp ' + this.guiCount + ': ' + path.split( '.' )[ 0 ]  )
+                const folder = this.gui.addFolder( 'Lamp ' + this.guiCount + ': ' + basename(path).split( '.' )[ 0 ]  )
                 this.guiCount++
 
                 folder.addColor( spotLight, 'color').name( "Color:" )
@@ -383,7 +379,7 @@ export class Create{
         }, 'Manual' )
 
         this.gui.add( {
-            Render: () => { alert( 'Hallo Fremder' ) }
+            Render: () => {  }
         }, 'Render' )
     }
 }

@@ -3,7 +3,8 @@ import {ObjectGUI} from './GUI_Objects.js'
 import { Create } from './Create.js'
 import { State } from './State.js'
 
-const glbs = JSON.parse( document.getElementById( "gltf" ).innerHTML )
+let glbs = JSON.parse( document.getElementById( "gltf" ).innerHTML )
+glbs = glbs.map(x => '/gltf/' + x)
 
 const GUIObjects = new ObjectGUI( glbs )
 

@@ -36,21 +36,21 @@
                                 src="{{ url_for('static', filename='Logo/Logo2.svg') }}" alt="logo"></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{url_for('preSim')}}">SimuLED</a>
+                        <a class="nav-link" href="{{url_for('simuled')}}">SimuLED</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{url_for('shop')}}">Shop</a>
+                        <a class="nav-link" href="{{url_for('lamp_showAll')}}">Shop</a>
                     </li>
                     {% if current_user.admin %}
                     <li class="nav-item">
-                        <a class="nav-link " href="{{url_for('addLamp')}}">Add Lamp</a>
+                        <a class="nav-link " href="{{url_for('lamp_add')}}">Add Lamp</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link " href="{{url_for('admin')}}">Admin</a>
                     </li>
                     {% endif %}
                     <li class="nav-item">
-                        <a class="nav-link " href="{{url_for('registerPage')}}">Register</a>
+                        <a class="nav-link " href="{{url_for('user_register')}}">Register</a>
                     </li>
                     <li>
                         <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -67,7 +67,7 @@
                     </ul>
                 </div>
                 <!--
-        <form action="{{ url_for('register')}}" method="POST" enctype="multipart/form-data">
+        <form action="{--{ url_for('user_register')}}" method="POST" enctype="multipart/form-data">
             <div class="form-group">
                 <input name="username" type="text" class="form-control" id="username" aria-describedby="emailHelp"
                        placeholder="Input Lamp Name">
@@ -88,33 +88,31 @@
                     <li class="nav-item">
 
                         
-                        <a class="btn btn-outline-primary position-relative" href="{{ url_for('shoppingCart') }}">
+                        <a class="btn btn-outline-primary position-relative" href="{{ url_for('cart_show') }}">
 
                             <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
                                 class="bi bi-cart3" viewBox="0 0 16 16">
                                 <path
                                     d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
                             </svg>
-                            {% if current_user.is_authenticated %}
                             <span
                                 class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
                                 {{cartAmount}}
                                 <span class="visually-hidden">unread messages</span>
                             </span>
-                            {% endif %}
                         </a>
                         
                     </li>
                     {% if current_user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link " href="{{url_for('renders')}}">{{ current_user.userName }}</a>
+                        <a class="nav-link " href="{{url_for('renders_showAll')}}">{{ current_user.userName }}</a>
                     </li>
 
                 </ul>
-                <a class="order-5 btn btn-outline-warning" href="{{ url_for('logout') }}">Logout</a>
+                <a class="order-5 btn btn-outline-warning" href="{{ url_for('user_logout') }}">Logout</a>
 
                 {% else %}
-                <form id="form" class="d-flex ms-auto order-5" action="login" method="POST"
+                <form id="form" class="d-flex ms-auto order-5" action="/login" method="POST"
                     enctype="multipart/form-data">
 
                     <input style="margin-right:5px" name="username" id="username" class="textarea form-control"

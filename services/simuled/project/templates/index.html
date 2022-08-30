@@ -14,7 +14,7 @@
         <h1 id="infotext" style="color: #f2f2f2;">Build it yourself!</h1>
         <p class="fs-5" style="color:#f2f2f2;">Here you can configure a light setup according to your liking. This scene
           can then be rendered in 3D and saved to your library.</p>
-        <a class="btn btn-outline-primary" href="{{url_for('preSim')}}"> Simuled</a>
+        <a class="btn btn-outline-primary" href="{{url_for('simuled')}}"> Simuled</a>
       </div>
     </div>
     <div class="col" id="col-2"
@@ -23,14 +23,14 @@
         <h1 id="infotext" style="color:#f2f2f2;">Choose your lamp!</h1>
         <p class="fs-5" style="color:#f2f2f2;">In our shop you can choose between a variety of lamps with vibrant colors
           and modern designs.</p>
-          <a class="btn btn-outline-primary" href="{{url_for('shop')}} ">Shop</a>
+          <a class="btn btn-outline-primary" href="{{url_for('lamp_showAll')}} ">Shop</a>
       </div>
     </div>
     <div class="col" id="col-3" style="background-image: url('{{url_for('static',filename='/images/company.jpg')}}');">
       <div class="content">
         <h1 id="infotext" style="color:#f2f2f2;">First time visit?</h1>
         <p class="fs-5" style="color:#f2f2f2;">Register and unlock new features!</p>
-        <a class="btn btn-outline-primary" href="{{url_for('registerPage')}}" >Register</a>
+        <a class="btn btn-outline-primary" href="{{url_for('user_register')}}" >Register</a>
 
       </div>
     </div>

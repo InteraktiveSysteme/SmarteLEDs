@@ -23,13 +23,13 @@
                             <div class="row">
                                 <div class="btn-group" role="group" aria-label="Basic example">
                                     {% if current_user.admin %}
-                                    <a href="{{ url_for('loeschen',id=lamp.lampID) }}"
+                                    <a href="{{ url_for('lamp_delete',id=lamp.lampID) }}"
                                         class="col-6 btn btn-outline-warning">Delete</a>
                                     {%endif%}
-                                    <a href="{{ url_for('lamp',id=lamp.lampID) }}"
+                                    <a href="{{ url_for('lamp_show',id=lamp.lampID) }}"
                                         class="col-6 btn btn-outline-primary btn-block">Details</a>
                                     <a style="margin-right:15px" class="col-6 btn btn-outline-primary"
-                                        href="{{ url_for('shopLamp',id=lamp.lampID) }}">
+                                        href="{{ url_for('cart_addLamp',id=lamp.lampID) }}">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
                                             fill="currentColor" class="bi bi-cart3" viewBox="0 0 16 16">
                                             <path
@@ -39,7 +39,7 @@
                                 </div>
                             </div>
                         </div>
-                        <!--<a href="{{ url_for('loeschen',id=lamp.lampID) }}" type="submit" class="btn btn-outline-danger">Delete</a>-->
+                        <!--<a href="{{ url_for('lamp_delete',id=lamp.lampID) }}" type="submit" class="btn btn-outline-danger">Delete</a>-->
                     </div>
                     <div class="card-footer">
                         <big style="color:#359DA3" class="text-mut">{{ lamp.lampPrice }} $</big>

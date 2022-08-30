@@ -1,29 +1,42 @@
 from project.routes_simuled import *
 
+# TODO: refactor url paths to:
+#
+#           /shopping_cart/del/<id>
+#           /shopping_cart/add/<id>
+# /shop  => /lamps/
+#           /lamps/show/<id>
+#           /lamps/del/<id>
+#           /lamps/add/
+#           /user/del/<id>
+
+# main pages
 app.route("/", methods=['GET'])(index)
 app.route("/index", methods=['GET'])(index)
-app.route("/render", methods=['GET'])(render)
-app.route("/test", methods=['GET'])(test)
-app.route("/shop", methods=['GET'])(shop)
-app.route("/shopping_cart", methods=['GET','POST'])(shoppingCart)
-app.route("/lamp/<id>", methods=['GET'])(lamp)
-app.route("/register", methods=['GET','POST'])(register)
-app.route("/registerPage", methods=['GET','POST'])(registerPage)
-app.route("/login", methods=['GET','POST'])(login)
-app.route("/lamp/login", methods=['GET','POST'])(login)
-app.route("/logout", methods=['GET','POST'])(logout)
-app.route("/preSim", methods=['GET','POST'])(preSim)
-app.route("/simuled", methods=['GET'])(simuled)
-app.route("/testglb", methods=['GET'])(testglb)
-app.route("/get/<file>", methods=['GET'])(expose_gltf)
+app.route("/simuled", methods=['GET','POST'])(simuled)
 app.route("/admin", methods=['GET'])(admin)
-app.route("/addLamp", methods=['GET','POST'])(addLamp)
-app.route("/lamp/<id>/delete", methods=['GET'])(loeschen)
-app.route("/User/<id>/delete", methods=['GET'])(userLoeschen)
-app.route("/shopLamp/<id>", methods=['GET','POST'])(shopLamp)
-app.route("/shopLamp/login", methods=['GET','POST'])(login)
-app.route("/renders/rooms", methods=['GET','POST'])(renders)
-app.route("/renders/add/<id>", methods=['GET','POST'])(safeRender)
-app.route("/delCart/<id>", methods=['GET'])(deleteCart)
-app.route("/delCart/login", methods=['GET','POST'])(login)
 
+# shopping cart
+app.route("/shopping_cart", methods=['GET','POST'])(cart_show)
+app.route("/delCart/<id>", methods=['GET'])(cart_delLamp)
+app.route("/shopLamp/<id>", methods=['GET','POST'])(cart_addLamp)
+
+# administer lamps
+app.route("/shop", methods=['GET'])(lamp_showAll)
+app.route("/lamp/<id>", methods=['GET'])(lamp_show)
+app.route("/lamp/<id>/delete", methods=['GET'])(lamp_delete)
+app.route("/addLamp", methods=['GET','POST'])(lamp_add)
+
+# user accounts
+app.route("/register", methods=['GET','POST'])(user_register)
+app.route("/login", methods=['GET','POST'])(user_login)
+app.route("/logout", methods=['GET','POST'])(user_logout)
+app.route("/User/<id>/delete", methods=['GET'])(user_delete)
+
+# blender renders
+app.route("/renders", methods=['GET','POST'])(renders_showAll)
+app.route("/renders/new", methods=['POST'])(renders_new)
+
+# misc
+app.route("/get/<file>", methods=['GET'])(expose_gltf)
+#app.route("/shopLamp/login", methods=['GET','POST'])(login)

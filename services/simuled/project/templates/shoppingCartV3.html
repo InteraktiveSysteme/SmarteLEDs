@@ -20,7 +20,7 @@
               <div class="col-10">
 
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                  <h1 style="font-family:Monospace; hyphens: auto; color:#D06ED4;text-align: center">Shopping Card<br>
+                  <h1 style="font-family:Monospace; hyphens: auto; color:#D06ED4;text-align: center">Shopping Cart<br>
                   </h1>
                 </div>
                 {% for lamp in lamps %}
@@ -32,7 +32,7 @@
                       </div>
                       <div class="col-md-3 col-lg-3 col-xl-3">
                         <p class="lead fw-normal mb-2">{{lamp.lampName}}</p>
-                        <p><span class="text-muted">{{lamp.lampText}}</p>
+                          <p><span class="text-muted">{{lamp.lampText}}</span></p>
                       </div>
                       <div class="col-md-2 col-lg-2 col-xl-1 d-flex">
 
@@ -42,7 +42,7 @@
                         <h5 onload="preis(5)" class="mb-0">{{lamp.lampPrice}} $</h5>
                       </div>
                       <div class="col-md-2 col-lg-1 col-xl-1 offset-lg-1">
-                        <a href="{{ url_for('deleteCart',id=lamp.lampID) }}">
+                        <a href="{{ url_for('cart_delLamp',id=lamp.lampID) }}">
                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-trash" viewBox="0 0 16 16">
                             <path

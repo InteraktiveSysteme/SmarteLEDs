@@ -1,5 +1,6 @@
 import  * as THREE from './three.module.js'
 import { Create } from './Create.js'
+import { GUI } from 'https://cdn.jsdelivr.net/npm/lil-gui@0.17/+esm'
 
 /**
  * RotationControls class
@@ -24,6 +25,14 @@ export class RotationControls{
 
                 if( this.selected ){
 
+                    if( this.selected.userData.isLight ){
+
+                        this.selected.userData.guiFolder.destroy()
+
+                        this.creator.lightArray.splice( this.creator.lightArray.indexOf( this.selected.parent.children[ this.selected.parent.children.length - 1 ] ), 1 )
+                    }
+
+                    this.creator.glbArray.splice( this.creator.glbArray.indexOf( this.selected.parent ), 1 )
                     this.creator.scene.remove( this.selected.parent )
                 }
             }

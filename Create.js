@@ -7,6 +7,11 @@ export class Create{
 
     constructor( width, height, depth ){
 
+	/**
+	* GLTF Folder
+	*/
+	this.gltfFolder = "./gltf/"
+
         /**
          * Sizes
          */
@@ -164,8 +169,10 @@ export class Create{
     glbImporter( path ){
 
         const loader = new GLTFLoader()
+
+        const fullpath = this.gltfFolder + path
     
-        loader.load( path, ( glb ) => {
+        loader.load( fullpath, ( glb ) => {
 
             console.log( path )
     

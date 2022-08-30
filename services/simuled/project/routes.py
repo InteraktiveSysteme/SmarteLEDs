@@ -19,8 +19,8 @@ app.route("/addLamp", methods=['GET','POST'])(lamp_add)
 
 # user accounts
 app.route("/register", methods=['GET','POST'])(user_register)
-app.route("/login", methods=['GET','POST'])(login)
-app.route("/logout", methods=['GET','POST'])(logout)
+app.route("/login", methods=['GET','POST'])(user_login)
+app.route("/logout", methods=['GET','POST'])(user_logout)
 app.route("/User/<id>/delete", methods=['GET'])(user_delete)
 
 # blender renders

@@ -91,7 +91,7 @@ def user_delete(id):
 # @param
 # ...
 # @return the HTML template of the landing page
-def login():
+def user_login():
     username = request.form['username']
     password = request.form["password"]
     user = User.query.filter_by(userName=username).first()
@@ -112,7 +112,7 @@ def login():
 # ...
 # @return the HTML template of the landing page
 @login_required
-def logout():
+def user_logout():
     logout_user()
     flash("You are not logged in anymore!")
     return render_template('index.html', cartAmount = amountCartObjects())

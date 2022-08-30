@@ -10,12 +10,12 @@ app.route("/admin", methods=['GET'])(admin)
 # shopping cart
 app.route("/shopping_cart", methods=['GET','POST'])(cart_show)
 app.route("/delCart/<id>", methods=['GET'])(cart_deleteElement)
+app.route("/shopLamp/<id>", methods=['GET','POST'])(cart_addLamp)
 
 # administer lamps
-app.route("/lamp/<id>", methods=['GET'])(lamp)
-app.route("/lamp/<id>/delete", methods=['GET'])(loeschen)
-app.route("/shopLamp/<id>", methods=['GET','POST'])(shopLamp)
-app.route("/addLamp", methods=['GET','POST'])(addLamp)
+app.route("/lamp/<id>", methods=['GET'])(lamp_show)
+app.route("/lamp/<id>/delete", methods=['GET'])(lamp_delete)
+app.route("/addLamp", methods=['GET','POST'])(lamp_add)
 
 # user accounts
 app.route("/register", methods=['GET','POST'])(user_register)

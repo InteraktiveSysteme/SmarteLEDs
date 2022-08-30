@@ -23,7 +23,7 @@
             {% for lamp in lamps %}
 
             <li class="list-group-item">{{lamp.lampID}}      lampName: {{ lamp.lampName }}
-            <a href="{{ url_for('loeschen',id=lamp.lampID) }}"
+            <a href="{{ url_for('lamp_delete',id=lamp.lampID) }}"
                                    class=" btn btn-link">Delete</a>
             </li>
             {% endfor %}

@@ -139,7 +139,7 @@ def admin():
 # @brief This function handles the adminLogic
 # @param id is the LampID that you want to show in detail
 # @return the HTML template
-def lamp(id):
+def lamp_show(id):
     lamp = Lamp.query.get_or_404(id)
     return render_template('lamp.html', lamp=lamp, name=lamp.lampName, text=lamp.lampText, price=lamp.lampPrice, img=lamp.imgName,
                            longText=lamp.lampLongText,  cartAmount = amountCartObjects())
@@ -149,7 +149,7 @@ def lamp(id):
 # @brief This function handles the addLamp logic. It provides the feature of adding a new Lamp
 # @return the HTML template
 @login_required
-def addLamp():
+def lamp_add():
     if request.method == "GET":
         form = forms.AddLampForm()
         return render_template('addLamp.html', form=form,  cartAmount = amountCartObjects())
@@ -191,7 +191,7 @@ def addLamp():
 # @param id of the lamp to delete
 # ..            cartTEMP = json.loads(request.cookies.get('cart')).
 # @return the HTML template of the Shop page
-def loeschen(id):
+def lamp_delete(id):
     deletable = Lamp.query.get_or_404(id)
     users = User.query.order_by(User.timeStamp)
 
@@ -281,7 +281,7 @@ def cart_show():
 # @param id is the lampID
 # ...
 # @return the HTML template
-def shopLamp(id):
+def cart_addLamp(id):
 
     lamps = Lamp.query.order_by(Lamp.timeStamp)
 

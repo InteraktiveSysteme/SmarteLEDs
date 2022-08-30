@@ -4,6 +4,8 @@ import { Create } from './Create.js'
 import { State } from './State.js'
 
 let glbs = JSON.parse( document.getElementById( "gltf" ).innerHTML )
+
+// set global pathname to be appended to glb paths
 glbs = glbs.map(x => '/gltf/' + x)
 
 const GUIObjects = new ObjectGUI( glbs )

@@ -1,4 +1,6 @@
 import  * as THREE from './three.module.js'
+import { GLTFLoader } from './GLTFLoader.js'
+import { GUI } from 'https://cdn.jsdelivr.net/npm/lil-gui@0.17/+esm'
 
 export class Create{
 
@@ -13,9 +15,13 @@ export class Create{
         }  
 
         this.scene = new THREE.Scene()
-        this.scene.background = new THREE.Color( 0xff0000 )
+        this.scene.background = new THREE.Color( 0xd8dce4 )
         this.camera = new THREE.PerspectiveCamera( 75, this.sizes.width / this.sizes.height, 0.05, 10000 );
         this.canvas = document.getElementById('myCanvas')
+
+        // Ambient Light
+        const ambient = new THREE.AmbientLight( 0xffffff, .1 )
+        this.scene.add( ambient )
 
         this.width = width
         this.height = height
@@ -40,7 +46,7 @@ export class Create{
         this.guiCount = 1
     }
     
-    
+
     loadFromJson(json) {
 
         this.scene.children

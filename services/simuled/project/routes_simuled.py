@@ -376,17 +376,26 @@ def renders_showAll():
     return render_template('renders.html', renders = renders,  cartAmount = amountCartObjects())
 
 def renders_new():
-    jsonString = request.get_json()
+    if current_user.is_authenticated:
+    	if request.method == "POST":
+    		jsonString = json.dumps(request.get_json())
 
-    imgName = str(uuid.uuid1()) + ".jpg"
-    imgPath = os.path.join(app.config['RENDER_FOLDER'], imgName)
+    		imgName = str(uuid.uuid1()) + ".png"
+    		imgPath = os.path.join(app.config['RENDER_FOLDER'], imgName)
 
-    subprocess.run(["blender", "-b", "--python", "static/json_imports.py", "--", jsonString, imgName])
-    render = Render(userID=current_user.userID, imgName=imgPath)
-    db.session.add(render)
-    db.session.commit()
+    		#subprocess.run(["blender", " -b ", " --python ", "static/json_import.py", " -- ", jsonString, imgName])
+    		jsonString = jsonString.replace('"', '|')
+    		exitcode = os.system("blender -b --python project/static/json_import.py -- " + '"' + jsonString + '" ' + imgName)
+    		if exitcode == 0:
+    			render = Render(userID=current_user.userID, imgName=imgName)
+    			db.session.add(render)
+    			db.session.commit()
+    			return "The render finished successfully"
+    		return "There was a problem during the render, please contact the website owner."
+    else:
+    	return "You need to login for accessing the render feature"
 
-    return "rendering"
+    return "OH BOY! Something went terribly wrong!"
 
 # ----------------------------- END SIMULATION SECTION -----------------------------
 
@@ -404,7 +413,7 @@ def page_not_found(e):
     return render_template("404.html"), 404
 
 def expose_gltf(file):
-    return send_from_directory(os.path.join(app.root_path, 'static/Gltf/'), file)
+    return send_from_directory(os.path.join(app.root_path, 'static/gltf/'), file)
 
 #def simuled():
 #    lamps = Lamp.query.order_by(Lamp.timeStamp)

@@ -39,7 +39,7 @@
                         <a class="nav-link" href="{{url_for('simuled')}}">SimuLED</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{url_for('shop')}}">Shop</a>
+                        <a class="nav-link" href="{{url_for('lamp_showAll')}}">Shop</a>
                     </li>
                     {% if current_user.admin %}
                     <li class="nav-item">
@@ -105,7 +105,7 @@
                     </li>
                     {% if current_user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link " href="{{url_for('renders')}}">{{ current_user.userName }}</a>
+                        <a class="nav-link " href="{{url_for('renders_showAll')}}">{{ current_user.userName }}</a>
                     </li>
 
                 </ul>

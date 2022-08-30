@@ -14,7 +14,7 @@ def index():
     print("index")
     return render_template('index.html', cartAmount=amountCartObjects())
 
-def shop():
+def lamp_showAll():
     lamps = Lamp.query.order_by(Lamp.timeStamp)
     return render_template("shop.html", lamps=lamps,  cartAmount = amountCartObjects()), 200
 
@@ -371,11 +371,11 @@ def simuled():
         return render_template('simuled.html', width=width, height=height, depth=depth, gltf = gltf,  cartAmount = amountCartObjects())
 
 @login_required
-def renders():
+def renders_showAll():
     renders = Render.query.filter_by(userID=current_user.userID)
     return render_template('renders.html', renders = renders,  cartAmount = amountCartObjects())
 
-def saveRender():
+def renders_new():
     jsonString = request.get_json()
 
     imgName = str(uuid.uuid1()) + ".jpg"

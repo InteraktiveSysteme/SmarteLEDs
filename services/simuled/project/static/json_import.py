@@ -8,19 +8,24 @@ import random
 import sys
 import time
 import pathlib
+import datetime
 
 load_external_materials = True
 
+resourceDir = os.getcwd() + "/project/static/"
 
 if load_external_materials:
-    blendpath = pathlib.Path("./empty_materials.blend")
+    blendpath = pathlib.Path(resourceDir + "empty_materials.blend")
     bpy.ops.wm.open_mainfile(filepath=str(blendpath))
 
 inputJson = sys.argv[5]
 
-glbPath = str(pathlib.Path("./Gltf/"))
+print("JS Bond zur Stelle: ")
+print(inputJson)
+inputJson.replace("|", '\"')
 
-outputPng = str(pathlib.Path("./renders")) + "/" + sys.argv[6]
+
+outputPng = str(pathlib.Path(resourceDir + "renders")) + "/" + sys.argv[6]
 
 
 vert_res = 720
@@ -252,7 +257,7 @@ def generateScene(importedJson):
             print("GLB matrix")
             print(matrix)
             deselect_all
-            bpy.ops.import_scene.gltf(filepath=str(glbPath) + "/" + importedJson[key]["path"])
+            bpy.ops.import_scene.gltf(filepath=str(resourceDir) + "/" + importedJson[key]["path"])
             loc,rot,sca = rotateMatrix(matrix).decompose()
             
             current_name = bpy.context.selected_objects[0].name
@@ -299,7 +304,9 @@ def renderScene(filepath):
 
     
 # load json from string
-jsonData = json.loads(inputJson)
+#jsonData = json.loads(json.dumps(json.loads(inputJson)))
+jsonData = json.loads(inputJson.replace("|", '"'))
+
 
 #load json from file
 
@@ -319,3 +326,9 @@ start = time.time()
 renderScene(outputPng)
 end = time.time()
 print(end-start)
+f = open("blenderlog.txt", "a")
+f.write("startlog " + str(datetime.datetime.now()) + "\n")
+f.write(str(outputPng) + "\n")
+f.write(str(end-start) + "\n")
+f.write("\n")
+f.close()

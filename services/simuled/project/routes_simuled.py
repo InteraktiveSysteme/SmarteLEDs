@@ -305,7 +305,7 @@ def cart_addLamp(id):
 
     return resp
 
-def cart_deleteElement(id):
+def cart_delLamp(id):
     if current_user.is_authenticated:
         carts = Cart.query.filter_by(userID=current_user.userID)
         for cart in carts:

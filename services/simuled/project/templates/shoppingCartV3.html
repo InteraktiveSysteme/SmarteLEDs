@@ -42,7 +42,7 @@
                         <h5 onload="preis(5)" class="mb-0">{{lamp.lampPrice}} $</h5>
                       </div>
                       <div class="col-md-2 col-lg-1 col-xl-1 offset-lg-1">
-                        <a href="{{ url_for('cart_deleteElement',id=lamp.lampID) }}">
+                        <a href="{{ url_for('cart_delLamp',id=lamp.lampID) }}">
                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-trash" viewBox="0 0 16 16">
                             <path

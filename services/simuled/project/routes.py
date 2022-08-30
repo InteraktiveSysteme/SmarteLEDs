@@ -9,7 +9,7 @@ app.route("/admin", methods=['GET'])(admin)
 
 # shopping cart
 app.route("/shopping_cart", methods=['GET','POST'])(cart_show)
-app.route("/delCart/<id>", methods=['GET'])(cart_deleteElement)
+app.route("/delCart/<id>", methods=['GET'])(cart_delLamp)
 app.route("/shopLamp/<id>", methods=['GET','POST'])(cart_addLamp)
 
 # administer lamps

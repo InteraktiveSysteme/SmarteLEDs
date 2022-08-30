@@ -13,7 +13,7 @@
             {% for user in users %}
 
             <li class="list-group-item">{{user.userID}}      userName: {{ user.userName }}      Admin: {{ user.admin }}
-            <a href="{{ url_for('userLoeschen',id=user.userID) }}"
+            <a href="{{ url_for('user_delete',id=user.userID) }}"
                                    class=" btn btn-link">Delete</a>
             </li>
             {% endfor %}

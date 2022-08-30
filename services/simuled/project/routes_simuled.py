@@ -68,7 +68,7 @@ def user_register():
 # ...
 # @return the HTML template of the admin page
 @login_required
-def userLoeschen(id):
+def user_delete(id):
     deletable = User.query.get_or_404(id)
     lamps = Lamp.query.order_by(Lamp.timeStamp)
 

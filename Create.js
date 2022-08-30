@@ -1,6 +1,6 @@
 import  * as THREE from './three.module.js'
 import { GLTFLoader } from './GLTFLoader.js'
-import { GUI } from 'https://cdn.jsdelivr.net/npm/lil-gui@0.17/+esm'
+import { GUI } from './lilgui.js'
 
 
 export function basename(path) {
@@ -381,13 +381,20 @@ export class Create{
         }, 'Manual' )
 
         // url starts from index
-        this.gui.add( {
-
-            Render: () => {
-
-                $.post( "/renders/new", this.exportScene() )
-            }
-            
+        this.gui.add({
+        
+         Render: () => 
+         	{ 
+         		let xhttp = new XMLHttpRequest()
+         		xhttp.open("POST", "/renders/new", true)
+         		xhttp.setRequestHeader("Content-type", "application/json")
+			xhttp.onreadystatechange = function() {
+  				if (this.readyState == 4 && this.status == 200) {
+      					alert(this.responseText)
+        			} 
+        		}
+        		xhttp.send(this.exportScene())
+        	} 
         }, 'Render' )
     }
 }

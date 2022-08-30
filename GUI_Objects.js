@@ -1,4 +1,4 @@
-import * as THREE from '//cdn.skypack.dev/three@0.129.0'
+import * as THREE from './three.module.js'
 import { GLTFLoader } from './GLTFLoader.js'
 
 

@@ -52,10 +52,10 @@ document.addEventListener( 'objectClicked', ( event ) => {
     creator.glbImporter( event.detail.glbPath )
 } )
 
-document.addEventListener( 'keydown', ( event ) => {
+// document.addEventListener( 'keydown', ( event ) => {
 
-    console.log( creator.exportScene() )
-} )
+    // console.log( creator.exportScene() )
+// } )
 
 /**
  * @brief is used as animate function to render the scene each frame.

@@ -1,6 +1,6 @@
 import  * as THREE from './three.module.js'
 import { Create } from './Create.js'
-import { GUI } from 'https://cdn.jsdelivr.net/npm/lil-gui@0.17/+esm'
+import { GUI } from './lilgui.js'
 
 /**
  * DragControls class

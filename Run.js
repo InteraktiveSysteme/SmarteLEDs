@@ -1,7 +1,6 @@
 import  * as THREE from './three.module.js'
 import {ObjectGUI} from './GUI_Objects.js'
 import { Create } from './Create.js'
-import { WallSetup } from './WallSetup.js'
 import { State } from './State.js'
 
 const glbs = JSON.parse( document.getElementById( "gltf" ).innerHTML )

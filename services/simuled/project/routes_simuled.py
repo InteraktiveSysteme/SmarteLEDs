@@ -18,10 +18,6 @@ def shop():
     lamps = Lamp.query.order_by(Lamp.timeStamp)
     return render_template("shop.html", lamps=lamps,  cartAmount = amountCartObjects()), 200
 
-def registerPage():
-    form = forms.RegisterForm()
-    return render_template('registerPage.html', form=form,  cartAmount = amountCartObjects())
-
 # ----------------------------- END MAIN PAGES SECTION -----------------------------
 
 
@@ -31,32 +27,40 @@ def registerPage():
 ##
 # @brief This function handles the register Logic
 # @return the HTML template
-def register():
-    username = request.form['name']
-    password = request.form["password"]
-    try:
-        user = User.query.filter_by(userName=username).first()
-        if user:
-            flash("Username already in Usage")
-            return render_template("registerPage.html",  cartAmount = amountCartObjects())
-    except:
-        print("Username not found")
-    admin = False
-    if username[0:5] == "admin":
-        admin = True
-    login = request.form.get("loginbutton")
-    register = request.form.get("registerbutton")
-    print("username: ", username, "  password: ", password,
-          "login: ", login, "  register: ", register)
-    user = User(userName=username, password=password, admin=admin)
-    print(login)
+def user_register():
 
-    db.session.add(user)
-    db.session.commit()
-    print("registered!")
-    flash(message="Registered!")
+    # CHECK METHOD IF POST OR GET
+    match (request.method):
+        case "GET":
+            form = forms.RegisterForm()
+            return render_template('register.html', form=form, cartAmount=amountCartObjects())
 
-    return render_template('index.html',  cartAmount = amountCartObjects())
+        case "POST":
+            username = request.form['name']
+            password = request.form["password"]
+            try:
+                user = User.query.filter_by(userName=username).first()
+                if user:
+                    flash("Username already in Usage")
+                    return redirect("/register")
+            except:
+                print("Username not found")
+            admin = False
+            if username[0:5] == "admin":
+                admin = True
+            login = request.form.get("loginbutton")
+            register = request.form.get("registerbutton")
+            print("username: ", username, "  password: ", password, "login: ", login, "  register: ", register)
+            user = User(userName=username, password=password, admin=admin)
+            print(login)
+
+            db.session.add(user)
+            db.session.commit()
+            print("registered!")
+            flash(message="Registered!")
+
+            return redirect("/")
+
 
 ##
 # @brief This function deletes the User  in the Database with the given ID
@@ -72,15 +76,15 @@ def userLoeschen(id):
         db.session.delete(deletable)
         db.session.commit()
         users = User.query.order_by(User.timeStamp)
-        return render_template("admin.html", users=users, lamps=lamps)
+        return render_template("admin.html", users=users, lamps=lamps, cartAmount=amountCartObjects())
 
     except:
         print("error")
         users = User.query.order_by(User.timeStamp)
-        return render_template("admin.html", users=users, lamps=lamps)
+        return render_template("admin.html", users=users, lamps=lamps, cartAdmount=amountCartObjects())
 
     users = User.query.order_by(User.timeStamp)
-    return render_template("admin.html", users=users, lamps=lamps)
+    return render_template("admin.html", users=users, lamps=lamps, cartAmount=amountCartObjects())
 
 ##
 # @brief This function gets the information from a form and uses the login_user function to sign in the user

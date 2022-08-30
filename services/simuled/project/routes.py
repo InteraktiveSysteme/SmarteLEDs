@@ -5,7 +5,6 @@ app.route("/", methods=['GET'])(index)
 app.route("/index", methods=['GET'])(index)
 app.route("/simuled", methods=['GET','POST'])(simuled)
 app.route("/shop", methods=['GET'])(shop)
-app.route("/registerPage", methods=['GET','POST'])(registerPage)
 
 # shopping cart
 app.route("/shopping_cart", methods=['GET','POST'])(shoppingCart)
@@ -18,7 +17,7 @@ app.route("/shopLamp/<id>", methods=['GET','POST'])(shopLamp)
 app.route("/addLamp", methods=['GET','POST'])(addLamp)
 
 # user accounts
-app.route("/register", methods=['GET','POST'])(register)
+app.route("/register", methods=['GET','POST'])(user_register)
 app.route("/login", methods=['GET','POST'])(login)
 app.route("/logout", methods=['GET','POST'])(logout)
 app.route("/admin", methods=['GET'])(admin)

@@ -16,7 +16,7 @@ const depth = JSON.parse( document.getElementById( "depth" ).innerHTML )
 // creates scene and room
 const creator = new Create( width, height, depth )
 
-creator.getCamera().position.z = 5
+creator.camera.position.z = 5
 
 // state is created
 const state = new State( creator )
@@ -29,16 +29,17 @@ var wallArray = creator.WallSetup()
 window.addEventListener( 'resize', () =>
 {
     // Update sizes
-    creator.getSizes().width = .95 * window.innerWidth
-    creator.getSizes().height = window.innerHeight
+    creator.sizes.width = .95 * window.innerWidth
+    creator.sizes.height = window.innerHeight
 
     // Update camera
-    creator.getCamera().aspect = creator.getSizes().width / creator.getSizes().height
-    creator.getCamera().updateProjectionMatrix()
+    creator.camera.aspect = creator.sizes.width / creator.sizes.height
+    creator.camera.updateProjectionMatrix()
 
     // Update renderer
-    creator.getRenderer().setSize( creator.getSizes().width, creator.getSizes().height )
-    creator.getRenderer().setPixelRatio( Math.min( window.devicePixelRatio, 2 ) )
+    creator.renderer.setSize( creator.sizes.width, creator.sizes.height )
+    creator.renderer.setPixelRatio( Math.min( window.devicePixelRatio, 2 ) )
+
 } )
 
 document.addEventListener( 'objectClicked', ( event ) => {
@@ -61,7 +62,7 @@ document.addEventListener( 'keydown', ( event ) => {
 function animate(){
 
      // Render
-     creator.getRenderer().render( creator.getScene(), creator.getCamera() )
+     creator.renderer.render( creator.scene, creator.camera )
  
      // Call tick again on the next frame
      window.requestAnimationFrame( animate )

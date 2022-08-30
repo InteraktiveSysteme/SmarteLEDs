@@ -1,11 +1,15 @@
-<!DOCTYPE html>
-<head>
+{% extends "base.html" %}
+{% block title %}Index{% endblock %}
+{% block head %}
+{{ super() }}
 	<meta charset="UTF-8"/>
 	<title>Three.js 101</title>
-  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-  <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-</head>
+  	<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+  	<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+  	<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    	<script type="module" src="{{ url_for('static', filename='/js/3droom.js')}}" ></script>
+{% endblock %}
+{% block content %}
 <body>
 
   <p hidden="true" id="width">4</p>
@@ -140,5 +144,5 @@
   </div>
 
     <!--p id="screen-log" style="color:white"></p-->
-    <script type="module" src="./Run.js"></script>
 </body>
+{% endblock %}

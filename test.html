@@ -2,6 +2,9 @@
 <head>
 	<meta charset="UTF-8"/>
 	<title>Three.js 101</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
 </head>
 <body>
 
@@ -46,7 +49,7 @@
 
   <center>
     <div id="webgl" style="width: auto; height:auto;">
-      <canvas id="gui" width="auto" height="auto" style="position: relativ; border-radius: 15px;"></canvas>
+      <canvas id="gui" width="auto" height="100" style="position: relativ; border-radius: 15px;"></canvas>
     </div>
   </center>
 
@@ -55,6 +58,86 @@
       <canvas oncontextmenu="return false;" id="myCanvas" width="auto" height="auto" style="position: relativ; border-radius: 15px;"></canvas>
     </div>
   </center>
+
+  <div title="Manual" id="manual" hidden="true">
+    <br>Q: Switch between Egoperspective and Turntable mode
+    <br>
+    <br>
+    <h2>Egoperspective</h2>
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Controls</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">W:</th>
+          <td>Move forward.</td>
+        </tr>
+        <tr>
+          <th scope="row">A:</th>
+          <td>Move left.</td>
+        </tr>
+        <tr>
+          <th scope="row">S:</th>
+          <td>Move backward.</td>
+        </tr>
+        <tr>
+          <th scope="row">D:</th>
+          <td>Move right.</td>
+        </tr>
+        <tr>
+          <th scope="row">Mouse-Click and Drag:</th>
+          <td>Look around.</td>
+        </tr>
+      </tbody>
+    </table>
+    <h2>Turntable</h2>
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Controls</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">Mouse-Click and Drag:</th>
+          <td>rotate the room.</td>
+        </tr>
+        <tr>
+          <th scope="row">C:</th>
+          <td>Switch between dragging and rotating objects.</td>
+        </tr>
+        <tr>
+          <th scope="row">Mouse-Click (in Drag-Mode):</th>
+          <td>Select an object, then move your mouse to find the preferred spot and click again to confirm placement.</td>
+        </tr>
+        <tr>
+          <th></th>
+          <td>To move an object one needs to move the cursor along the bottom plane to place it. </td>
+        </tr>
+        <tr>
+          <th></th>
+          <td>The Ceiling_lamp can also be placed via the ceiling.</td>
+        </tr>
+        <tr>
+          <th scope="row">Mouse-Click (in Rotation-Mode):</th>
+          <td>Select an object, then move your mouse to rotate it and click again to confirm the rotation.</td>
+        </tr>
+        <tr>
+          <th scope="row">X (in Drag- or Rotation-Controls):</th>
+          <td>An object needs to be selected in either Drag- or Rotation-Controls.</td>
+        </tr>
+        <tr>
+          <th scope="row"></th>
+          <td>When the x-key is pressed the object is deleted.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
     <!--p id="screen-log" style="color:white"></p-->
     <script type="module" src="./Run.js"></script>

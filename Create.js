@@ -402,8 +402,8 @@ export class Create{
     createGUI(){
 
         this.gui.add( {
-            Instructions: () => { alert( 'hi' ) }
-        }, 'Instructions' )
+            Manual: () => { $("#manual").dialog({width: window.document.width * 0.8}) }
+        }, 'Manual' )
 
         this.gui.add( {
             Render: () => { alert( 'Hallo Fremder' ) }

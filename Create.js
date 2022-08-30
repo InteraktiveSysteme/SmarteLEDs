@@ -43,6 +43,7 @@ export class Create{
 
         this.gui = new GUI()
         this.createGUI()
+        this.guiCount = 1
     }
     
     getCanvas(){
@@ -192,15 +193,9 @@ export class Create{
 
     glbImporter( path ){
 
-        let height = this.height
-        let glbArray = this.glbArray
-        let lightArray = this.lightArray
-        let scene = this.scene
-        let gui = this.gui
-
         const loader = new GLTFLoader()
     
-        loader.load( path, function ( glb ) {
+        loader.load( path, ( glb ) => {
 
             console.log( path )
     
@@ -223,14 +218,14 @@ export class Create{
                 spotLight.shadow.normalBias = .01
                 spotLight.userData.type = "SPOT"
     
-                lightArray.push( spotLight )
+                this.lightArray.push( spotLight )
     
                 const target1 = new THREE.Object3D()
                 target1.position.set( 0, -1, 0 )
                 spotLight.target = target1
-                scene.add( target1 )
+                this.scene.add( target1 )
     
-                root.position.set( 0, height / 2 - sizes.y, 0 )
+                root.position.set( 0, this.height / 2 - sizes.y, 0 )
     
                 root.userData.path = path
     
@@ -241,6 +236,7 @@ export class Create{
                 mesh.userData.draggable = true
                 mesh.userData.drag = true
                 mesh.userData.rot = true
+                mesh.userData.isLight = true
                 mesh.castShadow = true
                 mesh.receiveShadow = true
                 root.add( spotLight )
@@ -250,8 +246,12 @@ export class Create{
                 // spotLight.position.set( 0, -.05, 0 )
                 spotLight.position.set( 0, -.2, 0 )
 
-                gui.addColor( spotLight, 'color').name( path + ": " + lightArray.length )
-                gui.add( spotLight, 'intensity', 0, 2 ).name( "Intensity " + lightArray.length + ":" )
+                const folder = this.gui.addFolder( 'Lamp ' + this.guiCount + ': ' + path.split( '.' )[ 0 ]  )
+                this.guiCount++
+
+                folder.addColor( spotLight, 'color').name( "Color:" )
+                folder.add( spotLight, 'intensity', 0, 2 ).name( "Intensity:" )
+                mesh.userData.guiFolder = folder
             }
         
             else if( path.localeCompare( 'Standing_lamp.glb' ) == 0 ){
@@ -267,14 +267,14 @@ export class Create{
                 spotLight.shadow.normalBias = .01
                 spotLight.userData.type = "SPOT"
     
-                lightArray.push( spotLight )
+                this.lightArray.push( spotLight )
     
                 const target1 = new THREE.Object3D()
                 target1.position.set( 0, -1, 0 )
                 spotLight.target = target1
-                scene.add( target1 )
+                this.scene.add( target1 )
     
-                root.position.set( 0, ( - height + sizes.y ) / 2, 0 )
+                root.position.set( 0, ( - this.height + sizes.y ) / 2, 0 )
     
                 root.userData.path = path
     
@@ -285,6 +285,7 @@ export class Create{
                 mesh.userData.drag = true
                 mesh.userData.rot = true
                 mesh.castShadow = true
+                mesh.userData.isLight = true
                 mesh.receiveShadow = true
 
                 root.add( spotLight )
@@ -292,14 +293,17 @@ export class Create{
 
                 spotLight.position.set( .01, .5, 0 )
 
-                // delete lamp and gui object
-                gui.addColor( spotLight, 'color').name( path + ": " + lightArray.length )
-                gui.add( spotLight, 'intensity', 0, 2 ).name( "Intensity " + lightArray.length + ":" )
+                const folder = this.gui.addFolder( 'Lamp ' + this.guiCount + ': ' + path.split( '.' )[ 0 ]  )
+                this.guiCount++
+
+                folder.addColor( spotLight, 'color').name( "Color:" )
+                folder.add( spotLight, 'intensity', 0, 2 ).name( "Intensity:" )
+                mesh.userData.guiFolder = folder
             }
 
             else{
     
-                root.position.set( 0, ( - height + sizes.y ) / 2, 0 )
+                root.position.set( 0, ( - this.height + sizes.y ) / 2, 0 )
     
                 root.userData.path = path
     
@@ -313,103 +317,12 @@ export class Create{
                 mesh.castShadow = true
                 mesh.receiveShadow = true
             }
-        
-            // if( path.localeCompare( 'table.glb' ) == 0 ){
-    
-            //     root.position.set( 0, ( - height + sizes.y ) / 2, 0 )
-    
-            //     console.log( glb )
-    
-            //     root.userData.path = path
-    
-            //     // root.userData.glb = true
-            //     var child = root.children[ root.children.length - 1 ]
-    
-            //     child.castShadow = true
-            //     child.receiveShadow = true
-            //     child.userData.draggable = true
-            //     child.userData.drag = true
-            //     child.userData.rot = true
-            //     child.userData.glb = true
-            //     child.castShadow = true
-            //     child.receiveShadow = true
-            //     child.userData.root = root
-            // }
-        
-            // if( path.localeCompare( 'chair.glb' ) == 0 ){
-    
-            //     root.position.set( 0, ( - height + sizes.y ) / 2, 0 )
-    
-            //     console.log( glb )
-    
-            //     root.userData.path = path
-    
-            //     // root.userData.glb = true
-            //     var child = root.children[ root.children.length - 1 ]
-    
-            //     child.castShadow = true
-            //     child.receiveShadow = true
-            //     child.userData.draggable = true
-            //     child.userData.drag = true
-            //     child.userData.rot = true
-            //     child.userData.glb = true
-            //     child.castShadow = true
-            //     child.receiveShadow = true
-            //     child.userData.root = root
-            // }
-            
-            // if( path.localeCompare( 'shelf.glb' ) == 0 ){
-        
-            //     // root.position.set( 0, -.22, 0 )
-            //     root.position.set( 0, ( - height + sizes.y ) / 2, 0 )
-    
-            //     console.log( glb )
-    
-            //     root.userData.path = path
-    
-            //     // root.userData.glb = true
-            //     var child = root.children[ root.children.length - 1 ]
-    
-            //     child.castShadow = true
-            //     child.receiveShadow = true
-            //     child.userData.draggable = true
-            //     child.userData.drag = true
-            //     child.userData.rot = true
-            //     child.userData.glb = true
-            //     child.castShadow = true
-            //     child.receiveShadow = true
-            //     child.userData.root = root
-            // }
-        
-            // if( path.localeCompare( 'sofa.glb' ) == 0 ){
-        
-            //     root.position.set( 0, ( - height + sizes.y ) / 2, 0 )
-    
-            //     console.log( glb )
-    
-            //     root.userData.path = path
-    
-            //     // root.userData.glb = true
-            //     var child = root.children[ root.children.length - 1 ]
-    
-            //     child.castShadow = true
-            //     child.receiveShadow = true
-            //     child.userData.draggable = true
-            //     child.userData.drag = true
-            //     child.userData.rot = true
-            //     child.userData.glb = true
-            //     child.castShadow = true
-            //     child.receiveShadow = true
-            //     child.userData.root = root
-            // }
-    
-            // console.log( root.position )
 
             root.name = path
 
-            glbArray.push( root )
+            this.glbArray.push( root )
     
-            scene.add( root )
+            this.scene.add( root )
 
         }, function ( xhr ){
     

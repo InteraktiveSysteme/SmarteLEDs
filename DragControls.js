@@ -25,6 +25,8 @@ import { GUI } from 'https://cdn.jsdelivr.net/npm/lil-gui@0.17/+esm'
 
                 if( this.selected ){
 
+                    console.log( this.selected.parent )
+
                     if( this.selected.userData.isLight ){
 
                         this.selected.userData.guiFolder.destroy()
@@ -34,6 +36,8 @@ import { GUI } from 'https://cdn.jsdelivr.net/npm/lil-gui@0.17/+esm'
 
                     this.creator.glbArray.splice( this.creator.glbArray.indexOf( this.selected.parent ), 1 )
                     this.creator.scene.remove( this.selected.parent )
+
+                    this.selected = null
                 }
             }
         }
@@ -58,7 +62,6 @@ import { GUI } from 'https://cdn.jsdelivr.net/npm/lil-gui@0.17/+esm'
         
                 this.selected = intersects[ 0 ].object
             }
-            // this.creator.scene.remove( this.selected.parent )
         }
 
         this.onMouseMove = ( event ) => {

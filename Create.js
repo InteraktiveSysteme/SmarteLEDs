@@ -2,6 +2,7 @@ import  * as THREE from './three.module.js'
 import { GLTFLoader } from './GLTFLoader.js'
 import { GUI } from 'https://cdn.jsdelivr.net/npm/lil-gui@0.17/+esm'
 
+
 export class Create{
 
     constructor( width, height, depth ){

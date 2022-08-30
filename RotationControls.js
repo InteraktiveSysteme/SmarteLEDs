@@ -34,6 +34,8 @@ export class RotationControls{
 
                     this.creator.glbArray.splice( this.creator.glbArray.indexOf( this.selected.parent ), 1 )
                     this.creator.scene.remove( this.selected.parent )
+
+                    this.selected = null
                 }
             }
         }

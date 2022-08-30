@@ -219,7 +219,7 @@ export class Create{
                 // spotLight.position.set( 0, -.05, 0 )
                 spotLight.position.set( 0, -.2, 0 )
 
-                const folder = this.gui.addFolder( 'Lamp ' + this.guiCount + ': ' + basename(path).split( '.' )[ 0 ]  )
+                const folder = this.gui.addFolder( 'Lamp ' + this.guiCount + ': ' + basename(path).split( '.' ).reverse()[ 1 ]  )
                 this.guiCount++
 
                 folder.addColor( spotLight, 'color').name( "Color:" )
@@ -266,7 +266,7 @@ export class Create{
 
                 spotLight.position.set( .01, .5, 0 )
 
-                const folder = this.gui.addFolder( 'Lamp ' + this.guiCount + ': ' + basename(path).split( '.' )[ 0 ]  )
+                const folder = this.gui.addFolder( 'Lamp ' + this.guiCount + ': ' + basename(path).split( '.' ).reverse()[ 1 ]  )
                 this.guiCount++
 
                 folder.addColor( spotLight, 'color').name( "Color:" )

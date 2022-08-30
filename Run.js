@@ -47,7 +47,6 @@ window.addEventListener( 'resize', () =>
 
 document.addEventListener( 'objectClicked', ( event ) => {
 
-    // console.log( "Hallo Fremder." )
     console.log( event.detail.glbPath )
 
     creator.glbImporter( event.detail.glbPath )

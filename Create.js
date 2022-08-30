@@ -375,11 +375,19 @@ export class Create{
     createGUI(){
 
         this.gui.add( {
+
             Manual: () => { $("#manual").dialog({width: window.document.width * 0.8}) }
+
         }, 'Manual' )
 
+        // url starts from index
         this.gui.add( {
-            Render: () => {  }
+
+            Render: () => {
+
+                $.post( "/renders/new", this.exportScene() )
+            }
+            
         }, 'Render' )
     }
 }

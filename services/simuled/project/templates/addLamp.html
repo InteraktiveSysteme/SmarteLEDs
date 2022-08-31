@@ -14,7 +14,7 @@
                 new Lamp!<br></h1>
             <h2 style="margin-bottom:30px; font-family:Monospace; hyphens: auto; color:#000000;text-align: center">
                 Please provide Informations about the new Lamp!<br></h2>
-            <form action="/addLamp" method="POST" enctype="multipart/form-data">
+            <form action="/lamps/add" method="POST" enctype="multipart/form-data">
                 {{form.hidden_tag()}}
 
 
@@ -44,12 +44,6 @@
                         <div style="margin-bottom: 30px" class="form-group" style="padding = 10px">
                             <label>Upload an Image</label>
                             {{form.img(class="form-control", id="img", onkeyup="dun1();")}}
-                        </div>
-                    </div>
-                    <div class="col-md">
-                        <div style="margin-bottom: 30px" class="form-group" style="padding = 10px">
-                            <label>Upload an GLTF</label>
-                            {{form.gltf(class="form-control", onkeyup="dun1();")}}
                         </div>
                     </div>
                 </div>

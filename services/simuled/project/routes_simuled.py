@@ -190,13 +190,8 @@ def lamp_add():
         imgName = saveName
         img.save(os.path.join(app.config['UPLOAD_FOLDER'], saveName))
 
-        gltfName = secure_filename(gltf.filename)
-        savegltfName = str(uuid.uuid1()) + "_" + gltfName
-        gltfName = savegltfName
-        gltf.save(os.path.join(app.root_path +"/static/Gltf/Lampen/", savegltfName))
-
         #now we add the lamp to the database
-        lamp = Lamp(lampName=name, imgName=imgName, gltfName=gltfName, lampPrice=price, lampText=text,
+        lamp = Lamp(lampName=name, imgName=imgName, lampPrice=price, lampText=text,
                     lampLongText=longtext)
         db.session.add(lamp)
         db.session.commit()

@@ -14,7 +14,7 @@
                 new Lamp!<br></h1>
             <h2 style="margin-bottom:30px; font-family:Monospace; hyphens: auto; color:#000000;text-align: center">
                 Please provide Informations about the new Lamp!<br></h2>
-            <form action="#" method="POST" enctype="multipart/form-data">
+            <form action="/addLamp" method="POST" enctype="multipart/form-data">
                 {{form.hidden_tag()}}
 
 
@@ -23,20 +23,20 @@
                     <label for="name">Name</label>
                 </div>
                 <div class="form-floating mb-3">
-                    {{form.shortText(type="text", class="form-control", id="name",
+                    {{form.shortText(type="text", class="form-control", id="text",
                     onkeyup="dun1();",placeholder="...")}}
-                    <label for="name">Short Description</label>
+                    <label for="shortText">Short Description</label>
                 </div>
+           
+                <div class="form-floating mb-3">
+                    {{form.longText(type="textarea", class="form-control",placeholder="Leave a comment here", id="floatingTextarea2" )}}
+                    <label for="floatingTextarea2">Long Description</label>
+                  </div>
 
-                <div class="input-group mb-3">
-                    <span class="input-group-text">Long Description</span>
-                    {{form.longText(type="textarea", class="form-control", onkeyup="dun1();")}}
-                </div>
 
-                <div style="margin-bottom: 30px" class="input-group mb-3">
-                    <span class="input-group-text">Price</span>
-                    {{form.price(class="form-control",id="price", onkeyup="dun1();")}}
-                    <span class="input-group-text">$</span>
+                <div style="margin-bottom: 30px; " class="form-floating mb-3">
+                    {{form.price( class="form-control",id="price",onkeyup="dun1();", placeholder="Leave a comment here")}}
+                    <label for="price">Price ($)</label>
                 </div>
 
                 <div class="row g-2">
@@ -71,8 +71,11 @@
 
                     </div>
                     <div class="card-footer">
-                        <big id="priceOut" style="color:#359DA3" class="text-mut"> </big> <big style="color:#359DA3"
-                            class="text-mut">$</big>
+                        <big  id="priceOut" style="color:#359DA3" class="text-mut"></big><big  style="color:#359DA3" class="text-mut">$</big>
+
+                        
+                        <!--<p id="priceOut" style="color:#359DA3" class="text-mut"> </p> -->
+
                     </div>
                 </div>
             </div>
@@ -81,18 +84,21 @@
             <script>
                 const title = document.getElementById('name');
                 const text = document.getElementById('text');
+                const text2 = document.getElementById('text2');
+
                 const price = document.getElementById('price');
                 const img = document.getElementById('img');
                 const btn = document.getElementById('showbtn');
                 const titleout = document.getElementById('nameOut');
                 const textout = document.getElementById('textout');
-                const priceout = document.getElementById('priceOut');
+                const priceOut = document.getElementById('priceOut');
                 const imgout = document.getElementById('imgOut');
 
                 function dun1() {
                     titleout.innerHTML = title.value;
                     textout.innerHTML = text.value;
-                    priceout.innerHTML = price.value;
+
+                    priceOut.innerHTML = price.value;
 
                 }
                 btn.addEventListener('click', dun1);
@@ -107,13 +113,6 @@
                         reader.readAsDataURL(file);
                     }
                 });
-
-
-
-
-
-
-
 
             </script>
         </div>

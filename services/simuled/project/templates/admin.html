@@ -13,7 +13,7 @@
             {% for user in users %}
 
             <li class="list-group-item">{{user.userID}}      userName: {{ user.userName }}      Admin: {{ user.admin }}
-            <a href="{{ url_for('userLoeschen',id=user.userID) }}"
+            <a href="{{ url_for('user_delete',id=user.userID) }}"
                                    class=" btn btn-link">Delete</a>
             </li>
             {% endfor %}
@@ -23,7 +23,7 @@
             {% for lamp in lamps %}
 
             <li class="list-group-item">{{lamp.lampID}}      lampName: {{ lamp.lampName }}
-            <a href="{{ url_for('loeschen',id=lamp.lampID) }}"
+            <a href="{{ url_for('lamp_delete',id=lamp.lampID) }}"
                                    class=" btn btn-link">Delete</a>
             </li>
             {% endfor %}

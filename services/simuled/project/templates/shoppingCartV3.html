@@ -20,7 +20,7 @@
               <div class="col-10">
 
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                  <h1 style="font-family:Monospace; hyphens: auto; color:#D06ED4;text-align: center">Shopping Card<br>
+                  <h1 style="font-family:Monospace; hyphens: auto; color:#D06ED4;text-align: center">Shopping Cart<br>
                   </h1>
                 </div>
                 {% for lamp in lamps %}
@@ -32,17 +32,25 @@
                       </div>
                       <div class="col-md-3 col-lg-3 col-xl-3">
                         <p class="lead fw-normal mb-2">{{lamp.lampName}}</p>
-                        <p><span class="text-muted">{{lamp.lampText}}</p>
+                          <p><span class="text-muted">{{lamp.lampText}}</span></p>
                       </div>
-                      <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
+                      <div class="col-md-2 col-lg-2 col-xl-1 d-flex">
 
 
                       </div>
                       <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
                         <h5 onload="preis(5)" class="mb-0">{{lamp.lampPrice}} $</h5>
                       </div>
-                      <div class="col-md-1 col-lg-1 col-xl-1 text-end">
-                        <a href="#!" class="text-danger"><i class="fas fa-trash fa-lg"></i></a>
+                      <div class="col-md-2 col-lg-1 col-xl-1 offset-lg-1">
+                        <a href="{{ url_for('cart_delLamp',id=lamp.lampID) }}">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-trash" viewBox="0 0 16 16">
+                            <path
+                              d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
+                            <path fill-rule="evenodd"
+                              d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
+                          </svg>
+                        </a>
                       </div>
                     </div>
                   </div>
@@ -76,7 +84,7 @@
             <div class="d-flex justify-content-between">
               <div>
 
-                <big style="color: #359DA3"></bigstyle> Summe</big>
+                <big style="color: #359DA3"></bigstyle> Summe:</big>
               </div>
               <div>
                 <big> {{ summe }} $</big><br />
@@ -88,7 +96,10 @@
                 data-bs-target="#exampleModal">Check-out</button>
               {% endif %}
               {% if not current_user.is_authenticated %}
-              <button type="button" class="btn  btn-outline-warning" disabled>Log-in to Check-out</button>
+              <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#modelCookie">
+                Check-out
+              </button>
+              
               {% endif %}
             </div>
           </div>
@@ -96,7 +107,29 @@
       </div>
     </div>
   </div>
-  <!-- Modal -->
+
+
+<div class="modal fade" id="modelCookie" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Please Log-in to Check-out 
+      </div>
+      <div class="modal-footer">
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+          <a href={{url_for('user_add')}} class="btn btn-outline-primary">Register</a>
+          <button type="button" class="btn btn-outline-warning" data-bs-dismiss="modal">understood!</button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -110,9 +143,9 @@
             {{form.hidden_tag()}}
             <div class="row">
               <div class="col">
-                
+
                 <div class="form-floating mb-3">
-                  {{form.firstName(type="text", class="form-control", id="firstName",  placeholder="firstName")}}
+                  {{form.firstName(type="text", class="form-control", id="firstName", placeholder="firstName")}}
                   <label for="firstName">First Name</label>
                 </div>
               </div>
@@ -146,7 +179,7 @@
               </div>
             </div>
             <div class="modal-footer">
-              
+
               <div style="margin-top: 30 px">
                 <div class="d-grid gap-2">
                   {{form.submit(class="btn btn-outline-primary")}}

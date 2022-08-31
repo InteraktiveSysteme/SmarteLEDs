@@ -36,12 +36,10 @@ WORKDIR $APP_HOME
 # install dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends netcat
 RUN apt install -y blender
+
+# uninstall blender only keep dependencies of blender 
+# newest blender version needed and provided in repository
 RUN apt remove -y blender
-#RUN apt install -y snapd 
-#RUN systemctl enable snapd
-#RUN snap install core
-#RUN snap install snapd 
-#RUN snap install blender --classic
 COPY --from=builder /usr/src/app/wheels /wheels
 COPY --from=builder /usr/src/app/requirements.txt .
 RUN pip install --upgrade pip

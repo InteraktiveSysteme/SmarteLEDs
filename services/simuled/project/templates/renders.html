@@ -21,77 +21,80 @@
                         <img class="card-img-top" src="{{ url_for("static", filename="renders/" + render.imgName) }}"
                             alt="Card image cap"></a>
                     <div class="card-body">
-                        <div class="d-grid gap-2">
-                            <div class="btn-group" role="group">
-                                <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
-                                    data-bs-target="#exampleModal" data-bs-whatever="{{ url_for("static",
-                                    filename="renders/" + render.imgName) }}">Details</button>
-                                <a class="btn btn-outline-primary" href="{{ url_for("static", filename="renders/" +
-                                    render.imgName) }}" download> Download</a>
-                                    <a class="btn btn-outline-primary" href="{{ url_for("render_delete", id=render.renderID) }}"> Delete</a>
-                            </div>
-                        </div>
+
+                       
+                                <div class="btn-group " role="group">
+                                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
+                                        data-bs-target="#exampleModal" data-bs-whatever="{{ url_for("static",
+                                        filename="renders/" + render.imgName) }}">Details</button>
+                                    <a class="btn btn-outline-primary" href="{{ url_for("static", filename="renders/" +
+                                        render.imgName) }}" download> Download</a>
+                                    <a class="btn btn-outline-warning" href="{{ url_for("render_delete",
+                                        id=render.renderID) }}"> Delete</a>
+                                </div>
+                            
                     </div>
                     <div class=" card-footer">
-                                    <small> {{render.timeStamp}}</small>
+                        <small id="{{render.timeStamp}}" onload="toDate({{render.timeStamp}},{{render.timeStamp}})"> {{render.timeStamp}}</small>
 
 
 
-                                    <div class="modal fade" id="exampleModal" tabindex="-1"
-                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog modal-xl">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <img class="card-img-top" src="#" alt="Card image cap">
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <div class="d-grid gap-2 col-6 mx-auto">
-                                                        <a id="downloadLink" class="btn btn-outline-primary" href="#"
-                                                            download> Download</a>
-                                                    </div>
-                                                </div>
-                                            </div>
+                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-xl">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <img class="card-img-top" src="#" alt="Card image cap">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <div class="d-grid gap-2 col-6 mx-auto">
+                                            <a id="downloadLink" class="btn btn-outline-primary" href="#" download>
+                                                Download</a>
                                         </div>
                                     </div>
-
+                                </div>
                             </div>
                         </div>
 
                     </div>
-
-
-                    <!-- Modal -->
-
-                    {% endfor %}
                 </div>
+
             </div>
+
+
+            <!-- Modal -->
+
+            {% endfor %}
         </div>
-        <script>
-            var exampleModal = document.getElementById('exampleModal')
-            exampleModal.addEventListener('show.bs.modal', function (event) {
-                // Button that triggered the modal
-                var button = event.relatedTarget
-                const downloadlink = document.getElementById('downloadLink');
+    </div>
+</div>
 
-                // Extract info from data-bs-* attributes
-                var recipient = button.getAttribute('data-bs-whatever')
-                // If necessary, you could initiate an AJAX request here
-                // and then do the updating in a callback.
-                //
-                // Update the modal's content.
-                var modalTitle = exampleModal.querySelector('.modal-title')
-                var modalImage = exampleModal.querySelector('.card-img-top')
+<script>
+    var exampleModal = document.getElementById('exampleModal')
+    exampleModal.addEventListener('show.bs.modal', function (event) {
+        // Button that triggered the modal
+        var button = event.relatedTarget
+        const downloadlink = document.getElementById('downloadLink');
 
-                var modalBodyInput = exampleModal.querySelector('.modal-body img')
+        // Extract info from data-bs-* attributes
+        var recipient = button.getAttribute('data-bs-whatever')
+        // If necessary, you could initiate an AJAX request here
+        // and then do the updating in a callback.
+        //
+        // Update the modal's content.
+        var modalTitle = exampleModal.querySelector('.modal-title')
+        var modalImage = exampleModal.querySelector('.card-img-top')
 
-                modalImage.src = recipient
-                downloadlink.href = recipient
-                modalBodyInput.value = recipient
-            })
+        var modalBodyInput = exampleModal.querySelector('.modal-body img')
 
-        </script>
-        {% endblock %}
+        modalImage.src = recipient
+        downloadlink.href = recipient
+        modalBodyInput.value = recipient
+    })
+
+</script>
+{% endblock %}

@@ -368,7 +368,7 @@ def simuled():
                 gltf.append(lamp.gltfName)
         except:
             print("nicht alle GLTFs konnten geladen werden. Dies liegt moeglicherweise daran, dass eione Lampe kein GLTF hat... [ERROR]")
-        return render_template('simuled.html', width=width, height=height, depth=depth, gltf = gltf,  cartAmount = amountCartObjects())
+        return render_template('simuled.html', width=width, height=height, depth=depth, gltf=gltf,  cartAmount = amountCartObjects())
 
 @login_required
 def renders_showAll():
@@ -377,25 +377,26 @@ def renders_showAll():
 
 def renders_new():
     if current_user.is_authenticated:
-    	if request.method == "POST":
-    		jsonString = json.dumps(request.get_json())
+        if request.method == "POST":
+            jsonString = json.dumps(request.get_json())
 
-    		imgName = str(uuid.uuid1()) + ".png"
-    		imgPath = os.path.join(app.config['RENDER_FOLDER'], imgName)
+            imgName = str(uuid.uuid1()) + ".png"
+            imgPath = os.path.join(app.config['RENDER_FOLDER'], imgName)
 
-    		#subprocess.run(["blender", " -b ", " --python ", "static/json_import.py", " -- ", jsonString, imgName])
-    		jsonString = jsonString.replace('"', '|')
-    		exitcode = os.system("blender -b --python-exit-code 5  --python project/static/json_import.py -- " + '"' + jsonString + '" ' + imgName)
-    		if exitcode == 0:
-    			render = Render(userID=current_user.userID, imgName=imgName)
-    			db.session.add(render)
-    			db.session.commit()
-    			return "The render finished successfully"
-    		return "There was a problem during the render, please contact the website owner."
+            #subprocess.run(["blender", " -b ", " --python ", "static/json_import.py", " -- ", jsonString, imgName])
+            jsonString = jsonString.replace('"', '|')
+            exitcode = os.system("blender -b --python-exit-code 5  --python project/static/json_import.py -- " + '"' + jsonString + '" ' + imgName)
+            if exitcode == 0:
+                render = Render(userID=current_user.userID, imgName=imgName)
+                db.session.add(render)
+                db.session.commit()
+                return "The render finished successfully"
+
+            return "There was a problem during the render, please contact the website owner."
     else:
-    	return "You need to login for accessing the render feature"
-
+        return "You need to login for accessing the render feature"
     return "OH BOY! Something went terribly wrong!"
+
 
 # ----------------------------- END SIMULATION SECTION -----------------------------
 

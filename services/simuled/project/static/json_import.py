@@ -145,16 +145,14 @@ def generateScene(importedJson):
             print(matrix)
             
             light_data = bpy.data.lights.new(name=key + "data", type = importedJson[key]["type"])
-            light_data.energy = 100
             color = importedJson[key]["color"]
             
             light_data.color = (random.random(),random.random(),random.random())
             
             light_data.color = (color["x"],color["y"],color["z"])
             
-            h = 2.5
             energy = importedJson[key]["intensity"]
-            light_data.energy = 40 * h/2.5
+            light_data.energy = 200 * energy
             
             angle = importedJson[key]["angle"]
             if importedJson[key]["type"] == "SPOT":
@@ -300,7 +298,7 @@ def renderScene(filepath):
         bpy.context.scene.render.resolution_x = 1920 
         bpy.context.scene.render.resolution_y = 1080
         
-    bpy.context.scene.cycles.samples = 20
+    bpy.context.scene.cycles.samples = 100
     bpy.context.scene.cycles.use_denoising = True
     
     bpy.data.scenes[0].render.filepath = str(filepath)

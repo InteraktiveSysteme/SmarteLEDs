@@ -1,18 +1,18 @@
 from ctypes import addressof
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
 from flask_login import *
 from flask_bootstrap import Bootstrap
 from datetime import datetime
 import os
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 app = Flask(__name__)
+app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_host=1)
 app.config.from_object("project.config.Config")
 Bootstrap(app)
 db = SQLAlchemy(app)
-migrate = Migrate(app, db)
 
 
 login_manager = LoginManager()
@@ -22,8 +22,6 @@ login_manager.login_view = "index"
 @login_manager.user_loader
 def load_user(userID):
     return User.query.get(int(userID))
-
-db.create_all()
 
 class Cart(db.Model):
     cartID = db.Column(db.Integer(), primary_key=True)

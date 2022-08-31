@@ -13,7 +13,7 @@
             <h1 style="font-family:Monospace; hyphens: auto; color:#D06ED4;text-align: center; margin-bottom: 30px">
                 Register<br></h1>
 
-            <form action="/register" method="POST" enctype="multipart/form-data">
+            <form action="/user/add" method="POST" enctype="multipart/form-data">
                 {{form.hidden_tag()}}
                 <div class="form-floating mb-3">
                     {{form.name(type="text", class="form-control", id="adress", placeholder="Adress")}}

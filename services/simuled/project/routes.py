@@ -18,20 +18,20 @@ app.route("/admin", methods=['GET'])(admin)
 
 # shopping cart
 app.route("/shopping_cart", methods=['GET','POST'])(cart_show)
-app.route("/delCart/<id>", methods=['GET'])(cart_delLamp)
-app.route("/shopLamp/<id>", methods=['GET','POST'])(cart_addLamp)
+app.route("/shopping_cart/del/<id>", methods=['GET'])(cart_delLamp)
+app.route("/shopping_cart/add/<id>", methods=['GET','POST'])(cart_addLamp)
 
 # administer lamps
-app.route("/shop", methods=['GET'])(lamp_showAll)
-app.route("/lamp/<id>", methods=['GET'])(lamp_show)
-app.route("/lamp/<id>/delete", methods=['GET'])(lamp_delete)
-app.route("/addLamp", methods=['GET','POST'])(lamp_add)
+app.route("/lamps", methods=['GET'])(lamp_showAll)
+app.route("/lamps/show/<id>", methods=['GET'])(lamp_show)
+app.route("/lamps/add", methods=['GET','POST'])(lamp_add)
+app.route("/lamps/del/<id>", methods=['GET'])(lamp_delete)
 
 # user accounts
-app.route("/register", methods=['GET','POST'])(user_register)
-app.route("/login", methods=['GET','POST'])(user_login)
-app.route("/logout", methods=['GET','POST'])(user_logout)
-app.route("/User/<id>/delete", methods=['GET'])(user_delete)
+app.route("/user/add", methods=['GET','POST'])(user_register)
+app.route("/user/del/<id>", methods=['GET'])(user_delete)
+app.route("/user/login", methods=['GET','POST'])(user_login)
+app.route("/user/logout", methods=['GET','POST'])(user_logout)
 
 # blender renders
 app.route("/renders", methods=['GET','POST'])(renders_showAll)

@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% block title %}Index{% endblock %}
+{% block head %}
+{{ super() }}
+
+
+{% endblock %}
+{% block content %}
+
+<body>
+
+<h1 style="font-family:Monospace; hyphens: auto; color:#D06ED4;text-align: center">Shopping Card<br></h1>
+<div class="container">
+    <div class="row">
+
+        <div class="col-9">
+            {% for lamp in lamps %}
+            <div class="card" style=" margin-bottom: 10px">
+                <div class="row g-0">
+                    <div class="col-2">
+                        <img src="/static/lamps/{{ lamp.imgName }}" class="img-fluid rounded-start" alt="...">
+                    </div>
+                    <div class="col-lg-9 col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">{{lamp.lampName}}</h5>
+                            <p class="card-text">{{lamp.lampText}}</p>
+
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="card-body text-end">
+                            <h5 style="color:#359DA3" id="baseprice" class="card-title">{{lamp.lampPrice}} $</h5>
+                            <label for="amount" class="form-label">Amount</label>
+                            <input type="number" class="form-control" id="amount">
+                            <h5 style="color:#359DA3" id="newprice" class="card-title">{{lamp.lampPrice}} x $</h5>
+
+                        </div>
+                    </div>
+                    <script>
+                const amount = document.getElementById('amount');
+                const baseprice = document.getElementById('amount');
+                const newprice = document.getElementById('amount');
+
+                function dun1(){
+                    titleout.innerHTML = title.value;
+                    textout.innerHTML = text.value;
+                    priceout.innerHTML = price.value;
+
+                }
+                btn.addEventListener('click',dun1);
+                btn.addEventListener('click',function(){
+                    const file =img.files[0];
+                    if(file){
+                        const reader = new FileReader();
+                        reader.onload = function(){
+                            const result = reader.result;
+                            imgout.src = result;
+                        }
+                        reader.readAsDataURL(file);
+                    }
+                });
+
+
+
+                    </script>
+                </div>
+
+            </div>
+            {% endfor %}
+        </div>
+        <div class="col-2 ">
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">Shopping Cart</h5>
+                    {% for lamp in lamps %}
+                        <big style="color: #359DA3">{{ lamp.lampName }}:  {{ lamp.lampPrice }} $</big><br/>
+                    {% endfor %}
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-outline-warning" type="button">Checkout</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+        function validate(evt) {
+  var theEvent = evt || window.event;
+
+  // Handle paste
+  if (theEvent.type === 'paste') {
+      key = event.clipboardData.getData('text/plain');
+  } else {
+  // Handle key press
+      var key = theEvent.keyCode || theEvent.which;
+      key = String.fromCharCode(key);
+  }
+  var regex = /[0-9]|\./;
+  if( !regex.test(key) ) {
+    theEvent.returnValue = false;
+    if(theEvent.preventDefault) theEvent.preventDefault();
+  }
+}
+
+
+
+
+
+
+
+
+
+
+</script>
+</body>
+
+{% endblock %}

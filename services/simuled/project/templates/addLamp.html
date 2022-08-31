@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{% block title %}Index{% endblock %}
+{% block head %}
+{{ super() }}
+
+{% endblock %}
+{% block content %}
+
+<div class="container-md">
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-sm-12 ">
+            <h1 style="margin-bottom:30px; font-family:Monospace; hyphens: auto; color:#D06ED4;text-align: center">Add a
+                new Lamp!<br></h1>
+            <h2 style="margin-bottom:30px; font-family:Monospace; hyphens: auto; color:#000000;text-align: center">
+                Please provide Informations about the new Lamp!<br></h2>
+            <form action="/addLamp" method="POST" enctype="multipart/form-data">
+                {{form.hidden_tag()}}
+
+
+                <div class="form-floating mb-3">
+                    {{form.name(type="text", class="form-control", id="name", onkeyup="dun1();", placeholder="...")}}
+                    <label for="name">Name</label>
+                </div>
+                <div class="form-floating mb-3">
+                    {{form.shortText(type="text", class="form-control", id="text",
+                    onkeyup="dun1();",placeholder="...")}}
+                    <label for="shortText">Short Description</label>
+                </div>
+           
+                <div class="form-floating mb-3">
+                    {{form.longText(type="textarea", class="form-control",placeholder="Leave a comment here", id="floatingTextarea2" )}}
+                    <label for="floatingTextarea2">Long Description</label>
+                  </div>
+
+
+                <div style="margin-bottom: 30px; " class="form-floating mb-3">
+                    {{form.price( class="form-control",id="price",onkeyup="dun1();", placeholder="Leave a comment here")}}
+                    <label for="price">Price ($)</label>
+                </div>
+
+                <div class="row g-2">
+                    <div class="col-md">
+                        <div style="margin-bottom: 30px" class="form-group" style="padding = 10px">
+                            <label>Upload an Image</label>
+                            {{form.img(class="form-control", id="img", onkeyup="dun1();")}}
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div style="margin-bottom: 30px" class="form-group" style="padding = 10px">
+                            <label>Upload an GLTF</label>
+                            {{form.gltf(class="form-control", onkeyup="dun1();")}}
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-top: 30 px">
+                    <div class="d-grid gap-2">
+                        {{form.submit(class="btn btn-outline-warning")}}
+                    </div>
+                </div>
+
+            </form>
+        </div>
+        <div class="col-md-2 col-sm-6  ">
+            <div>
+                <div class="card mb-4 p-3  border-danger" style="width: 18rem;">
+                    <img id="imgOut" alt="" class="card-img-top" src="/static/lamps/">
+                    <div class="card-body">
+                        <h5 class="card-title" id="nameOut"></h5>
+                        <p class="card-text" id="textout"><br /></p>
+
+                    </div>
+                    <div class="card-footer">
+                        <big  id="priceOut" style="color:#359DA3" class="text-mut"></big><big  style="color:#359DA3" class="text-mut">$</big>
+
+                        
+                        <!--<p id="priceOut" style="color:#359DA3" class="text-mut"> </p> -->
+
+                    </div>
+                </div>
+            </div>
+            <button id="showbtn" class="btn btn-outline-primary btn-block">Show
+            </button>
+            <script>
+                const title = document.getElementById('name');
+                const text = document.getElementById('text');
+                const text2 = document.getElementById('text2');
+
+                const price = document.getElementById('price');
+                const img = document.getElementById('img');
+                const btn = document.getElementById('showbtn');
+                const titleout = document.getElementById('nameOut');
+                const textout = document.getElementById('textout');
+                const priceOut = document.getElementById('priceOut');
+                const imgout = document.getElementById('imgOut');
+
+                function dun1() {
+                    titleout.innerHTML = title.value;
+                    textout.innerHTML = text.value;
+
+                    priceOut.innerHTML = price.value;
+
+                }
+                btn.addEventListener('click', dun1);
+                btn.addEventListener('click', function () {
+                    const file = img.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function () {
+                            const result = reader.result;
+                            imgout.src = result;
+                        }
+                        reader.readAsDataURL(file);
+                    }
+                });
+
+            </script>
+        </div>
+    </div>
+</div>
+
+</div>
+{% endblock %}

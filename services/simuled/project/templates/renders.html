@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block title %}Index{% endblock %}
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static',filename='/css/index_style.css') }}">
+{% endblock %}
+{% block content %}
+
+<div class="container">
+    <div class="row g-2">
+        <h1 style="margin-bottom:30px; font-family:Monospace; hyphens: auto; color:#D06ED4;text-align: center">YOUR
+            ROOMS
+        </h1>
+        <br>
+        <div class="card-group">
+            {% for render in renders %}
+            <div class="col-12 col-md-6 col-lg-3 g-2">
+                <div class="card mb-4 p-3  border-primary" style="width: 18rem;">
+                    <a data-bs-toggle="modal" data-bs-target="#exampleModal" style="border: 0px, padding: 0 !important"
+                        data-bs-whatever="{{ url_for("static", filename="renders/" + render.imgName) }}">
+                        <img class="card-img-top" src="{{ url_for("static", filename="renders/" + render.imgName) }}"
+                            alt="Card image cap"></a>
+                    <div class="card-body">
+
+                       
+                                <div class="btn-group " role="group">
+                                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
+                                        data-bs-target="#exampleModal" data-bs-whatever="{{ url_for("static",
+                                        filename="renders/" + render.imgName) }}">Details</button>
+                                    <a class="btn btn-outline-primary" href="{{ url_for("static", filename="renders/" +
+                                        render.imgName) }}" download> Download</a>
+                                    <a class="btn btn-outline-warning" href="{{ url_for("render_delete",
+                                        id=render.renderID) }}"> Delete</a>
+                                </div>
+                            
+                    </div>
+                    <div class=" card-footer">
+                        <small id="{{render.timeStamp}}" onload="toDate({{render.timeStamp}},{{render.timeStamp}})"> {{render.timeStamp}}</small>
+
+
+
+                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-xl">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <img class="card-img-top" src="#" alt="Card image cap">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <div class="d-grid gap-2 col-6 mx-auto">
+                                            <a id="downloadLink" class="btn btn-outline-primary" href="#" download>
+                                                Download</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- Modal -->
+
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script>
+    var exampleModal = document.getElementById('exampleModal')
+    exampleModal.addEventListener('show.bs.modal', function (event) {
+        // Button that triggered the modal
+        var button = event.relatedTarget
+        const downloadlink = document.getElementById('downloadLink');
+
+        // Extract info from data-bs-* attributes
+        var recipient = button.getAttribute('data-bs-whatever')
+        // If necessary, you could initiate an AJAX request here
+        // and then do the updating in a callback.
+        //
+        // Update the modal's content.
+        var modalTitle = exampleModal.querySelector('.modal-title')
+        var modalImage = exampleModal.querySelector('.card-img-top')
+
+        var modalBodyInput = exampleModal.querySelector('.modal-body img')
+
+        modalImage.src = recipient
+        downloadlink.href = recipient
+        modalBodyInput.value = recipient
+    })
+
+</script>
+{% endblock %}

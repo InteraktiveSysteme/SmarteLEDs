@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+{% block title %}Index{% endblock %}
+{% block head %}
+{{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static',filename='/css/index_style.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+{% endblock %}
+{% block content %}
+
+<meta charset="UTF-8" />
+<title>Three.js 101</title>
+
+  <p hidden="true" id="width">{{ width }}</p>
+  <p hidden="true" id="height">{{ height }}</p>
+  <p hidden="true" id="depth">{{ depth }}</p>
+  <p hidden="true" id="gltf">{{ gltf }}</p>
+    <!-- [ "Ceiling_lamp.glb", "chair.glb", "table.glb", "Standing_lamp.glb", "sofa.glb", "shelf.glb" ]-->
+<style>
+.lil-gui {
+	margin-top: 7%;
+	margin-right: 3%;
+	--background-color: #f2f2f2;
+	--text-color: #595959;
+	--padding: 15px;
+	--title-background-color: #86D3D9;
+	--title-text-color: #595959;
+	--hover-color: #D06ED4;
+  --hover-text-color: #f2f2f2;
+	--widget-color: #595959;
+  --widget-text-color: #ffffff;
+	--number-color: #f2f2f2;
+	border-radius: 10px;
+	--font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+/* HIER DIE FARBE FUER DEN WIDGET TEXT AENDERN */
+.lil-gui>.children:not(.title) {
+	--text-color: #f2f2f2;
+}
+
+.lil-gui input {
+	color: #f2f2f2;
+}
+
+.lil-gui.root>.title {
+	border-radius: 10px;
+ }
+</style>
+
+  <center>
+    <div id="webgl" style="width: auto; height:auto;">
+      <canvas id="gui" width="auto" height="100" style="position: relativ; border-radius: 15px;"></canvas>
+    </div>
+  </center>
+
+  <center>
+    <div id="gl" style="width: auto; height: auto;">
+      <canvas oncontextmenu="return false;" id="myCanvas" width="auto" height="auto" style="position: relativ; border-radius: 15px;"></canvas>
+    </div>
+</center>
+
+  <div title="Manual" id="manual" hidden="true">
+    <br>Q: Switch between Egoperspective and Turntable mode
+    <br>
+    <br>
+    <h2>Egoperspective</h2>
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Controls</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">W:</th>
+          <td>Move forward.</td>
+        </tr>
+        <tr>
+          <th scope="row">A:</th>
+          <td>Move left.</td>
+        </tr>
+        <tr>
+          <th scope="row">S:</th>
+          <td>Move backward.</td>
+        </tr>
+        <tr>
+          <th scope="row">D:</th>
+          <td>Move right.</td>
+        </tr>
+        <tr>
+          <th scope="row">Mouse-Click and Drag:</th>
+          <td>Look around.</td>
+        </tr>
+      </tbody>
+    </table>
+    <h2>Turntable</h2>
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Controls</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">Mouse-Click and Drag:</th>
+          <td>rotate the room.</td>
+        </tr>
+        <tr>
+          <th scope="row">C:</th>
+          <td>Switch between dragging and rotating objects.</td>
+        </tr>
+        <tr>
+          <th scope="row">Mouse-Click (in Drag-Mode):</th>
+          <td>Select an object, then move your mouse to find the preferred spot and click again to confirm placement.</td>
+        </tr>
+        <tr>
+          <th></th>
+          <td>To move an object one needs to move the cursor along the bottom plane to place it. </td>
+        </tr>
+        <tr>
+          <th></th>
+          <td>The Ceiling_lamp can also be placed via the ceiling.</td>
+        </tr>
+        <tr>
+          <th scope="row">Mouse-Click (in Rotation-Mode):</th>
+          <td>Select an object, then move your mouse to rotate it and click again to confirm the rotation.</td>
+        </tr>
+        <tr>
+          <th scope="row">X (in Drag- or Rotation-Controls):</th>
+          <td>An object needs to be selected in either Drag- or Rotation-Controls.</td>
+        </tr>
+        <tr>
+          <th scope="row"></th>
+          <td>When the x-key is pressed the object is deleted.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+    <!--p id="screen-log" style="color:white"></p-->
+</body>
+{% endblock %}

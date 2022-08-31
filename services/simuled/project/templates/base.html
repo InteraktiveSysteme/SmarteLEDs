@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% block head %}
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="{{ url_for('static',filename='/css/LampStyle.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='/css/baseStyle.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='/scss/styleGeneratormin.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+        crossorigin="anonymous"></script>
+    <!--
+           <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+                 integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+                 crossorigin="anonymous">
+                  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+                 integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+                 crossorigin="anonymous">-->
+
+    <title>Let´s SimuLED</title>
+
+    {% endblock %}
+</head>
+
+<body>
+    <nav class="navbar bg-light fixed-top navbar-expand-sm ">
+        <div class="container-fluid">
+            <div class="collapse navbar-collapse " id="navbarSupportedContent">
+                <ul class="navbar-nav nav-pills me-auto order-0 ">
+                    <li class="nav-item">
+                        <a href="{{url_for('index')}}"><img style="padding-right: 30px" class="d-block" height="50"
+                                src="{{ url_for('static', filename='Logo/Logo2.svg') }}" alt="logo"></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{url_for('simuled')}}">SimuLED</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{url_for('lamp_showAll')}}">Shop</a>
+                    </li>
+                    {%  if current_user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link " href="{{url_for('renders_showAll')}}">Renders</a>
+                        </li>
+                    {% endif %}
+                    {% if current_user.admin %}
+                    <li class="nav-item">
+                        <a class="nav-link " href="{{url_for('lamp_add')}}">Add Lamp</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " href="{{url_for('admin')}}">Admin</a>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link " href="{{url_for('user_add')}}">Register</a>
+                    </li>
+                    <li>
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </li>
+
+                </ul>
+                <div class="mx-auto">
+                    <ul class="navbar-nav ">
+
+                    </ul>
+                </div>
+                <!--
+        <form action="{--{ url_for('user_add')}}" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <input name="username" type="text" class="form-control" id="username" aria-describedby="emailHelp"
+                       placeholder="Input Lamp Name">
+            </div>
+            <div class="form-group">
+                <input name="password" type="text" class="form-control" id="password" aria-describedby="emailHelp"
+                       placeholder="Input Lamp Name">
+            </div>
+
+
+            <div style="margin-top: 30 px">
+                <button type="submit" class="btn btn-outline-primary btn-block">Submitaut
+                </button>
+            </div>
+    </div>
+    </form>-->
+                <ul class="navbar-nav nav-pills   ">
+                    <li class="nav-item">
+
+                        
+                        <a class="btn btn-outline-primary position-relative" href="{{ url_for('cart_show') }}">
+
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
+                                class="bi bi-cart3" viewBox="0 0 16 16">
+                                <path
+                                    d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+                            </svg>
+                            <span
+                                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
+                                {{cartAmount}}
+                                <span class="visually-hidden">unread messages</span>
+                            </span>
+                        </a>
+                        
+                    </li>
+                    {% if current_user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link " href="{{url_for('renders_showAll')}}">{{ current_user.userName }}</a>
+                    </li>
+
+                </ul>
+                <a class="order-5 btn btn-outline-warning" href="{{ url_for('user_logout') }}">Logout</a>
+
+                {% else %}
+                <form id="form" class="d-flex ms-auto order-5" action="/user/login" method="POST"
+                    enctype="multipart/form-data">
+
+                    <input style="margin-right:5px" name="username" id="username" class="textarea form-control"
+                        placeholder="Username" aria-label="With textarea"></input>
+                    <input type="password" style="margin-right:5px" name="password" id="password"
+                        class="textarea form-control" placeholder="Password" aria-label="With textarea"></input>
+                    <input id="login" href="javascript:;" class="btn btn-outline-primary" style="margin-right:5px"
+                        type="submit" value="Login" onclick="parentNode.submit();">
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+    <div style="margin-top: 70px">
+        {% for message in get_flashed_messages() %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong>{{message}}</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        {%endfor%}
+    </div>
+    <!-- Page Content -->
+    <div id="content" style="padding-bottom: 5px;padding-bottom: 40px; padding-top: 40px">{% block content %}{% endblock
+        %}</div>
+
+
+    <!-- Section: Links  -->
+    <!-- Footer -->
+    <footer class="text-center text-lg-start bg-light text-muted" id="footer" style="padding-top: 10px">
+        <!-- Section: Social media -->
+
+        <!-- Section: Social media -->
+
+        <!-- Section: Links  -->
+        <section class="">
+            <div class="container text-center text-md-start mt-5">
+                <!-- Grid row -->
+                <div class="row mt-3">
+                    <!-- Grid column -->
+                    <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+                        <!-- Content -->
+                        <h6 class="text-uppercase fw-bold mb-4">
+                            <i class="fas fa-gem me-3"></i>Simuled
+                        </h6>
+                        <p>
+                            Simuled is the product of the IA and Web Phase of the Th-Köln
+                        </p>
+                    </div>
+                    <!-- Grid column -->
+
+                    <!-- Grid column -->
+                    <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+                        <!-- Links -->
+                        <h6 class="text-uppercase fw-bold mb-4">
+                            Developers
+                        </h6>
+                        <p>
+                            <a href="#!" class="text-reset">David Mertens</a>
+                        </p>
+                        <p>
+                            <a href="#!" class="text-reset">Samuel Häseler</a>
+                        </p>
+                        <p>
+                            <a href="#!" class="text-reset">Lukas Decker</a>
+                        </p>
+                        <p>
+                            <a href="#!" class="text-reset">Lucas Haupt</a>
+                        </p>
+                        <p>
+                            <a href="#!" class="text-reset">Alisa Rüge</a>
+                        </p>
+                    </div>
+                    <!-- Grid column -->
+
+                    <!-- Grid column -->
+                    <div class="col-md-4 col-lg-2 col-xl-2 mx-auto mb-4">
+                        <!-- Links -->
+                        <h6 class="text-uppercase fw-bold mb-4">
+                            Contact
+                        </h6>
+                        <p>
+                            <a href="#!" class="text-reset">david_tim_luca.mertens@smail.th-koeln.de</a>
+                        </p>
+                        <p>
+                            <a href="#!" class="text-reset">samuel_leon.haeseler@smail.th-koeln.de</a>
+                        </p>
+                        <p>
+                            <a href="#!" class="text-reset">lukas_franz.decker@smail.th-koeln.de</a>
+                        </p>
+                        <p>
+                            <a href="#!" class="text-reset">lucas.haupt_smail.th-koeln.de</a>
+                        </p>
+                        <p>
+                            <a href="#!" class="text-reset">alisa.ruege@smail.th-koeln.de</a>
+                        </p>
+                    </div>
+                    <!-- Grid column -->
+
+
+                </div>
+                <!-- Grid row -->
+            </div>
+        </section>
+        <!-- Section: Links  -->
+    </footer>
+    <!-- Footer -->
+</body>
+
+</html>

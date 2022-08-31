@@ -21,7 +21,7 @@ import { GUI } from './lilgui.js'
 
         /**
          * @brief deletes a glb if it's selected via the raycaster and the X-key is pressed
-         * @param {keydown} event 
+         * @param {keydown} event: triggered when X-key press
          */
         this.deleteEvent = ( event ) => {
 
@@ -48,7 +48,7 @@ import { GUI } from './lilgui.js'
  
         /**
          * @brief if glb is clicked it will be saved as selected and mouse coordinates will be tracked
-         * @param {click} event 
+         * @param {click} event; triggered when left mouse button is clicked
          * @returns 
          */
         this.onClick = ( event ) => {
@@ -74,7 +74,7 @@ import { GUI } from './lilgui.js'
 
         /**
          * @brief updates mouse-coordinates
-         * @param {mousemove} event 
+         * @param {mousemove} event: triggered when mouse moves
          */
         this.onMouseMove = ( event ) => {
 
@@ -84,7 +84,7 @@ import { GUI } from './lilgui.js'
 
         /**
          * @brief selected glb is placed at mouse position via raycaster
-         * @param {mousemove} event 
+         * @param {mousemove} event: triggered when mouse moves
          */
         this.dragObject = ( event ) => {
 
@@ -125,7 +125,7 @@ import { GUI } from './lilgui.js'
         // it was optimized for non glbs for testing
         /**
          * @brief sets the transparency of the material to transparent if mouse hovers over object
-         * @param {mousemove} event 
+         * @param {mousemove} event: triggered when mouse moves
          */
         this.hoverObject = ( event ) => {
 

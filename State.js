@@ -13,7 +13,7 @@ import { FirstPerson } from './FirstPerson.js'
 
     /**
      * @brief creates a State object.
-     * @param {Create} creator
+     * @param {Create} creator: used to get information on three.js scene
      */
     constructor( creator ){
 
@@ -35,7 +35,7 @@ import { FirstPerson } from './FirstPerson.js'
 
         /**
          * @brief switches between Turntable nd FirstPerson mode when Q-key is pressed
-         * @param {keydown} event 
+         * @param {keydown} event: triggered when key Q-key is pressed
          */
         this.perspectiveEvent = ( event ) => {
 
@@ -47,7 +47,7 @@ import { FirstPerson } from './FirstPerson.js'
 
         /**
          * @brief switches between DragControls and RotationControls when C-key is pressed
-         * @param {keydown} event 
+         * @param {keydown} event: triggered when C-key is pressed
          */
         this.controlsEvent = ( event ) => {
 

@@ -179,7 +179,7 @@ export class Create{
 
         /**
          * @brief loads the glb with the GLTFLoader
-         * @param {String} path
+         * @param {String} path: file path of glb to load them
          */
         loader.load( path, ( glb ) => {
     
@@ -234,7 +234,6 @@ export class Create{
                 root.add( target1 )
 
                 // places light relative to origin of parent
-                // spotLight.position.set( 0, -.05, 0 )
                 // slight offset, this way it doesn't spawn inside the glb
                 spotLight.position.set( 0, -.2, 0 )
 

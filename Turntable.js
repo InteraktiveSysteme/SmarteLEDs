@@ -8,7 +8,7 @@ export class Turntable{
 
     /**
      * @brief creates a Turntable object
-     * @param {Create} creator
+     * @param {Create} creator: used to get information on three.js scene
      */
     constructor( creator ){
 
@@ -25,7 +25,7 @@ export class Turntable{
 
         /**
          * @brief sets Boolean for dragging to true and updates camera variables
-         * @param {mousedown} event 
+         * @param {mousedown} event: triggered when left-mouse-button is clicked
          */
         this.startDrag = ( event ) => {
 
@@ -37,7 +37,7 @@ export class Turntable{
 
         /**
          * @brief dragging mouse in horizontal motion, circles camera around room
-         * @param {mousemove} event 
+         * @param {mousemove} event: triggered when mouse moves
          */
         this.drag = ( event ) => {
 
@@ -55,7 +55,7 @@ export class Turntable{
 
         /**
          * @brief sets Boolean for dragging to false, cancelling camera motion
-         * @param {mouseup} event 
+         * @param {mouseup} event: triggered when mouse button is let go
          */
         this.cancelDrag = ( event ) => {
 

@@ -10,7 +10,7 @@ export class RotationControls{
 
     /**
      * @brief creates a RotationControls object
-     * @param {Create} creator
+     * @param {Create} creator: used to get information on three.js scene
      */
     constructor( creator ){
 
@@ -22,7 +22,7 @@ export class RotationControls{
 
         /**
          * @brief deletes a glb if it's selected via the raycaster and the X-key is pressed
-         * @param {keydown} event 
+         * @param {keydown} event: triggered if key is pressed
          */
         this.deleteEvent = ( event ) => {
 
@@ -50,7 +50,7 @@ export class RotationControls{
 
         /**
          * @brief if glb is clicked it will be saved as selected and mouse coordinates will be tracked
-         * @param {click} event 
+         * @param {click} event: triggered when left mouse is clicked
          * @returns 
          */
         this.onClick = ( event ) => {
@@ -83,7 +83,7 @@ export class RotationControls{
 
         /**
          * @brief rotates glb along the local y-axis
-         * @param {mousemove} event 
+         * @param {mousemove} event: triggered when mouse moves
          */
         this.rotateObject = ( event ) => {
 
@@ -99,7 +99,7 @@ export class RotationControls{
         // it was optimized for non glbs for testing
         /**
          * @brief sets the transparency of the material to transparent if mouse hovers over object
-         * @param {mousemove} event 
+         * @param {mousemove} event: triggered when mouse moves
          */
         this.hoverObject = ( event ) => {
 

@@ -8,7 +8,7 @@ export class FirstPerson{
 
     /**
      * @brief creates a FirstPerson object.
-     * @param {Create} creator
+     * @param {Create} creator: is used to get information on threejs scene
      */
     constructor( creator ){
 
@@ -33,7 +33,7 @@ export class FirstPerson{
 
         /**
          * @brief sets the Boolean for dragging the camera view to true and updates mouse coordinates
-         * @param {mousedown} event 
+         * @param {mousedown} event: triggered mouse-click
          */
         this.startDrag = ( event ) => {
 
@@ -45,7 +45,7 @@ export class FirstPerson{
 
         /**
          * @brief rotates a selected object depending on the horizontal movement of the mouse.
-         * @param {mousemove} event 
+         * @param {mousemove} event: triggered mouse movement
          */
         this.drag = ( event ) => {
 
@@ -84,7 +84,7 @@ export class FirstPerson{
 
         /**
          * @brief sets the Boolean for dragging camera view to false
-         * @param {mouseup} event 
+         * @param {mouseup} event: triggered when you let go of mouse
          */
         this.cancelDrag = ( event ) => {
 
@@ -93,7 +93,7 @@ export class FirstPerson{
 
         /**
          * @brief sets the Boolean for the pressed key for movement to true
-         * @param {keydown} event 
+         * @param {keydown} event: triggered pressed keys
          */
         this.keyMove = ( event ) => {
 
@@ -119,7 +119,7 @@ export class FirstPerson{
 
         /**
          * @brief cancels the movement of the camera by setting the move Boolean to false
-         * @param {keyup} event 
+         * @param {keyup} event: triggered when keys are let go
          */
         this.keyStop = ( event ) => {
     
@@ -145,7 +145,7 @@ export class FirstPerson{
 
         /**
          * @brief updates the position of the camera depending on the Boolean variables of each direction
-         * @param {keydown} event 
+         * @param {keydown} event: triggered when keys are pressed
          */
         this.update = ( event ) => {
 

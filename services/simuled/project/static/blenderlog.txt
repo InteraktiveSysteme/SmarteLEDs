@@ -66,3 +66,7 @@ startlog 2022-08-31 16:10:27.881790
 D:\THKöln\SmarteLEDs\services\simuled\project\static\renders/90c6f4a6-2936-11ed-8fbb-40b076a501bd.png
 40.574612617492676
 
+startlog 2022-08-31 16:17:29.280174
+D:\THKöln\SmarteLEDs\services\simuled\project\static\renders/8cb58153-2937-11ed-a4bf-40b076a501bd.png
+39.30311560630798
+

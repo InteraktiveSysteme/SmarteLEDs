@@ -37,11 +37,8 @@ class User(db.Model, UserMixin):
     userID = db.Column(db.Integer(), primary_key=True)
     userName = db.Column(db.String(100), unique=False, nullable=False)
     passwordHash = db.Column(db.String(120))
-    lamps = db.relationship('Lamp', backref='poster')
     timeStamp = db.Column(db.DateTime, default=datetime.utcnow, unique=False)
-    currentOrder = db.Column(db.Integer())
     admin = db.Column(db.Boolean)
-
     firstName =  db.Column(db.String(200))
     lastName =  db.Column(db.String(200))
     country =  db.Column(db.String(200))

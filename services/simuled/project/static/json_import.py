@@ -18,14 +18,19 @@ if load_external_materials:
     blendpath = pathlib.Path(resourceDir + "empty_materials.blend")
     bpy.ops.wm.open_mainfile(filepath=str(blendpath))
 
-inputJson = sys.argv[5]
+# pop arguments until after python argument border ( "--" sign)
+while True:
+    arg = sys.argv.pop(0)
+    if arg == "--":
+        break
+
+inputJson = sys.argv[0]
 
 print("JS Bond zur Stelle: ")
 print(inputJson)
-inputJson.replace("|", '\"')
 
 
-outputPng = str(pathlib.Path(resourceDir + "renders")) + "/" + sys.argv[6]
+outputPng = str(pathlib.Path(resourceDir + "renders")) + "/" + sys.argv[1]
 
 
 vert_res = 720
@@ -304,12 +309,10 @@ def renderScene(filepath):
 
     
 # load json from string
-#jsonData = json.loads(json.dumps(json.loads(inputJson)))
+# reverse replacement of escaped double quotes ( | to " ) escaping necessary due to call over unix shell
 jsonData = json.loads(inputJson.replace("|", '"'))
 
-
 #load json from file
-
 #with open(pathlib.Path(inputJson), 'r') as jsonInput2:
     #example=json.load(jsonInput2)
  #   example = json.loads(json.dumps(json.load(jsonInput2)))
@@ -326,6 +329,8 @@ start = time.time()
 renderScene(outputPng)
 end = time.time()
 print(end-start)
+
+# write blenderlog.txt
 f = open(resourceDir + "blenderlog.txt", "a")
 f.write("startlog " + str(datetime.datetime.now()) + "\n")
 f.write(str(outputPng) + "\n")

@@ -385,7 +385,7 @@ def renders_new():
 
     		#subprocess.run(["blender", " -b ", " --python ", "static/json_import.py", " -- ", jsonString, imgName])
     		jsonString = jsonString.replace('"', '|')
-    		exitcode = os.system("blender -b --python project/static/json_import.py -- " + '"' + jsonString + '" ' + imgName)
+    		exitcode = os.system("blender -b --python-exit-code 5  --python project/static/json_import.py -- " + '"' + jsonString + '" ' + imgName)
     		if exitcode == 0:
     			render = Render(userID=current_user.userID, imgName=imgName)
     			db.session.add(render)

@@ -397,6 +397,23 @@ def renders_new():
 
     return "OH BOY! Something went terribly wrong!"
 
+def render_delete(id):
+    deletable = Render.query.get_or_404(id)
+    users = User.query.order_by(User.timeStamp)
+
+    try:
+        imgName = deletable.imgName
+        db.session.delete(deletable)
+        db.session.commit()
+        os.remove("/static/Imgages/", imgName)
+        return render_template("renders.html", lamps=lamps, users=users)
+
+    except:
+        print("error")
+        
+
+    renders = Render.query.filter_by(userID=current_user.userID)
+    return render_template('renders.html', renders = renders,  cartAmount = amountCartObjects())
 # ----------------------------- END SIMULATION SECTION -----------------------------
 
 

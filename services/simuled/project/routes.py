@@ -36,6 +36,8 @@ app.route("/User/<id>/delete", methods=['GET'])(user_delete)
 # blender renders
 app.route("/renders", methods=['GET','POST'])(renders_showAll)
 app.route("/renders/new", methods=['POST'])(renders_new)
+app.route("/renders/delete/<id>", methods=['GET'])(render_delete)
+
 
 # misc
 app.route("/gltf/<file>", methods=['GET'])(expose_gltf)

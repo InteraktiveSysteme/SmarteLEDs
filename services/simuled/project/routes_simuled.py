@@ -14,12 +14,40 @@ def index():
     print("index")
     return render_template('index.html', cartAmount=amountCartObjects())
 
-def lamp_showAll():
-    lamps = Lamp.query.order_by(Lamp.timeStamp)
-    return render_template("shop.html", lamps=lamps,  cartAmount = amountCartObjects()), 200
+##
+# @brief This function handles the adminLogic
+# @return the HTML template
+@login_required
+def admin():
+    if current_user and current_user.admin:
+        lamps = Lamp.query.order_by(Lamp.timeStamp)
+        users = User.query.order_by(User.timeStamp)
+        return render_template("admin.html", users=users, lamps=lamps,  cartAmount = amountCartObjects()), 200
+    flash("Admin Page is for Admins only")
+    return render_template("index"), 200
+
+##
+# @brief This function gives the form information to the preSim template
+# @return the HTML template
+def simuled():
+    if request.method == "GET":
+        # GET branch to return the Template and Form
+        form = forms.RoomForm()
+        return render_template('preSim.html', form=form, cartAmount = amountCartObjects())
+
+    if request.method == "POST":
+        # POST branch to get the Room information
+        width = request.form["width"]
+        height = request.form["height"]
+        depth = request.form["depth"]
+        lamps = Lamp.query.order_by(Lamp.timeStamp)
+
+        # create gltf list from directory listing (furniture must be included)
+        gltf = os.listdir(app.root_path + "/static/gltf/")
+        gltf = json.dumps(gltf)
+        return render_template('simuled.html', width=width, height=height, depth=depth, gltf=gltf,  cartAmount = amountCartObjects())
 
 # ----------------------------- END MAIN PAGES SECTION -----------------------------
-
 
 
 # ***************************** BEGIN USER ACCOUNT SECTION *****************************
@@ -27,7 +55,7 @@ def lamp_showAll():
 ##
 # @brief This function handles the register Logic
 # @return the HTML template
-def user_register():
+def user_add():
 
     # CHECK METHOD IF POST OR GET
     match (request.method):
@@ -117,23 +145,16 @@ def user_logout():
     flash("You are not logged in anymore!")
     return render_template('index.html', cartAmount = amountCartObjects())
 
-##
-# @brief This function handles the adminLogic
-# @return the HTML template
-@login_required
-def admin():
-    if current_user and current_user.admin:
-        lamps = Lamp.query.order_by(Lamp.timeStamp)
-        users = User.query.order_by(User.timeStamp)
-        return render_template("admin.html", users=users, lamps=lamps,  cartAmount = amountCartObjects()), 200
-    flash("Admin Page is for Admins only")
-    return render_template("index"), 200
 
 # ----------------------------- END USER ACCOUNT SECTION  -----------------------------
 
 
 
 # ***************************** BEGIN LAMP ADMINISTRATION SECTION *****************************
+
+def lamp_showAll():
+    lamps = Lamp.query.order_by(Lamp.timeStamp)
+    return render_template("shop.html", lamps=lamps,  cartAmount = amountCartObjects()), 200
 
 ##
 # @brief This function handles the adminLogic
@@ -347,42 +368,9 @@ def amountCartObjects():
 
 # ***************************** BEGIN SIMULATION SECTION *****************************
 
-##
-# @brief This function gives the form information to the preSim template
-# @return the HTML template
-def simuled():
-    if request.method == "GET":
-        # GET branch to return the Template and Form
-        form = forms.RoomForm()
-        return render_template('preSim.html', form=form, cartAmount = amountCartObjects())
-
-    if request.method == "POST":
-        # POST branch to get the Room information
-        width = request.form["width"]
-        height = request.form["height"]
-        depth = request.form["depth"]
-        lamps = Lamp.query.order_by(Lamp.timeStamp)
-
-        # create gltf list from directory listing (furniture must be included)
-        gltf = os.listdir(app.root_path + "/static/gltf/")
-        gltf = json.dumps(gltf)
-        return render_template('simuled.html', width=width, height=height, depth=depth, gltf=gltf,  cartAmount = amountCartObjects())
 
 @login_required
 def renders_showAll():
-    renders = Render.query.filter_by(userID=current_user.userID)
-    return render_template('renders.html', renders = renders,  cartAmount = amountCartObjects())
-
-def render_delete(id):
-    deletable = Render.query.get_or_404(id)
-
-    try:
-        db.session.delete(deletable)
-        db.session.commit()
-
-    except:
-        print("error")
-
     renders = Render.query.filter_by(userID=current_user.userID)
     return render_template('renders.html', renders = renders,  cartAmount = amountCartObjects())
 
@@ -405,9 +393,22 @@ def renders_new():
 
             return "There was a problem during the render, please contact the website owner."
     else:
-    	return "You need to login for accessing the render feature"
+        return "You need to login for accessing the render feature"
 
     return "OH BOY! Something went terribly wrong!"
+
+def renders_delete(id):
+    deletable = Render.query.get_or_404(id)
+
+    try:
+        db.session.delete(deletable)
+        db.session.commit()
+
+    except:
+        print("error")
+
+    renders = Render.query.filter_by(userID=current_user.userID)
+    return render_template('renders.html', renders = renders,  cartAmount = amountCartObjects())
 
 # ----------------------------- END SIMULATION SECTION -----------------------------
 

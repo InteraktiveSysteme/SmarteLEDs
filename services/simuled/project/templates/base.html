@@ -55,7 +55,7 @@
                     </li>
                     {% endif %}
                     <li class="nav-item">
-                        <a class="nav-link " href="{{url_for('user_register')}}">Register</a>
+                        <a class="nav-link " href="{{url_for('user_add')}}">Register</a>
                     </li>
                     <li>
                         <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -72,7 +72,7 @@
                     </ul>
                 </div>
                 <!--
-        <form action="{--{ url_for('user_register')}}" method="POST" enctype="multipart/form-data">
+        <form action="{--{ url_for('user_add')}}" method="POST" enctype="multipart/form-data">
             <div class="form-group">
                 <input name="username" type="text" class="form-control" id="username" aria-describedby="emailHelp"
                        placeholder="Input Lamp Name">
@@ -117,7 +117,7 @@
                 <a class="order-5 btn btn-outline-warning" href="{{ url_for('user_logout') }}">Logout</a>
 
                 {% else %}
-                <form id="form" class="d-flex ms-auto order-5" action="/login" method="POST"
+                <form id="form" class="d-flex ms-auto order-5" action="/user/login" method="POST"
                     enctype="multipart/form-data">
 
                     <input style="margin-right:5px" name="username" id="username" class="textarea form-control"

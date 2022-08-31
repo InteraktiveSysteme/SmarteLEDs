@@ -1,7 +1,7 @@
-import  * as THREE from './three.module.js'
-import {ObjectGUI} from './GUI_Objects.js'
-import { Create } from './Create.js'
-import { State } from './State.js'
+import  * as THREE from '/gltf/three.module.js'
+import {ObjectGUI} from '/gltf/GUI_Objects.js'
+import { Create } from '/gltf/Create.js'
+import { State } from '/gltf/State.js'
 
 let glbs = JSON.parse( document.getElementById( "gltf" ).innerHTML )
 

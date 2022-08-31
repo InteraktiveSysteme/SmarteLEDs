@@ -179,7 +179,6 @@ def lamp_add():
         #we first get the information about the Lamp we are about to safe through the form
         name = request.form["name"]
         img = request.files["img"]
-        gltf = request.files["gltf"]
         text = request.form["shortText"]
         longtext = request.form["longText"]
         price = request.form["price"]

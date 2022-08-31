@@ -1,3 +1,4 @@
+#Authors: Lukas Decker, Lucas Haupt, Samuel Haeseler, David Mertens, Alisa Ruege -->
 import random
 
 from flask import Flask, render_template, request, flash
@@ -28,9 +29,9 @@ class RegisterForm(FlaskForm):
 
 
 class RoomForm(FlaskForm):
-    height = DecimalField("height", validators=[DataRequired()])
-    width = DecimalField("width", validators=[DataRequired()])
-    depth = DecimalField("depth", validators=[DataRequired()])
+    height = DecimalField("height", validators=[DataRequired(),NumberRange(min=2, max=10, message=None)])
+    width = DecimalField("width", validators=[DataRequired(),NumberRange(min=3, max=10, message=None)])
+    depth = DecimalField("depth", validators=[DataRequired(),NumberRange(min=3, max=10, message=None)])
     submit = SubmitField("Submit")
 
 
@@ -38,7 +39,7 @@ class OrderForm(FlaskForm):
     firstName = StringField("first name", validators=[DataRequired()])
     lastName = StringField("last name", validators=[DataRequired()])
     country = StringField("Country", validators=[DataRequired()])
-    adress = StringField("Adress", validators=[DataRequired()])
+    adress = StringField("Adress", validators=[DataRequired(),NumberRange(min=10000, max=99999, message=None)])
     postalCode = StringField("Postal Code", validators=[DataRequired()])
     keepInformations = BooleanField(false_values=(False, 'false', 0, '0'))
     submit = SubmitField("Place Order")

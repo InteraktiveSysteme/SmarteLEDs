@@ -1,3 +1,4 @@
+# Authors: Lukas Decker, Lucas Haupt, Samuel Haeseler, David Mertens, Alisa Ruege
 import bpy
 import json
 import mathutils
@@ -26,8 +27,8 @@ while True:
 
 inputJson = sys.argv[0]
 
-print("JS Bond zur Stelle: ")
-print(inputJson)
+#print("JS Bond zur Stelle: ")
+#print(inputJson)
 
 
 outputPng = str(pathlib.Path(resourceDir + "renders")) + "/" + sys.argv[1]
@@ -37,101 +38,59 @@ vert_res = 720
 
 fhd_override = False
 
-
-#jsonInput3 = sys.argv[5]
-
-#print(sys.argv[5])
-
-#print(os.getcwd())
-
-#deselect all objects
+##
+# @brief deselect all objects
 def deselect_all():
     for ob in bpy.context.selected_objects:
         ob.select_set(False)
 
-#selects all objects
+##
+# @brief selects all objects
 def select_all():
     for ob in bpy.data.objects:
         ob.select_set(True)
-        
-#deletes all objects
+
+##        
+# @brief deletes all objects
 def delete_all():
     for ob in bpy.data.objects:
         bpy.ops.object.delete()
 
-#select object by name
+##
+# @brief select object by name
 def select(object):
     bpy.data.objects[object].select_set(True)
 
-
-#deselect object by name    
+##
+# @briefdeselect object by name    
 def deselect(object):
     bpy.data.objects[object].select_set(False)
 
-
-#convert json to mathutils Matrix
-def jsonToMatrixAlt(data):
-    #mat = mathutils.Matrix([1,2,1],[1,2,1],[1,2,3])
-    return mathutils.Matrix((data[0],data[1],data[2],data[3]))
-
-#convert json to mathutils Matrix
+##
+# @brief convert json to mathutils Matrix
 def jsonToMatrix(data):
-    #mat = mathutils.Matrix([[1,2,1],[1,2,1],[1,2,3]])
-    #print(mat)
     output = mathutils.Matrix([[data[0],data[1],data[2],data[3]],    [data[4],data[5],data[6],data[7]],    [data[8],data[9],data[10],data[11]],    [data[12],data[13],data[14],data[15]]])
-    print("output Matrix")
-    print(output)
-    print("")
     return output
 
-
-#set transform matrix of specified object by name
-def setTransformMatrix(object, matrix, mesh):
-    deselect_all
-    obj = bpy.data.objects["object"]
-    if mesh:
-        mesh = obj.data
-    
-        for vert in mesh.vertices:
-            vert.co = matrix * vert.co
-    else:
-        loc, rot, scale = matrix.decompose()
-        obj.location = loc
-
-
-#transforms three js coordinate system to blender coordinate system
-def transformCoordinates(matrix):
-    
-    loc,rot,sca = matrix.decompose()
-    rotMat = mathutils.Matrix.Rotation(math.radians(90),4,'X')
-    rotMat3 = mathutils.Matrix.Rotation(math.radians(-90),3,'X')
-    print(loc)
-    newLoc = loc @ rotMat3
-    print(newLoc)
-    matrix = mathutils.Matrix.LocRotScale(newLoc,rot,sca)
-    print(matrix)
-    return matrix @ rotMat
-
+##
+# @brief rotates a matrix 90 degrees around the x axis
+# @param matrix to rotate
 def rotateMatrix(matrix):
     loc,rot,scale = matrix.decompose()
     rotMat = mathutils.Matrix.Rotation(math.radians(-90),4,'X')
     return matrix @ rotMat
 
-#generate Scene based on the imported Json
+##
+# @brief generate Scene based on the importedJson
+# @param dictionary importedJson: json file that already got imported as a python dictionary.
 def generateScene(importedJson):
     keys = importedJson.keys()
-    #print(importedJson[keys(1)])
+
     emptyObject = bpy.ops.object.empty_add(type='PLAIN_AXES', align='WORLD', location=(0, 0, 0), scale=(1, 1, 1))
 
     for key in keys:
         matrix = jsonToMatrix(importedJson[key]["matrix"]).transposed()
-        print(key)
-        print("before")
-        print(matrix)
-        matrixWall = matrix
-        #matrix = transformCoordinates(matrix)
-        print("after")
-        print(matrix)
+
         loc,rot,sca = matrix.decompose()
         
         if importedJson[key]["objectType"] == "LAMP":
@@ -140,9 +99,6 @@ def generateScene(importedJson):
             matrix = matrix @ rotMat
             
             rot = matrix.decompose()[1]
-                        
-            print("Lamp matrix")
-            print(matrix)
             
             light_data = bpy.data.lights.new(name=key + "data", type = importedJson[key]["type"])
             color = importedJson[key]["color"]
@@ -165,13 +121,11 @@ def generateScene(importedJson):
             light_object.rotation_mode = "QUATERNION"
             light_object.rotation_quaternion = rot
             light_object.location = loc
-            #light_object.color = [1,0,0]
+
             print("Lamp added")
         
         if importedJson[key]["objectType"] == "CAMERA":
             deselect_all
-            print("Camera Matrix")
-            #print(transformCoordinates(matrix) * matrix)
 
             aspect = importedJson[key]["aspect"]
             res_x = aspect * vert_res
@@ -182,10 +136,10 @@ def generateScene(importedJson):
             
             camera_data = bpy.data.cameras.new(name=key)
             
-            
-            #aspect = importedJson[key]["focal_length"]
             camera_data.lens = 13.8
+            
             camera_object = bpy.data.objects.new("Camera", camera_data)
+            
             bpy.context.scene.collection.objects.link(camera_object)
 
             camera_object.location = loc
@@ -196,37 +150,13 @@ def generateScene(importedJson):
             
             bpy.context.scene.camera = camera_object
             
-            #camera = bpy.data.cameras[0]
-            #print(camera)
-            
-            #bpy.data.cameras[0].lens_unit = "FOV"
-            #bpy.data.cameras[0].angle = math.radians(75)
-            
-            #print(math.degrees(camera.angle))
-            
-            #camera.location = loc
-            #camera.rotation_mode = "QUATERNION"
-            #camera.rotation_quaternion = rot
-            
-            
-            
-            
             print("Camera added")
         
         if importedJson[key]["objectType"] == "WALL":
-            print("Wall matrix")
-            print(matrix)
             deselect_all
-            #loc, rot, sca = matrixWall.decompose()
-            
-            #bpy.ops.mesh.primitive_plane_add(size = 0.5, align="WORLD", location = loc, rotation = rot.to_euler(), scale = sca)
+
             bpy.ops.mesh.primitive_plane_add(size = 1, align="WORLD")
             
-            eulerAngle = rot.to_euler()[0]
-            
-            #bpy.ops.transform.rotate(value = eulerAngle, center_override = mathutils.Vector((0,0,0)))
-            
-            #mesh = bpy.context.object.data
             current_name = bpy.context.selected_objects[0].name
             plane = bpy.data.objects[current_name]
             
@@ -236,31 +166,23 @@ def generateScene(importedJson):
             mat.use_backface_culling = True
             
             if load_external_materials:
-                print(bpy.data.materials["WALL"])
                 mat = bpy.data.materials["WALL"]
 
             plane.data.materials.append(mat)
             
-            #for vert in mesh.vertices:
-            #    vert.co = matrix @ vert.co
-            
-            #plane.rotation_mode = "QUATERNION"
-            #plane.rotation_quaternion = rot
             plane.location = loc
             
             plane.scale = sca
             
-            plane.matrix_world = matrixWall
-
-            #bpy.context.object.location = loc
+            plane.matrix_world = matrix
             
             print("Wall added")
             
         if importedJson[key]["objectType"] == "GLB":
-            print("GLB matrix")
-            print(matrix)
             deselect_all
+            
             bpy.ops.import_scene.gltf(filepath=str(resourceDir) + "/" + importedJson[key]["path"])
+            
             loc,rot,sca = rotateMatrix(matrix).decompose()
             
             current_name = bpy.context.selected_objects[0].name
@@ -271,24 +193,16 @@ def generateScene(importedJson):
             
             glb.rotation_mode = "QUATERNION"
             
-            eul = mathutils.Euler(mathutils.Vector((math.radians(90),0,0)),"XYZ")
-            
-            #quat = eul.to_quaternion()
-            
             glb.rotation_quaternion = rot
-            
-            #glb.rotation_euler = eul
-            
+
             glb.scale = sca
             
-            #glb.scale = glb.scale * mathutils.Vector((0.5,0.5,0.5))
             
-            #bpy.context.object.location = loc
             print("glb" + key + " added")
             
-    #bpy.data.objects["Empty"].rotation_euler = mathutils.Vector((math.radians(90),0,0))
-
-#renders scene to desired file path
+##
+# @brief renders scene to desired file path
+# @param filepath as string
 def renderScene(filepath):
     print("Objects to render:")
     print(bpy.context.scene.objects.keys())
@@ -298,7 +212,7 @@ def renderScene(filepath):
         bpy.context.scene.render.resolution_x = 1920 
         bpy.context.scene.render.resolution_y = 1080
         
-    bpy.context.scene.cycles.samples = 100
+    bpy.context.scene.cycles.samples = 20
     bpy.context.scene.cycles.use_denoising = True
     
     bpy.data.scenes[0].render.filepath = str(filepath)
@@ -310,15 +224,6 @@ def renderScene(filepath):
 # reverse replacement of escaped double quotes ( | to " ) escaping necessary due to call over unix shell
 jsonData = json.loads(inputJson.replace("|", '"'))
 
-#load json from file
-#with open(pathlib.Path(inputJson), 'r') as jsonInput2:
-    #example=json.load(jsonInput2)
- #   example = json.loads(json.dumps(json.load(jsonInput2)))
-  #  pprint.pprint(jsonInput2)
-    #example = json.loads(jsonInput2)
-    #pprint.pprint(example)
-    #pprint.pprint(example["LAMP"]["matrix"])
-   # print("Json Loaded")
 
 delete_all()
 generateScene(jsonData)

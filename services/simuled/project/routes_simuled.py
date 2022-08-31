@@ -373,6 +373,19 @@ def renders_showAll():
     renders = Render.query.filter_by(userID=current_user.userID)
     return render_template('renders.html', renders = renders,  cartAmount = amountCartObjects())
 
+def render_delete(id):
+    deletable = Render.query.get_or_404(id)
+
+    try:
+        db.session.delete(deletable)
+        db.session.commit()
+
+    except:
+        print("error")
+
+    renders = Render.query.filter_by(userID=current_user.userID)
+    return render_template('renders.html', renders = renders,  cartAmount = amountCartObjects())
+
 def renders_new():
     if current_user.is_authenticated:
         if request.method == "POST":
@@ -392,9 +405,9 @@ def renders_new():
 
             return "There was a problem during the render, please contact the website owner."
     else:
-        return "You need to login for accessing the render feature"
-    return "OH BOY! Something went terribly wrong!"
+    	return "You need to login for accessing the render feature"
 
+    return "OH BOY! Something went terribly wrong!"
 
 # ----------------------------- END SIMULATION SECTION -----------------------------
 

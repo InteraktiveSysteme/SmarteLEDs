@@ -38,5 +38,5 @@ app.route("/renders", methods=['GET','POST'])(renders_showAll)
 app.route("/renders/new", methods=['POST'])(renders_new)
 
 # misc
-app.route("/get/<file>", methods=['GET'])(expose_gltf)
+app.route("/gltf/<file>", methods=['GET'])(expose_gltf)
 #app.route("/shopLamp/login", methods=['GET','POST'])(login)

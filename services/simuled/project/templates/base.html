@@ -41,6 +41,11 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{url_for('lamp_showAll')}}">Shop</a>
                     </li>
+                    {%  if current_user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link " href="{{url_for('renders_showAll')}}">Renders</a>
+                        </li>
+                    {% endif %}
                     {% if current_user.admin %}
                     <li class="nav-item">
                         <a class="nav-link " href="{{url_for('lamp_add')}}">Add Lamp</a>

@@ -1,3 +1,5 @@
+// Authors: Lukas Decker, Lucas Haupt, Samuel Häseler, David Mertens, Alisa Rüge
+
 import  * as THREE from './three.module.js'
 import { Create } from './Create.js'
 

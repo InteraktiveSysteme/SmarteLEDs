@@ -14,9 +14,6 @@ def index():
     print("index")
     return render_template('index.html', cartAmount=amountCartObjects())
 
-def lamp_showAll():
-    lamps = Lamp.query.order_by(Lamp.timeStamp)
-    return render_template("shop.html", lamps=lamps,  cartAmount = amountCartObjects()), 200
 
 # ----------------------------- END MAIN PAGES SECTION -----------------------------
 
@@ -27,7 +24,7 @@ def lamp_showAll():
 ##
 # @brief This function handles the register Logic
 # @return the HTML template
-def user_register():
+def user_add():
 
     # CHECK METHOD IF POST OR GET
     match (request.method):
@@ -134,6 +131,10 @@ def admin():
 
 
 # ***************************** BEGIN LAMP ADMINISTRATION SECTION *****************************
+
+def lamp_showAll():
+    lamps = Lamp.query.order_by(Lamp.timeStamp)
+    return render_template("shop.html", lamps=lamps,  cartAmount = amountCartObjects()), 200
 
 ##
 # @brief This function handles the adminLogic
@@ -373,19 +374,6 @@ def renders_showAll():
     renders = Render.query.filter_by(userID=current_user.userID)
     return render_template('renders.html', renders = renders,  cartAmount = amountCartObjects())
 
-def render_delete(id):
-    deletable = Render.query.get_or_404(id)
-
-    try:
-        db.session.delete(deletable)
-        db.session.commit()
-
-    except:
-        print("error")
-
-    renders = Render.query.filter_by(userID=current_user.userID)
-    return render_template('renders.html', renders = renders,  cartAmount = amountCartObjects())
-
 def renders_new():
     if current_user.is_authenticated:
         if request.method == "POST":
@@ -405,9 +393,22 @@ def renders_new():
 
             return "There was a problem during the render, please contact the website owner."
     else:
-    	return "You need to login for accessing the render feature"
+        return "You need to login for accessing the render feature"
 
     return "OH BOY! Something went terribly wrong!"
+
+def renders_delete(id):
+    deletable = Render.query.get_or_404(id)
+
+    try:
+        db.session.delete(deletable)
+        db.session.commit()
+
+    except:
+        print("error")
+
+    renders = Render.query.filter_by(userID=current_user.userID)
+    return render_template('renders.html', renders = renders,  cartAmount = amountCartObjects())
 
 # ----------------------------- END SIMULATION SECTION -----------------------------
 

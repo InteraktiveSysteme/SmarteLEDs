@@ -28,16 +28,15 @@ app.route("/lamps/add", methods=['GET','POST'])(lamp_add)
 app.route("/lamps/del/<id>", methods=['GET'])(lamp_delete)
 
 # user accounts
-app.route("/user/add", methods=['GET','POST'])(user_register)
+app.route("/user/add", methods=['GET','POST'])(user_add)
 app.route("/user/del/<id>", methods=['GET'])(user_delete)
-app.route("/user/login", methods=['GET','POST'])(user_login)
+app.route("/user/login", methods=['GET'])(user_login)
 app.route("/user/logout", methods=['GET','POST'])(user_logout)
 
 # blender renders
 app.route("/renders", methods=['GET','POST'])(renders_showAll)
 app.route("/renders/new", methods=['POST'])(renders_new)
-app.route("/renders/del/<id>", methods=['GET'])(render_delete)
-
+app.route("/renders/del/<id>", methods=['GET'])(renders_delete)
 
 # misc
 app.route("/gltf/<file>", methods=['GET'])(expose_gltf)

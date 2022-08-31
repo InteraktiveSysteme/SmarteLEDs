@@ -1,3 +1,4 @@
+# Authors: Lukas Decker, Lucas Haupt, Samuel Haeseler, David Mertens, Alisa Ruege
 import os
 from . import app
 

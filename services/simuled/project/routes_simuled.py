@@ -1,3 +1,4 @@
+# Authors: Lukas Decker, Lucas Haupt, Samuel Haeseler, David Mertens, Alisa Ruege
 from project import *
 from flask import Flask, render_template, request, flash, url_for, redirect, make_response, send_from_directory
 from flask import render_template

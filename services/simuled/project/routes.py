@@ -1,14 +1,5 @@
+# Authors: Lukas Decker, Lucas Haupt, Samuel Haeseler, David Mertens, Alisa Ruege
 from project.routes_simuled import *
-
-# TODO: refactor url paths to:
-#
-#           /shopping_cart/del/<id>
-#           /shopping_cart/add/<id>
-# /shop  => /lamps/
-#           /lamps/show/<id>
-#           /lamps/del/<id>
-#           /lamps/add/
-#           /user/del/<id>
 
 # main pages
 app.route("/", methods=['GET'])(index)

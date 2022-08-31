@@ -179,7 +179,6 @@ def lamp_add():
         #we first get the information about the Lamp we are about to safe through the form
         name = request.form["name"]
         img = request.files["img"]
-        gltf = request.files["gltf"]
         text = request.form["shortText"]
         longtext = request.form["longText"]
         price = request.form["price"]
@@ -190,13 +189,8 @@ def lamp_add():
         imgName = saveName
         img.save(os.path.join(app.config['UPLOAD_FOLDER'], saveName))
 
-        gltfName = secure_filename(gltf.filename)
-        savegltfName = str(uuid.uuid1()) + "_" + gltfName
-        gltfName = savegltfName
-        gltf.save(os.path.join(app.root_path +"/static/Gltf/Lampen/", savegltfName))
-
         #now we add the lamp to the database
-        lamp = Lamp(lampName=name, imgName=imgName, gltfName=gltfName, lampPrice=price, lampText=text,
+        lamp = Lamp(lampName=name, imgName=imgName, lampPrice=price, lampText=text,
                     lampLongText=longtext)
         db.session.add(lamp)
         db.session.commit()

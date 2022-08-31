@@ -38,7 +38,7 @@ class OrderForm(FlaskForm):
     firstName = StringField("first name", validators=[DataRequired()])
     lastName = StringField("last name", validators=[DataRequired()])
     country = StringField("Country", validators=[DataRequired()])
-    adress = StringField("Adress", validators=[DataRequired()])
+    adress = StringField("Adress", validators=[DataRequired(),NumberRange(min=10000, max=99999, message=None)])
     postalCode = StringField("Postal Code", validators=[DataRequired()])
     keepInformations = BooleanField(false_values=(False, 'false', 0, '0'))
     submit = SubmitField("Place Order")

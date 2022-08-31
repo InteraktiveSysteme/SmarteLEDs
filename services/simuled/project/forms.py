@@ -28,9 +28,9 @@ class RegisterForm(FlaskForm):
 
 
 class RoomForm(FlaskForm):
-    height = DecimalField("height", validators=[DataRequired()])
-    width = DecimalField("width", validators=[DataRequired()])
-    depth = DecimalField("depth", validators=[DataRequired()])
+    height = DecimalField("height", validators=[DataRequired(),NumberRange(min=2, max=10, message=None)])
+    width = DecimalField("width", validators=[DataRequired(),NumberRange(min=3, max=10, message=None)])
+    depth = DecimalField("depth", validators=[DataRequired(),NumberRange(min=3, max=10, message=None)])
     submit = SubmitField("Submit")
 
 

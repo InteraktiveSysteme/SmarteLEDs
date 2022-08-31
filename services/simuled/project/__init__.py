@@ -1,3 +1,4 @@
+#Authors: Lukas Decker, Lucas Haupt, Samuel Haeseler, David Mertens, Alisa Ruege
 from ctypes import addressof
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy

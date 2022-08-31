@@ -394,13 +394,16 @@ export class Create{
      */
     createGUI(){
 
+        // adds manual to GUI and moves view to manual
         this.gui.add( {
 
-            Manual: () => { $("#manual").dialog({width: window.document.width * 0.8}) }
+            // Manual: () => { $("#manual").dialog({width: window.document.width * 0.8}) }
+            Manual: () => { document.getElementById( "manual" ).scrollIntoView( { behavior: "smooth", block: "center" } ) }
 
         }, 'Manual' )
 
         // url starts from index
+        // makes a post-request to server and calls exportScene()
         this.gui.add({
         
          Render: () => 

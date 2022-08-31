@@ -26,8 +26,8 @@ while True:
 
 inputJson = sys.argv[0]
 
-print("JS Bond zur Stelle: ")
-print(inputJson)
+#print("JS Bond zur Stelle: ")
+#print(inputJson)
 
 
 outputPng = str(pathlib.Path(resourceDir + "renders")) + "/" + sys.argv[1]
@@ -67,17 +67,8 @@ def deselect(object):
 
 ##
 # @brief convert json to mathutils Matrix
-def jsonToMatrixAlt(data):
-    #mat = mathutils.Matrix([1,2,1],[1,2,1],[1,2,3])
-    return mathutils.Matrix((data[0],data[1],data[2],data[3]))
-
-##
-# @brief convert json to mathutils Matrix
 def jsonToMatrix(data):
     output = mathutils.Matrix([[data[0],data[1],data[2],data[3]],    [data[4],data[5],data[6],data[7]],    [data[8],data[9],data[10],data[11]],    [data[12],data[13],data[14],data[15]]])
-    print("output Matrix")
-    print(output)
-    print("")
     return output
 
 ##
@@ -107,9 +98,6 @@ def generateScene(importedJson):
             matrix = matrix @ rotMat
             
             rot = matrix.decompose()[1]
-                        
-            print("Lamp matrix")
-            print(matrix)
             
             light_data = bpy.data.lights.new(name=key + "data", type = importedJson[key]["type"])
             color = importedJson[key]["color"]
@@ -137,8 +125,6 @@ def generateScene(importedJson):
         
         if importedJson[key]["objectType"] == "CAMERA":
             deselect_all
-            print("Camera Matrix")
-
 
             aspect = importedJson[key]["aspect"]
             res_x = aspect * vert_res
@@ -150,7 +136,9 @@ def generateScene(importedJson):
             camera_data = bpy.data.cameras.new(name=key)
             
             camera_data.lens = 13.8
+            
             camera_object = bpy.data.objects.new("Camera", camera_data)
+            
             bpy.context.scene.collection.objects.link(camera_object)
 
             camera_object.location = loc
@@ -164,13 +152,9 @@ def generateScene(importedJson):
             print("Camera added")
         
         if importedJson[key]["objectType"] == "WALL":
-            print("Wall matrix")
-            print(matrix)
             deselect_all
 
             bpy.ops.mesh.primitive_plane_add(size = 1, align="WORLD")
-            
-            eulerAngle = rot.to_euler()[0]
             
             current_name = bpy.context.selected_objects[0].name
             plane = bpy.data.objects[current_name]
@@ -181,7 +165,6 @@ def generateScene(importedJson):
             mat.use_backface_culling = True
             
             if load_external_materials:
-                print(bpy.data.materials["WALL"])
                 mat = bpy.data.materials["WALL"]
 
             plane.data.materials.append(mat)
@@ -195,10 +178,10 @@ def generateScene(importedJson):
             print("Wall added")
             
         if importedJson[key]["objectType"] == "GLB":
-            print("GLB matrix")
-            print(matrix)
             deselect_all
+            
             bpy.ops.import_scene.gltf(filepath=str(resourceDir) + "/" + importedJson[key]["path"])
+            
             loc,rot,sca = rotateMatrix(matrix).decompose()
             
             current_name = bpy.context.selected_objects[0].name
@@ -209,12 +192,8 @@ def generateScene(importedJson):
             
             glb.rotation_mode = "QUATERNION"
             
-            eul = mathutils.Euler(mathutils.Vector((math.radians(90),0,0)),"XYZ")
-            
-            
             glb.rotation_quaternion = rot
-            
-            
+
             glb.scale = sca
             
             

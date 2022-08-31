@@ -2,23 +2,35 @@ import  * as THREE from './three.module.js'
 import { GLTFLoader } from './GLTFLoader.js'
 import { GUI } from './lilgui.js'
 
-
+/**
+ * @brief extracts filename from file path
+ * @param {String} path 
+ * @returns String
+ */
 export function basename(path) {
     return path.split('/').reverse()[0];
 }
 
+/**
+ * @brief is used as universal object for scene variables
+ */
 export class Create{
 
+    /**
+     * @brief creates a Create object
+     * @param {float} width 
+     * @param {float} height 
+     * @param {float} depth 
+     */
     constructor( width, height, depth ){
 
-        /**
-         * Sizes
-         */
+        // window sizes
         this.sizes = {
             width: .95 * window.innerWidth,
             height: window.innerHeight
         }  
 
+        // creates a threejs scene
         this.scene = new THREE.Scene()
         this.scene.background = new THREE.Color( 0xd8dce4 )
         this.camera = new THREE.PerspectiveCamera( 75, this.sizes.width / this.sizes.height, 0.05, 10000 );
@@ -28,10 +40,12 @@ export class Create{
         const ambient = new THREE.AmbientLight( 0xffffff, .1 )
         this.scene.add( ambient )
 
+        // measures for the virtual room
         this.width = width
         this.height = height
         this.depth = depth
 
+        // creates and enables renderer
         this.renderer = new THREE.WebGLRenderer({
             canvas: this.canvas,
             alpha: true
@@ -42,30 +56,20 @@ export class Create{
         this.renderer.shadowMap.enabled = true
         this.renderer.shadowMap.type = THREE.VSMShadowMap
 
+        // object arrays for sceneExport
         this.wallArray = []
         this.glbArray = []
         this.lightArray = []
 
+        // gui is created
         this.gui = new GUI()
         this.createGUI()
         this.guiCount = 1
     }
-    
-
-    loadFromJson(json) {
-
-        this.scene.children
-        //let construct = JSON.parse(json)
-        console.log(json)
-        //console.log(construct)
-    }
 
     /**
- * @brief creates a wall for the room, with correct orientation and sizing, depending on the type.
- * @param {String} type 
- * @param {PlaneGeometry} geo 
- * @param {Material} material 
- */
+     * @brief creates all planes for the virtual room
+     */
     WallSetup(){
 
         const geo = new THREE.PlaneGeometry( 1, 1 )
@@ -165,22 +169,32 @@ export class Create{
         return this.wallArray
     }
 
+    /**
+     * @brief loads a glb object from its filepath into the scene
+     * @param {String} path 
+     */
     glbImporter( path ){
 
         const loader = new GLTFLoader()
 
+        /**
+         * @brief loads the glb with the GLTFLoader
+         * @param {String} path
+         */
         loader.load( path, ( glb ) => {
-
     
             let root = glb.scene
     
+            // creating a bounding box for the glb for optimal positioning
             const box = new THREE.Box3().setFromObject( root )
             const sizes = box.getSize( new THREE.Vector3() )
     
+            // if statement to distinguish the lights from furniture glbs
             if( basename(path).localeCompare( 'Ceiling_lamp.glb' ) == 0 ){
     
                 const spotColor1 = 0xffffff;
     
+                // creating a spotlight for light glb
                 const spotLight = new THREE.SpotLight( spotColor1, 1, 8 )
                 spotLight.penumbra = .1
                 spotLight.angle = 1
@@ -193,6 +207,7 @@ export class Create{
     
                 this.lightArray.push( spotLight )
     
+                // target defines the look-point of the light
                 const target1 = new THREE.Object3D()
                 target1.position.set( 0, -1, 0 )
                 spotLight.target = target1
@@ -204,6 +219,9 @@ export class Create{
     
                 var mesh = root.children[ root.children.length - 1 ]
     
+                // the properties of the glb mesh are getting defined
+                // the mesh is used, because the raycaster can select it
+                // userData is used for storing information
                 mesh.castShadow = true
                 mesh.receiveShadow = true
                 mesh.userData.draggable = true
@@ -217,11 +235,14 @@ export class Create{
 
                 // places light relative to origin of parent
                 // spotLight.position.set( 0, -.05, 0 )
+                // slight offset, this way it doesn't spawn inside the glb
                 spotLight.position.set( 0, -.2, 0 )
 
+                // creating folder for Dat.GUI
                 const folder = this.gui.addFolder( 'Lamp ' + this.guiCount + ': ' + basename(path).split( '.' ).reverse()[ 1 ]  )
                 this.guiCount++
 
+                // adding color and intensity elements to Dat.GUI
                 folder.addColor( spotLight, 'color').name( "Color:" )
                 folder.add( spotLight, 'intensity', 0, 2 ).name( "Intensity:" )
                 mesh.userData.guiFolder = folder
@@ -274,6 +295,7 @@ export class Create{
                 mesh.userData.guiFolder = folder
             }
 
+            // else-case for furniture glbs
             else{
     
                 root.position.set( 0, ( - this.height + sizes.y ) / 2, 0 )
@@ -299,6 +321,7 @@ export class Create{
 
         }, function ( xhr ){
     
+            // tells if glb is loaded
             console.log( ( xhr.loaded/xhr.total * 100 ) + "% loaded" ) 
     
         }, function ( error ) {
@@ -309,12 +332,8 @@ export class Create{
     }
 
     /**
-     * @brief exports all lights, objects, cameras and walls as a JSON-String.
-     * @param {Object3D} lightArray 
-     * @param {PerspectiveCamera} camera 
-     * @param {Object3D} wallArray 
-     * @param {Object3D} glbArray 
-     * @returns JSON-String
+     * @brief exports all lights, objects, cameras and walls as a JSON-String
+     * @returns JSON
      */
     exportScene(){
 
@@ -327,10 +346,9 @@ export class Create{
             let lMatrix = new THREE.Matrix4()
             let rgb = new THREE.Vector3( this.lightArray[ i ].color.r, this.lightArray[ i ].color.g, this.lightArray[ i ].color.b )
 
+            // saves the world position of the light
             let pos = new THREE.Vector3()
             this.lightArray[ i ].getWorldPosition( pos )
-
-            // this.lightArray[ i ].position.set( this.lightArray[ i ].userData.object.position.x, this.lightArray[ i ].userData.object.position.y, this.lightArray[ i ].userData.object.position.z )
 
             lMatrix.compose( pos, this.lightArray[ i ].quaternion, this.lightArray[ i ].scale )
 
@@ -356,7 +374,7 @@ export class Create{
             dict[ 'WALL' + i ] = { 'matrix' : wMatrix.elements, 'objectType' : 'WALL' }        
         }
 
-        // // for loop for glbArray
+        // for loop for glbArray
 
         for( let i = 0; i < this.glbArray.length; i++ ){
 
@@ -372,6 +390,9 @@ export class Create{
         return json
     }
 
+    /**
+     * @brief adds the manual for instructions and Render-button for exporting the scene to GUI
+     */
     createGUI(){
 
         this.gui.add( {

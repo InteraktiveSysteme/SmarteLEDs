@@ -12,13 +12,11 @@
 {% block content %}
 <body>
 
-  <p hidden="true" id="width">4</p>
-  <p hidden="true" id="height">3</p>
-  <p hidden="true" id="depth">5</p>
-  <p hidden="true" id="gltf">
-    [ "Ceiling_lamp.glb", "chair.glb", "table.glb", "Standing_lamp.glb", "sofa.glb", "shelf.glb" ]
-  </p>
-
+  <p hidden="true" id="width">{{ width }}</p>
+  <p hidden="true" id="height">{{ height }}</p>
+  <p hidden="true" id="depth">{{ depth }}</p>
+  <p hidden="true" id="gltf">{{ gltf }}</p>
+    <!-- [ "Ceiling_lamp.glb", "chair.glb", "table.glb", "Standing_lamp.glb", "sofa.glb", "shelf.glb" ]-->
 <style>
 .lil-gui {
 	margin-top: 7%;

@@ -357,63 +357,58 @@ def simuled():
         return render_template('preSim.html', form=form, cartAmount = amountCartObjects())
 
     if request.method == "POST":
-        # POST branch to get the Room Informations
+        # POST branch to get the Room information
         width = request.form["width"]
         height = request.form["height"]
         depth = request.form["depth"]
         lamps = Lamp.query.order_by(Lamp.timeStamp)
-        gltf =[]
-        try:
-            for lamp in lamps:
-                gltf.append(lamp.gltfName)
-        except:
-            print("nicht alle GLTFs konnten geladen werden. Dies liegt moeglicherweise daran, dass eione Lampe kein GLTF hat... [ERROR]")
-        return render_template('simuled.html', width=width, height=height, depth=depth, gltf = gltf,  cartAmount = amountCartObjects())
+
+        # create gltf list from directory listing (furniture must be included)
+        gltf = os.listdir(app.root_path + "/static/gltf/")
+        gltf = json.dumps(gltf)
+        return render_template('simuled.html', width=width, height=height, depth=depth, gltf=gltf,  cartAmount = amountCartObjects())
 
 @login_required
 def renders_showAll():
     renders = Render.query.filter_by(userID=current_user.userID)
     return render_template('renders.html', renders = renders,  cartAmount = amountCartObjects())
 
+def render_delete(id):
+    deletable = Render.query.get_or_404(id)
+
+    try:
+        db.session.delete(deletable)
+        db.session.commit()
+
+    except:
+        print("error")
+
+    renders = Render.query.filter_by(userID=current_user.userID)
+    return render_template('renders.html', renders = renders,  cartAmount = amountCartObjects())
+
 def renders_new():
     if current_user.is_authenticated:
-    	if request.method == "POST":
-    		jsonString = json.dumps(request.get_json())
+        if request.method == "POST":
+            jsonString = json.dumps(request.get_json())
 
-    		imgName = str(uuid.uuid1()) + ".png"
-    		imgPath = os.path.join(app.config['RENDER_FOLDER'], imgName)
+            imgName = str(uuid.uuid1()) + ".png"
+            imgPath = os.path.join(app.config['RENDER_FOLDER'], imgName)
 
-    		#subprocess.run(["blender", " -b ", " --python ", "static/json_import.py", " -- ", jsonString, imgName])
-    		jsonString = jsonString.replace('"', '|')
-    		exitcode = os.system("blender -b --python-exit-code 5  --python project/static/json_import.py -- " + '"' + jsonString + '" ' + imgName)
-    		if exitcode == 0:
-    			render = Render(userID=current_user.userID, imgName=imgName)
-    			db.session.add(render)
-    			db.session.commit()
-    			return "The render finished successfully"
-    		return "There was a problem during the render, please contact the website owner."
+            #subprocess.run(["blender", " -b ", " --python ", "static/json_import.py", " -- ", jsonString, imgName])
+            jsonString = jsonString.replace('"', '|')
+            exitcode = os.system("blender -b --python-exit-code 5  --python project/static/json_import.py -- " + '"' + jsonString + '" ' + imgName)
+            if exitcode == 0:
+                render = Render(userID=current_user.userID, imgName=imgName)
+                db.session.add(render)
+                db.session.commit()
+                return "The render finished successfully"
+
+            return "There was a problem during the render, please contact the website owner."
     else:
     	return "You need to login for accessing the render feature"
 
     return "OH BOY! Something went terribly wrong!"
 
-def render_delete(id):
-    deletable = Render.query.get_or_404(id)
-    users = User.query.order_by(User.timeStamp)
-
-    try:
-        imgName = deletable.imgName
-        db.session.delete(deletable)
-        db.session.commit()
-        os.remove("/static/Imgages/", imgName)
-        return render_template("renders.html", lamps=lamps, users=users)
-
-    except:
-        print("error")
-        
-
-    renders = Render.query.filter_by(userID=current_user.userID)
-    return render_template('renders.html', renders = renders,  cartAmount = amountCartObjects())
 # ----------------------------- END SIMULATION SECTION -----------------------------
 
 

@@ -237,11 +237,11 @@ export class Create{
                 // slight offset, this way it doesn't spawn inside the glb
                 spotLight.position.set( 0, -.2, 0 )
 
-                // creating folder for Dat.GUI
+                // creating folder for lil-gui
                 const folder = this.gui.addFolder( 'Lamp ' + this.guiCount + ': ' + basename(path).split( '.' ).reverse()[ 1 ]  )
                 this.guiCount++
 
-                // adding color and intensity elements to Dat.GUI
+                // adding color and intensity elements to lil-gui
                 folder.addColor( spotLight, 'color').name( "Color:" )
                 folder.add( spotLight, 'intensity', 0, 2 ).name( "Intensity:" )
                 mesh.userData.guiFolder = folder

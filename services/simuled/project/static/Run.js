@@ -1,3 +1,4 @@
+// Authors: Lukas Decker, Lucas Haupt, Samuel Häseler, David Mertens, Alisa Rüge
 import  * as THREE from '/js/three.module.js'
 import {ObjectGUI} from '/js/GUI_Objects.js'
 import { Create } from '/js/Create.js'
@@ -19,8 +20,6 @@ const depth = JSON.parse( document.getElementById( "depth" ).innerHTML )
 // creates scene and room
 const creator = new Create( width, height, depth )
 
-creator.camera.position.z = 5
-
 // state is created
 const state = new State( creator )
 
@@ -28,7 +27,9 @@ const state = new State( creator )
 var wallArray = creator.WallSetup()
 
 
-// dynamically resizing canvas
+/**
+ * @brief dynamically resizes the canvas based on window
+ */
 window.addEventListener( 'resize', () =>
 {
     // Update sizes
@@ -45,6 +46,9 @@ window.addEventListener( 'resize', () =>
 
 } )
 
+/**
+ * @brief in gui selected object is imported into the room
+ */
 document.addEventListener( 'objectClicked', ( event ) => {
 
     console.log( event.detail.glbPath )
@@ -52,13 +56,8 @@ document.addEventListener( 'objectClicked', ( event ) => {
     creator.glbImporter( event.detail.glbPath )
 } )
 
-// document.addEventListener( 'keydown', ( event ) => {
-
-    // console.log( creator.exportScene() )
-// } )
-
 /**
- * @brief is used as animate function to render the scene each frame.
+ * @brief is used as animate function to render the scene each frame
  */
 
 function animate(){

@@ -1,15 +1,17 @@
+// Authors: Lukas Decker, Lucas Haupt, Samuel Häseler, David Mertens, Alisa Rüge
+
 import  * as THREE from './three.module.js'
 import { Create } from './Create.js'
 import { GUI } from './lilgui.js'
 
 /**
- * DragControls class
- * @brief object to instantiate controls for dragging.
+ * @brief controls for dragging
  */
  export class DragControls{
 
     /**
-     * @brief creates an DragControls object.
+     * @brief creates an DragControls object
+     * @param {Create} creator
      */
     constructor( creator ){
 
@@ -19,14 +21,18 @@ import { GUI } from './lilgui.js'
         this.selected = null
         this.name = "drag"
 
+        /**
+         * @brief deletes a glb if it's selected via the raycaster and the X-key is pressed
+         * @param {keydown} event: triggered when X-key press
+         */
         this.deleteEvent = ( event ) => {
 
             if( event.key == 'x' ){
 
+                // checks if an object is selected
                 if( this.selected ){
 
-                    console.log( this.selected.parent )
-
+                    // three.js light of light glb will be deleted from gui and array
                     if( this.selected.userData.isLight ){
 
                         this.selected.userData.guiFolder.destroy()
@@ -34,6 +40,7 @@ import { GUI } from './lilgui.js'
                         this.creator.lightArray.splice( this.creator.lightArray.indexOf( this.selected.parent.children[ this.selected.parent.children.length - 1 ] ), 1 )
                     }
 
+                    // glb is deleted from array and removed from scene
                     this.creator.glbArray.splice( this.creator.glbArray.indexOf( this.selected.parent ), 1 )
                     this.creator.scene.remove( this.selected.parent )
 
@@ -42,6 +49,11 @@ import { GUI } from './lilgui.js'
             }
         }
  
+        /**
+         * @brief if glb is clicked it will be saved as selected and mouse coordinates will be tracked
+         * @param {click} event; triggered when left mouse button is clicked
+         * @returns 
+         */
         this.onClick = ( event ) => {
 
             const raycaster = new THREE.Raycaster()
@@ -57,19 +69,25 @@ import { GUI } from './lilgui.js'
         
         
             if( ( intersects.length ) > 0 && ( intersects[ 0 ].object.userData.drag ) ){
-
-                // intersects[ 0 ].object.draggable = true
         
                 this.selected = intersects[ 0 ].object
             }
         }
 
+        /**
+         * @brief updates mouse-coordinates
+         * @param {mousemove} event: triggered when mouse moves
+         */
         this.onMouseMove = ( event ) => {
 
             this.mouseX = ( ( event.clientX - this.creator.canvas.getBoundingClientRect().left ) / this.creator.sizes.width ) * 2 - 1
             this.mouseY = - ( ( event.clientY - this.creator.canvas.getBoundingClientRect().top ) / this.creator.sizes.height ) * 2 + 1
         }
 
+        /**
+         * @brief selected glb is placed at mouse position via raycaster
+         * @param {mousemove} event: triggered when mouse moves
+         */
         this.dragObject = ( event ) => {
 
             const raycaster = new THREE.Raycaster()
@@ -78,24 +96,26 @@ import { GUI } from './lilgui.js'
 
                 raycaster.setFromCamera( new THREE.Vector2( this.mouseX, this.mouseY ), this.creator.camera )
                 
+                // returns intersections with the planes of the room
                 const intersections = raycaster.intersectObjects( this.creator.scene.children )
                 
                 if( intersections.length > 0 ){
         
                     for( let i = 0; i < intersections.length; i++ ){
 
-                        if( intersections[ i ].object.userData.top ){ // for topLight
+                        // if-case for ceiling light glb
+                        if( intersections[ i ].object.userData.top ){
 
+                            // position of the glb root element is update to mouse intersection with plane
+                            // only x-z-coordinates: no floating objects
+                            // this way glbs can't be positioned outside of the room boundaries
                             this.selected.parent.position.x = intersections[ i ].point.x
                             this.selected.parent.position.z = intersections[ i ].point.z
-
-                            // this.selected.userData.target.position.x = this.selected.position.x
-                            // this.selected.userData.target.position.z = this.selected.position.z
-                            // this.selected.userData.target.position.y = - height
                         }
         
                         if( intersections[ i ].object.userData.bottom ){
 
+                            // same procedure for furniture and Standing lamp glbs
                             this.selected.parent.position.x = intersections[ i ].point.x
                             this.selected.parent.position.z = intersections[ i ].point.z
                         }
@@ -103,17 +123,24 @@ import { GUI } from './lilgui.js'
                 }
             }
         }
-
+        
+        // it was optimized for non glbs for testing
+        /**
+         * @brief sets the transparency of the material to transparent if mouse hovers over object
+         * @param {mousemove} event: triggered when mouse moves
+         */
         this.hoverObject = ( event ) => {
 
             let raycaster = new THREE.Raycaster()
 
             raycaster.setFromCamera( new THREE.Vector2( this.mouseX, this.mouseY ), this.creator.camera )
-            // hopefully only returns the surface level children and not the children of the room group
+
+            // puts all children of the scene in array
             const intersects = raycaster.intersectObjects( this.creator.scene.children )
     
             let hovArray = []
     
+            // pushes draggable object into hovArray
             for( let i = 0; i < intersects.length; i++ ){
         
                 if( intersects[i].object.userData.drag ){
@@ -121,7 +148,8 @@ import { GUI } from './lilgui.js'
                     hovArray.push( intersects[ i ] )
                 }
             }
-        
+
+            // array with hovered objects is being traversed and opacity turned to .5
             if( hovArray.length > 0 ){
     
                 for( let i = 0; i < intersects.length; i++ ){
@@ -132,13 +160,13 @@ import { GUI } from './lilgui.js'
                 }
             }
     
+            // other objects opacity is turned to normal
             else{
     
                 for( let i = 0; i < this.creator.scene.children.length; i++ ){
         
                     if( this.creator.scene.children[ i ].material ){
             
-                        //scene.children[ i ].material.opacity = scene.children[ i ].draggable == true ? .5 : 1.0
                         this.creator.scene.children[ i ].material.opacity = 1.0
                     }
                 }

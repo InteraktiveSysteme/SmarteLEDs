@@ -357,17 +357,15 @@ def simuled():
         return render_template('preSim.html', form=form, cartAmount = amountCartObjects())
 
     if request.method == "POST":
-        # POST branch to get the Room Informations
+        # POST branch to get the Room information
         width = request.form["width"]
         height = request.form["height"]
         depth = request.form["depth"]
         lamps = Lamp.query.order_by(Lamp.timeStamp)
-        gltf =[]
-        try:
-            for lamp in lamps:
-                gltf.append(lamp.gltfName)
-        except:
-            print("nicht alle GLTFs konnten geladen werden. Dies liegt moeglicherweise daran, dass eione Lampe kein GLTF hat... [ERROR]")
+
+        # create gltf list from directory listing (furniture must be included)
+        gltf = os.listdir(app.root_path + "/static/gltf/")
+        gltf = json.dumps(gltf)
         return render_template('simuled.html', width=width, height=height, depth=depth, gltf=gltf,  cartAmount = amountCartObjects())
 
 @login_required

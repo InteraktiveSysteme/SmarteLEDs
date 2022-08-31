@@ -4,7 +4,7 @@ import { GUI } from './lilgui.js'
 
 /**
  * @brief extracts filename from file path
- * @param {String} path 
+ * @param {String} path: filepath of glb
  * @returns String
  */
 export function basename(path) {
@@ -18,9 +18,9 @@ export class Create{
 
     /**
      * @brief creates a Create object
-     * @param {float} width 
-     * @param {float} height 
-     * @param {float} depth 
+     * @param {float} width: user room width in m
+     * @param {float} height: user room height in m
+     * @param {float} depth: user room depth in m
      */
     constructor( width, height, depth ){
 
@@ -171,7 +171,7 @@ export class Create{
 
     /**
      * @brief loads a glb object from its filepath into the scene
-     * @param {String} path 
+     * @param {String} path: path of glb to find glb
      */
     glbImporter( path ){
 

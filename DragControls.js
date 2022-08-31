@@ -27,10 +27,10 @@ import { GUI } from './lilgui.js'
 
             if( event.key == 'x' ){
 
+                // checks if an object is selected
                 if( this.selected ){
 
-                    console.log( this.selected.parent )
-
+                    // three.js light of light glb will be deleted from gui and array
                     if( this.selected.userData.isLight ){
 
                         this.selected.userData.guiFolder.destroy()
@@ -38,6 +38,7 @@ import { GUI } from './lilgui.js'
                         this.creator.lightArray.splice( this.creator.lightArray.indexOf( this.selected.parent.children[ this.selected.parent.children.length - 1 ] ), 1 )
                     }
 
+                    // glb is deleted from array and removed from scene
                     this.creator.glbArray.splice( this.creator.glbArray.indexOf( this.selected.parent ), 1 )
                     this.creator.scene.remove( this.selected.parent )
 
@@ -58,7 +59,6 @@ import { GUI } from './lilgui.js'
             if( this.selected ){
         
                 this.selected = null
-                this.selected.material.opacity = 1.0
                 return
             }
         

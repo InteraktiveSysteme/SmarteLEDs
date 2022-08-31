@@ -13,6 +13,14 @@ services/simuled/manage.py: keep version of main (Delete on temporary merge bran
 services/simuled/project/migrations
 services/simuled/project/SQLTerror.db
 
+## Advanced merge (merge with care to not destroy container integrity)
+services/simuled/\_\_init\_\_.py:
+	- remove line: ``from flask_migrate import Migrate``
+	- remove line: ``migrate = Migrate(app, db)``
+	- add line: ``from werkzeug.middleware.proxy_fix import ProxyFix``
+	- add line: ``app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_host=1)`` after ``app = Flask(\_\_name\_\_)``
+	- remove line: ``db.create_all()``
+
 ## Easy merge (independent from docker container / db configuration)
 services/simuled/requirements.txt: Don't delete psycopg and gunicorn (needed in docker)
 services/simuled/project/config.py
@@ -22,9 +30,3 @@ services/simuled/project/forms.py
 services/simuled/project/static
 services/simuled/project/templates
 
-## Advanced merge (merge with care to not destroy container integrity)
-services/simuled/\_\_init\_\_.py:
-	- remove line: ``from flask_migrate import Migrate``
-	- remove line: ``migrate = Migrate(app, db)``
-	- add line: ``app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_host=1)`` after app = Flask(\_\_name\_\_)
-	- remove line: ``db.create_all()``

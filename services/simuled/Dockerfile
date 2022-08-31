@@ -1,5 +1,5 @@
 # building dockercontainer
-FROM python:slim-buster as builder
+FROM python as builder
 
 WORKDIR /usr/src/app
 
@@ -18,7 +18,7 @@ COPY ./requirements.txt .
 RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requirements.txt
 
 # pull official base image
-FROM python:slim-buster
+FROM python
 
 # set work directory
 RUN mkdir -p /home/app
@@ -29,11 +29,19 @@ RUN addgroup --system app && adduser --system --group app
 # create directories
 ENV HOME=/home/app
 ENV APP_HOME=/home/app/simuled
+ENV PATH=$APP_HOME/blender:$PATH
 RUN mkdir $APP_HOME
 WORKDIR $APP_HOME
 
 # install dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends netcat
+RUN apt install -y blender
+RUN apt remove -y blender
+#RUN apt install -y snapd 
+#RUN systemctl enable snapd
+#RUN snap install core
+#RUN snap install snapd 
+#RUN snap install blender --classic
 COPY --from=builder /usr/src/app/wheels /wheels
 COPY --from=builder /usr/src/app/requirements.txt .
 RUN pip install --upgrade pip

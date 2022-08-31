@@ -6,7 +6,6 @@ module.exports = {
 			path.resolve(__dirname, '../GLTFLoader.js'),
 			path.resolve(__dirname, '../DragControls.js'),
 			path.resolve(__dirname, '../RotationControls.js'),
-			path.resolve(__dirname, '../Controls.js'),
 			path.resolve(__dirname, '../FirstPerson.js'),
 			path.resolve(__dirname, '../Turntable.js'),
 			path.resolve(__dirname, '../Create.js'),

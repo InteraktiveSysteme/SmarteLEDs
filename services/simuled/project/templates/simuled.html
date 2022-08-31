@@ -3,16 +3,15 @@
 {% block title %}Index{% endblock %}
 {% block head %}
 {{ super() }}
-    <link rel="stylesheet" href="{{ url_for('static',filename='/css/index_style.css') }}">
-    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-    <script type="module" src="{{ url_for('static', filename='Run.js') }}"></script>
+	<meta charset="UTF-8"/>
+	<title>Three.js 101</title>
+  	<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+  	<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+  	<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    	<script type="module" src="{{ url_for('static', filename='/js/3droom.js')}}" ></script>
 {% endblock %}
 {% block content %}
-
-<meta charset="UTF-8" />
-<title>Three.js 101</title>
+<body>
 
   <p hidden="true" id="width">{{ width }}</p>
   <p hidden="true" id="height">{{ height }}</p>
@@ -61,9 +60,12 @@
     <div id="gl" style="width: auto; height: auto;">
       <canvas oncontextmenu="return false;" id="myCanvas" width="auto" height="auto" style="position: relative; border-radius: 15px;"></canvas>
     </div>
-</center>
+  </center>
 
-  <div title="Manual" id="manual">
+<div class="container">
+<div class="row">
+<div class="col">
+  <div title="Manual" id="manual" >
     <br>Q: Switch between Egoperspective and Turntable mode
     <br>
     <br>
@@ -141,6 +143,9 @@
         </tr>
       </tbody>
     </table>
+  </div>
+  	</div>
+	</div>
   </div>
 
     <!--p id="screen-log" style="color:white"></p-->

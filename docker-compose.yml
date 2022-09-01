@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3.3'
 
 services:
     simuled:
@@ -25,7 +25,7 @@ services:
       volumes:
         - ./services/nginx/js/:/home/app/simuled/js
       ports:
-        - 1337:80
+        - 443:443
       depends_on:
         - simuled
 

@@ -215,7 +215,7 @@ def lamp_delete(id):
         imgName = deletable.imgName
         db.session.delete(deletable)
         db.session.commit()
-        os.remove("/static/Imgages/", imgName)
+        os.remove(app.config['UPLOAD_FOLDER'], imgName)
         lamps = Lamp.query.order_by(Lamp.timeStamp)
         return render_template("shop.html", lamps=lamps, users=users)
 
@@ -398,7 +398,7 @@ def renders_delete(id):
     try:
         db.session.delete(deletable)
         db.session.commit()
-
+        os.remove(app.config['RENDER_FOLDER'], deletable.imgName)
     except:
         print("error")
 

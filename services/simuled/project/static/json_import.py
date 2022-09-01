@@ -212,8 +212,8 @@ def renderScene(filepath):
         bpy.context.scene.render.resolution_x = 1280 
         bpy.context.scene.render.resolution_y = 720
         
-    bpy.context.scene.cycles.samples = 20
-    bpy.context.scene.cycles.use_denoising = True
+    bpy.context.scene.cycles.samples = 50
+    bpy.context.scene.cycles.use_denoising = False
     
     bpy.data.scenes[0].render.filepath = str(filepath)
     

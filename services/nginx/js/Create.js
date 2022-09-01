@@ -419,6 +419,7 @@ export class Create{
         			} 
         		}
         		xhttp.send(this.exportScene())
+			alert("The render might take a while. A notification should pop up after around 2 minutes. CPU rendering is sssllooow (and there is no denoise support).")
         	} 
         }, 'Render' )
     }

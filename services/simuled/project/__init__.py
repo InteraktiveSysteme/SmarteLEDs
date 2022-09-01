@@ -64,7 +64,7 @@ class User(db.Model, UserMixin):
 
 class Render(db.Model):
     renderID = db.Column(db.Integer(), primary_key=True)
-    userID = db.Column(db.String(100), unique=False)
+    userID = db.Column(db.Integer(), unique=False)
     renderName = db.Column(db.String(100), unique=False)
     timeStamp = db.Column(db.DateTime, default=datetime.utcnow, unique=False)
     imgName = db.Column(db.String(1000), unique=False)

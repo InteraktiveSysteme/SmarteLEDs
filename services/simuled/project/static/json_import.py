@@ -209,8 +209,8 @@ def renderScene(filepath):
     
     
     if fhd_override:
-        bpy.context.scene.render.resolution_x = 1920 
-        bpy.context.scene.render.resolution_y = 1080
+        bpy.context.scene.render.resolution_x = 1280 
+        bpy.context.scene.render.resolution_y = 720
         
     bpy.context.scene.cycles.samples = 20
     bpy.context.scene.cycles.use_denoising = True
